@@ -1,0 +1,5 @@
+name = DiToolsi Training
+package = ditoolsi
+core = 7.x
+
+dependencies[] = entity

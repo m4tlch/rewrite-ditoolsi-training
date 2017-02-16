@@ -1,0 +1,222 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function ditoolsi_training_schema() {
+  $schema['ditoolsi_training_pupils_list'] = array(
+    'fields' => array(
+      'id' => array(
+        'type'     => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'length'   => 11,
+      ),
+      'course_id' => array(
+        'type'     => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'length'   => 11,
+      ),
+      'user_id' => array(
+        'type'     => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'length'   => 11,
+      ),
+      'current_lesson' => array(
+        'type'     => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'length'   => 11,
+      ),
+      'created' => array(
+        'type'     => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'length'   => 11,
+      ),
+      'status' => array(
+        'type'     => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'length'   => 11,
+      ),
+      'started' => array(
+        'type'     => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'length'   => 11,
+      ),
+    ),
+    'primary key' => array('id', 'course_id', 'user_id'),
+  );
+
+  $schema['ditoolsi_training_curators_list'] = array(
+    'fields' => array(
+      'id' => array(
+        'type'     => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'length'   => 11,
+      ),
+      'course_id' => array(
+        'type'     => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'length'   => 11,
+      ),
+      'user_id' => array(
+        'type'     => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'length'   => 11,
+      ),
+      'created' => array(
+        'type'     => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'length'   => 11,
+      ),
+    ),
+    'primary key' => array('id', 'course_id', 'user_id'),
+  );
+
+  $schema['ditoolsi_training_library_pupils'] = array(
+    'fields' => array(
+      'id' => array(
+        'type'     => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'length'   => 11,
+      ),
+      'user_id' => array(
+        'type'     => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'length'   => 11,
+      ),
+      'library_id' => array(
+        'type'     => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'length'   => 11,
+      ),
+      'created' => array(
+        'type'     => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'length'   => 11,
+      ),
+    ),
+    'primary key' => array('id', 'library_id', 'user_id'),
+  );
+
+  $schema['ditoolsi_training_vk_messages_queue'] = array(
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'length' => 11,
+      ),
+      'comment' => array(
+        'type' => 'text',
+        'not null' => TRUE,
+      ),
+      'vk_id' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'access_token' => array(
+        'type' => 'varchar',
+        'length' => 480,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Create table for joining course and user and table to track progress of tasks.
+ */
+function ditoolsi_training_update_7001() {
+  $schema = ditoolsi_training_schema();
+
+  foreach ($schema as $name => $table) {
+    if (!db_table_exists($name)) {
+      db_create_table($name, $table);
+    }
+  }
+}
+/**
+ * Create table for joining course and curator.
+ */
+function ditoolsi_training_update_7002() {
+  ditoolsi_training_update_7001();
+}
+
+/**
+ * Add newcol field to {ditoolsi_training_pupils_list} table.
+ */
+function ditoolsi_training_update_7003() {
+  if (!db_field_exists('ditoolsi_training_pupils_list', 'status')) {
+    $field = array(
+      'type'     => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      'length'   => 11,
+    );
+    db_add_field( 'ditoolsi_training_pupils_list', 'status', $field);
+  }
+}
+
+/**
+ * Create table for joining library and user.
+ */
+function ditoolsi_training_update_7004() {
+  $schema = ditoolsi_training_schema();
+
+  foreach ($schema as $name => $table) {
+    if (!db_table_exists($name)) {
+      db_create_table($name, $table);
+    }
+  }
+}
+
+/**
+ * Create table for saving queue of messages.
+ */
+function ditoolsi_training_update_7005() {
+  $schema = ditoolsi_training_schema();
+
+  foreach ($schema as $name => $table) {
+    if (!db_table_exists($name)) {
+      db_create_table($name, $table);
+    }
+  }
+}
+
+/**
+ * Add field table for saving queue of messages.
+ */
+function ditoolsi_training_update_7006() {
+  $schema = ditoolsi_training_schema();
+
+  if (!db_field_exists('ditoolsi_training_vk_messages_queue', 'access_token'))
+    db_add_field('ditoolsi_training_vk_messages_queue', 'access_token', $schema['ditoolsi_training_vk_messages_queue']['fields']['access_token']);
+}
+
+/**
+ * Add field table for time of start learning.
+ */
+function ditoolsi_training_update_7007() {
+  $schema = ditoolsi_training_schema();
+
+  if (!db_field_exists('ditoolsi_training_pupils_list', 'started'))
+    db_add_field('ditoolsi_training_pupils_list', 'started', $schema['ditoolsi_training_pupils_list']['fields']['started']);
+}
