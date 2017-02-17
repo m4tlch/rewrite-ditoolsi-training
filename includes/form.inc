@@ -147,8 +147,7 @@ function ditoolsi_training_add_lesson_form(
       $default_value,
     );
   }
-  $back_to_course_link      = l(t('Вернуться к списку уроков'),
-    '/course/' . $course->nid);
+  $back_to_course_link      = l(t('Вернуться к списку уроков'), '/course/' . $course->nid);
   $form['return_to_course'] = array(
     '#markup' => '<span class="fa fa-arrow-up back-to-course"> ' . $back_to_course_link . '</span>',
   );
@@ -383,8 +382,7 @@ function ditoolsi_training_add_lesson_form(
       ));
     }
 
-    $v_wrapper = entity_metadata_wrapper('field_collection_item',
-      $fc_video[$i]);
+    $v_wrapper = entity_metadata_wrapper('field_collection_item', $fc_video[$i]);
 
     $form['attach']['tabs']['content']['video']['content'][$i] = array(
       '#type' => 'container',
@@ -398,8 +396,7 @@ function ditoolsi_training_add_lesson_form(
       '#default_value' => $v_wrapper->field_lesson_video_title->value(),
     );
 
-    $btn = '<button type="button" target="upload-lesson-video-file-' . $i . '" class="btn btn-success add-button">'
-      . '<i class="fa fa-plus-circle"></i> ' . t('Add') . '</button>';
+    $btn = '<button type="button" target="upload-lesson-video-file-' . $i . '" class="btn btn-success add-button">' . '<i class="fa fa-plus-circle"></i> ' . t('Add') . '</button>';
 
 
     $container['file'] = array(
@@ -418,8 +415,7 @@ function ditoolsi_training_add_lesson_form(
       $container['file']['#default_value'] = $file['fid'];
     }
 
-    $btn = '<button type="button" target="upload-lesson-video-url-' . $i . '" class="btn btn-success add-button">'
-      . '<i class="fa fa-plus-circle"></i> ' . t('Add') . '</button>';
+    $btn = '<button type="button" target="upload-lesson-video-url-' . $i . '" class="btn btn-success add-button">' . '<i class="fa fa-plus-circle"></i> ' . t('Add') . '</button>';
 
     $container['url']           = array(
       '#type'          => 'textfield',
@@ -471,8 +467,7 @@ function ditoolsi_training_add_lesson_form(
       ));
     }
 
-    $v_wrapper = entity_metadata_wrapper('field_collection_item',
-      $fc_audio[$i]);
+    $v_wrapper = entity_metadata_wrapper('field_collection_item', $fc_audio[$i]);
 
     $form['attach']['tabs']['content']['audio']['content'][$i] = array(
       '#type' => 'container',
@@ -486,8 +481,7 @@ function ditoolsi_training_add_lesson_form(
       '#default_value' => $v_wrapper->field_lesson_audio_title->value(),
     );
 
-    $btn = '<button type="button" target="upload-lesson-audio-file-' . $i . '" class="btn btn-success add-button">'
-      . '<i class="fa fa-plus-circle"></i> ' . t('Add') . '</button>';
+    $btn = '<button type="button" target="upload-lesson-audio-file-' . $i . '" class="btn btn-success add-button">' . '<i class="fa fa-plus-circle"></i> ' . t('Add') . '</button>';
 
     $container['file'] = array(
       '#type'              => 'managed_file',
@@ -542,8 +536,7 @@ function ditoolsi_training_add_lesson_form(
       ));
     }
 
-    $p_wrapper = entity_metadata_wrapper('field_collection_item',
-      $fc_presentation[$i]);
+    $p_wrapper = entity_metadata_wrapper('field_collection_item', $fc_presentation[$i]);
 
     $form['attach']['tabs']['content']['presentation']['content'][$i] = array(
       '#type' => 'container',
@@ -557,8 +550,7 @@ function ditoolsi_training_add_lesson_form(
       '#default_value' => $p_wrapper->field_lesson_presentation_title->value(),
     );
 
-    $btn = '<button type="button" target="upload-lesson-presentation-file-' . $i . '" class="btn btn-success add-button">'
-      . '<i class="fa fa-plus-circle"></i> ' . t('Add') . '</button>';
+    $btn = '<button type="button" target="upload-lesson-presentation-file-' . $i . '" class="btn btn-success add-button">' . '<i class="fa fa-plus-circle"></i> ' . t('Add') . '</button>';
 
     $container['file'] = array(
       '#type'              => 'managed_file',
@@ -683,8 +675,7 @@ function ditoolsi_training_add_lesson_form(
       ),
     );
 
-    $btn = '<button type="button" target="upload-lesson-task-file-' . $i . '" class="btn btn-success add-button">'
-      . '<i class="fa fa-plus-circle"></i> ' . t('Add') . '</button>';
+    $btn = '<button type="button" target="upload-lesson-task-file-' . $i . '" class="btn btn-success add-button">' . '<i class="fa fa-plus-circle"></i> ' . t('Add') . '</button>';
 
     $container['text_task']['file'] = array(
       '#type'              => 'managed_file',
@@ -999,14 +990,12 @@ function ditoolsi_training_add_lesson_form(
 
   $form['#attached']['css'] = array(
     drupal_get_path('theme', 'bootstrap_subtheme') . '/css/add-lesson.css',
-    drupal_get_path('theme',
-      'bootstrap_subtheme') . '/css/jquery/jquery.sliderTabs.min.css',
+    drupal_get_path('theme', 'bootstrap_subtheme') . '/css/jquery/jquery.sliderTabs.min.css',
   );
 
   $form['#attached']['js'] = array(
     drupal_get_path('module', 'ditoolsi_training') . '/js/add-lesson.js',
-    drupal_get_path('theme',
-      'bootstrap_subtheme') . '/js/jquery/jquery.sliderTabs.js',
+    drupal_get_path('theme', 'bootstrap_subtheme') . '/js/jquery/jquery.sliderTabs.js',
   );
 
   return $form;
@@ -1288,9 +1277,7 @@ function ditoolsi_training_add_lesson_form_validate($form, &$form_state) {
   $course       = $form_state['build_info']['args'][0];
   $lesson       = isset($form_state['build_info']['args'][1]) ? $form_state['build_info']['args'][1] : FALSE;
 
-  if ($lesson && $field_lesson_number = field_get_items('node', $lesson,
-      'field_lesson_number')
-  ) {
+  if ($lesson && $field_lesson_number = field_get_items('node', $lesson, 'field_lesson_number')) {
     $current_number = $field_lesson_number[0]['value'];
   }
   else {
@@ -1311,8 +1298,7 @@ function ditoolsi_training_add_lesson_form_validate($form, &$form_state) {
   }
 
   $query = new EntityFieldQuery();
-  $query
-    ->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'lesson')
     ->propertyCondition('status', NODE_PUBLISHED)
     ->fieldCondition('field_lesson_course', 'target_id', $course->nid)
@@ -1322,8 +1308,7 @@ function ditoolsi_training_add_lesson_form_validate($form, &$form_state) {
   $result = $query->execute();
 
   if (isset($result['node'])) {
-    form_set_error('info][number',
-      t('The lesson with this number already exists.'));
+    form_set_error('info][number', t('The lesson with this number already exists.'));
   }
 
   // Validate title of lesson.
@@ -1360,29 +1345,25 @@ function ditoolsi_training_add_lesson_form_validate($form, &$form_state) {
               if (!$answers_correct || !$answers) {
                 $path = 'attach][tabs][content][task][content][' . $task_key . '][auto_test][question][' . $question_key;
                 form_set_error($path,
-                  t('The question must have at least one correct answer. (task @t, question @q)',
-                    array(
-                      '@t' => $task_key + 1,
-                      '@q' => $question_key + 1,
-                    )));
+                  t('The question must have at least one correct answer. (task @t, question @q)', array(
+                    '@t' => $task_key + 1,
+                    '@q' => $question_key + 1,
+                  )));
               }
               if (!$question['weight']) {
                 $path = 'attach][tabs][content][task][content][' . $task_key . '][auto_test][question][' . $question_key;
                 form_set_error($path,
-                  t('Weight question must be greater than zero. (task @t, question @q)',
-                    array(
-                      '@t' => $task_key + 1,
-                      '@q' => $question_key + 1,
-                    )));
+                  t('Weight question must be greater than zero. (task @t, question @q)', array(
+                    '@t' => $task_key + 1,
+                    '@q' => $question_key + 1,
+                  )));
               }
               elseif (!is_numeric($question['weight']) || intval($question['weight']) != $question['weight'] || $question['weight'] <= 0) {
                 $path = 'attach][tabs][content][task][content][' . $task_key . '][auto_test][question][' . $question_key;
-                form_set_error($path,
-                  t('Weight must be a positive integer. (task @t, question @q)',
-                    array(
-                      '@t' => $task_key + 1,
-                      '@q' => $question_key + 1,
-                    )));
+                form_set_error($path, t('Weight must be a positive integer. (task @t, question @q)', array(
+                  '@t' => $task_key + 1,
+                  '@q' => $question_key + 1,
+                )));
               }
               else {
                 $total_weight += $question['weight'];
@@ -1403,11 +1384,9 @@ function ditoolsi_training_add_lesson_form_validate($form, &$form_state) {
           }
           elseif (!is_numeric($approval_threshold) || intval($approval_threshold) != $approval_threshold || $approval_threshold <= 0) {
             $path = 'attach][tabs][content][task][content][' . $task_key . '][auto_test][approval_threshold';
-            form_set_error($path,
-              t('Approval threshold must be a positive integer. (task @t)',
-                array(
-                  '@t' => $task_key + 1,
-                )));
+            form_set_error($path, t('Approval threshold must be a positive integer. (task @t)', array(
+              '@t' => $task_key + 1,
+            )));
           }
           elseif ($approval_threshold > $total_weight) {
             $path = 'attach][tabs][content][task][content][' . $task_key . '][auto_test][approval_threshold';
@@ -1428,11 +1407,9 @@ function ditoolsi_training_add_lesson_form_validate($form, &$form_state) {
           }
           elseif (!is_numeric($time_completion) || intval($time_completion) != $time_completion || $time_completion < 1 || $time_completion > 100) {
             $path = 'attach][tabs][content][task][content][' . $task_key . '][auto_test][time_completion';
-            form_set_error($path,
-              t('Time for completion must be from 1 to 100 minutes. (task @t)',
-                array(
-                  '@t' => $task_key + 1,
-                )));
+            form_set_error($path, t('Time for completion must be from 1 to 100 minutes. (task @t)', array(
+              '@t' => $task_key + 1,
+            )));
           }
         }
         if ($questions && $answers) {
@@ -1444,9 +1421,7 @@ function ditoolsi_training_add_lesson_form_validate($form, &$form_state) {
         if ($task['text_task']['description']['value']) {
           $tasks_filled++;
         }
-        if ($task['text_task']['redaction']
-          && !$task['text_task']['first_redaction']['value']
-        ) {
+        if ($task['text_task']['redaction'] && !$task['text_task']['first_redaction']['value']) {
           $path = 'attach][tabs][content][task][content][' . $task_key . '][text_task][first_redaction';
           form_set_error($path, t('The task must have first redaction'));
         }
@@ -1494,8 +1469,7 @@ function ditoolsi_training_add_lesson_form_submit($form, &$form_state) {
     $task_remove = $form_state['storage']['task_to_remove'];
   }
 
-  $l_wrapper                            = entity_metadata_wrapper('node',
-    $lesson);
+  $l_wrapper                            = entity_metadata_wrapper('node', $lesson);
   $l_wrapper->field_lesson_number       = $info['number'];
   $l_wrapper->title                     = $info['title'];
   $l_wrapper->field_lesson_link_post    = $info['link_post'];
@@ -1531,8 +1505,7 @@ function ditoolsi_training_add_lesson_form_submit($form, &$form_state) {
     if (($oldfile = $v_wrapper->field_lesson_video_file->value()) && empty($item['file'])) {
       $oldfile = (object) $oldfile;
       file_delete($oldfile);
-      file_usage_delete($oldfile, 'field_collection', $v_wrapper->getBundle(),
-        $item['item_id']);
+      file_usage_delete($oldfile, 'field_collection', $v_wrapper->getBundle(), $item['item_id']);
       $v_wrapper->field_lesson_video_file->set(NULL);
       $v_wrapper->field_lesson_video_url->set(NULL);
       $v_wrapper->field_embedded_code->set(NULL);
@@ -1561,14 +1534,12 @@ function ditoolsi_training_add_lesson_form_submit($form, &$form_state) {
       if ($oldfile = $v_wrapper->field_lesson_video_file->value()) {
         $oldfile = (object) $oldfile;
         file_delete($oldfile);
-        file_usage_delete($oldfile, 'field_collection', $v_wrapper->getBundle(),
-          $item['item_id']);
+        file_usage_delete($oldfile, 'field_collection', $v_wrapper->getBundle(), $item['item_id']);
       }
 
       $v_wrapper->field_lesson_video_file = (array) $file;
       $v_wrapper->save(TRUE);
-      file_usage_add($file, 'field_collection', $v_wrapper->getBundle(),
-        $v_wrapper->getIdentifier());
+      file_usage_add($file, 'field_collection', $v_wrapper->getBundle(), $v_wrapper->getIdentifier());
     }
     elseif (!empty($item['url'])) {
       $type                               = DITOOLSI_TRAINING_VIDEO_TYPE_YOUTUBE;
@@ -1584,8 +1555,7 @@ function ditoolsi_training_add_lesson_form_submit($form, &$form_state) {
 
       if ($file) {
         file_delete($file);
-        file_usage_delete($file, 'field_collection', $v_wrapper->getBundle(),
-          $item['item_id']);
+        file_usage_delete($file, 'field_collection', $v_wrapper->getBundle(), $item['item_id']);
       }
 
       $v_wrapper->save(TRUE);
@@ -1604,8 +1574,7 @@ function ditoolsi_training_add_lesson_form_submit($form, &$form_state) {
 
       if ($file) {
         file_delete($file);
-        file_usage_delete($file, 'field_collection', $v_wrapper->getBundle(),
-          $item['item_id']);
+        file_usage_delete($file, 'field_collection', $v_wrapper->getBundle(), $item['item_id']);
       }
 
       $v_wrapper->save(TRUE);
@@ -1634,8 +1603,7 @@ function ditoolsi_training_add_lesson_form_submit($form, &$form_state) {
     if (($oldfile = $v_wrapper->field_lesson_audio_file->value()) && empty($item['file'])) {
       $oldfile = (object) $oldfile;
       file_delete($oldfile);
-      file_usage_delete($oldfile, 'field_collection', $v_wrapper->getBundle(),
-        $item['item_id']);
+      file_usage_delete($oldfile, 'field_collection', $v_wrapper->getBundle(), $item['item_id']);
       $v_wrapper->field_lesson_audio_file->set(NULL);
       $v_wrapper->field_lesson_audio_title->set('');
       $v_wrapper->save(TRUE);
@@ -1657,14 +1625,12 @@ function ditoolsi_training_add_lesson_form_submit($form, &$form_state) {
       if ($oldfile = $v_wrapper->field_lesson_audio_file->value()) {
         $oldfile = (object) $oldfile;
         file_delete($oldfile);
-        file_usage_delete($oldfile, 'field_collection', $v_wrapper->getBundle(),
-          $item['item_id']);
+        file_usage_delete($oldfile, 'field_collection', $v_wrapper->getBundle(), $item['item_id']);
       }
 
       $v_wrapper->field_lesson_audio_file = (array) $file;
       $v_wrapper->save(TRUE);
-      file_usage_add($file, 'field_collection', $v_wrapper->getBundle(),
-        $v_wrapper->getIdentifier());
+      file_usage_add($file, 'field_collection', $v_wrapper->getBundle(), $v_wrapper->getIdentifier());
     }
   }
 
@@ -1683,15 +1649,13 @@ function ditoolsi_training_add_lesson_form_submit($form, &$form_state) {
       $fc_presentation->setHostEntity('node', $lesson);
     }
 
-    $p_wrapper = entity_metadata_wrapper('field_collection_item',
-      $fc_presentation);
+    $p_wrapper = entity_metadata_wrapper('field_collection_item', $fc_presentation);
     $p_wrapper->field_lesson_presentation_title->set($item['title']);
 
     if ($oldfile = $p_wrapper->field_lesson_presentation_file->value()) {
       $oldfile = (object) $oldfile;
       file_delete($oldfile);
-      file_usage_delete($oldfile, 'field_collection', $p_wrapper->getBundle(),
-        $item['item_id']);
+      file_usage_delete($oldfile, 'field_collection', $p_wrapper->getBundle(), $item['item_id']);
     }
 
     if (empty($item['file'])) {
@@ -1708,8 +1672,7 @@ function ditoolsi_training_add_lesson_form_submit($form, &$form_state) {
 
     $p_wrapper->field_lesson_presentation_file = (array) $file;
     $p_wrapper->save(TRUE);
-    file_usage_add($file, 'field_collection', $p_wrapper->getBundle(),
-      $p_wrapper->getIdentifier());
+    file_usage_add($file, 'field_collection', $p_wrapper->getBundle(), $p_wrapper->getIdentifier());
   }
 
   $l_wrapper->save();
@@ -1737,10 +1700,8 @@ function ditoolsi_training_add_lesson_form_submit($form, &$form_state) {
           ));
         }
 
-        $title                                      = substr($data['description']['value'],
-          0, 120);
-        $t_wrapper                                  = entity_metadata_wrapper('node',
-          $node);
+        $title                                      = substr($data['description']['value'], 0, 120);
+        $t_wrapper                                  = entity_metadata_wrapper('node', $node);
         $t_wrapper->title                           = strip_tags($title);
         $t_wrapper->body                            = $data['description'];
         $t_wrapper->field_text_task_redaction       = $data['redaction'];
@@ -1763,8 +1724,7 @@ function ditoolsi_training_add_lesson_form_submit($form, &$form_state) {
         $t_wrapper->field_task_lesson = $l_wrapper->getIdentifier();
         $t_wrapper->save();
         if (!empty($data['file'])) {
-          file_usage_add($file, 'node', 'lesson_text_task',
-            $t_wrapper->getIdentifier());
+          file_usage_add($file, 'node', 'lesson_text_task', $t_wrapper->getIdentifier());
         }
         break;
 
@@ -1788,8 +1748,7 @@ function ditoolsi_training_add_lesson_form_submit($form, &$form_state) {
           ));
         }
 
-        $t_wrapper                                 = entity_metadata_wrapper('node',
-          $node);
+        $t_wrapper                                 = entity_metadata_wrapper('node', $node);
         $t_wrapper->title                          = $data['title'];
         $t_wrapper->field_autotest_freeze_time     = (int) $data['freeze_time'];
         $t_wrapper->field_autotest_threshold       = (int) $data['approval_threshold'];
@@ -1950,13 +1909,8 @@ function ditoolsi_training_delete_lesson_form(
   $form['course'] = array('#type' => 'value', '#value' => $course->nid);
 
   return confirm_form($form,
-    t('Are you sure you want to delete lesson %title?',
-      array('%title' => $lesson->title)),
-    'course/' . $course->nid,
-    t('This action cannot be undone.'),
-    t('Delete'),
-    t('Cancel')
-  );
+    t('Are you sure you want to delete lesson %title?', array('%title' => $lesson->title)),
+    'course/' . $course->nid, t('This action cannot be undone.'), t('Delete'), t('Cancel'));
 }
 
 /**
@@ -1984,7 +1938,7 @@ function ditoolsi_training_delete_lesson_form_submit($form, &$form_state) {
       node_delete_multiple($delete_nids);
       watchdog('content', '@type: deleted %title.', array(
         '@type'  => $lesson->type,
-        '%title' => $lesson->title
+        '%title' => $lesson->title,
       ));
       drupal_set_message(t('Lesson was deleted'), 'status', FALSE);
       $form_state['redirect'] = "course/" . $course;
@@ -2086,9 +2040,7 @@ function ditoolsi_training_add_curator_form($form, &$form_state) {
   $query = db_select('ditoolsi_training_curators_list', 'cl');
   $query->join('users', 'u', 'u.uid = cl.user_id');
   $query->addField('u', 'uid');
-  $query
-    ->condition('cl.course_id', $course_id)
-    ->condition('u.uid', 0, '<>');
+  $query->condition('cl.course_id', $course_id)->condition('u.uid', 0, '<>');
   $uids = $query->execute()->fetchCol();
 
   if ($uids) {
@@ -2181,17 +2133,14 @@ function ditoolsi_training_add_curator_submit_ajax($form, &$form_state) {
     if (!empty($account)) {
       $course_id = $form_state['values']['manual']['course'];
 
-      db_merge('ditoolsi_training_curators_list')
-        ->fields(array(
-          'course_id' => $course_id,
-          'user_id'   => $account->uid,
-          'created'   => REQUEST_TIME,
-        ))
-        ->key(array(
-          'course_id' => $course_id,
-          'user_id'   => $account->uid,
-        ))
-        ->execute();
+      db_merge('ditoolsi_training_curators_list')->fields(array(
+        'course_id' => $course_id,
+        'user_id'   => $account->uid,
+        'created'   => REQUEST_TIME,
+      ))->key(array(
+        'course_id' => $course_id,
+        'user_id'   => $account->uid,
+      ))->execute();
 
       $roles = user_roles();
 
@@ -2235,21 +2184,18 @@ function ditoolsi_training_add_curator_submit_ajax($form, &$form_state) {
 
       $course_id = $form_state['values']['manual']['course'];
 
-      $query        = db_insert('ditoolsi_training_curators_list')
-        ->fields(array(
-          'course_id' => $course_id,
-          'user_id'   => $account->uid,
-          'created'   => REQUEST_TIME,
-        ))
-        ->execute();
+      $query        = db_insert('ditoolsi_training_curators_list')->fields(array(
+        'course_id' => $course_id,
+        'user_id'   => $account->uid,
+        'created'   => REQUEST_TIME,
+      ))->execute();
       $course_node  = node_load($course_id);
       $mail_subject = 'Вас добавили в качестве куратора на курс "' . $course_node->title . '"';
       $mail_body    = 'Вас добавили в качестве куратора на курс "' . $course_node->title . '"<br>
          Ссылка для входа на сайт: <a href="http://rewrite.up-lvl.ru/user">http://rewrite.up-lvl.ru/user</a><br>
          Для входа используйте следующие данные:         
-         Логин: <b>' . $fields['name'] . '</b> пароль:<b>' . $fields['pass'] . '</b>' .
-        '<br><br>';
-//        '<br><br>* <em>Обязательно поменяйте стандартный пароль на свой!</em><br>';
+         Логин: <b>' . $fields['name'] . '</b> пароль:<b>' . $fields['pass'] . '</b>' . '<br><br>';
+      //        '<br><br>* <em>Обязательно поменяйте стандартный пароль на свой!</em><br>';
       /*mgc_send_mail($account->mail, $mail[0]['subject'], $mail[0]['body']);
   */
       global $language;
@@ -2296,8 +2242,7 @@ function ditoolsi_training_save_task_form(
     );
 
     $query = new EntityFieldQuery();
-    $query
-      ->entityCondition('entity_type', 'node')
+    $query->entityCondition('entity_type', 'node')
       ->entityCondition('bundle', 'text_task_progress')
       ->propertyCondition('uid', $user->uid)
       ->fieldCondition('field_progress_task', 'target_id', $task->nid);
@@ -2392,8 +2337,7 @@ function ditoolsi_training_save_task_form(
 
   }
   $query = new EntityFieldQuery();
-  $query
-    ->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'text_task_progress')
     ->propertyCondition('uid', $uid)
     ->fieldCondition('field_progress_task', 'target_id', $task->nid);
@@ -2403,8 +2347,7 @@ function ditoolsi_training_save_task_form(
   if (isset($result['node'])) {
     $nid                              = key($result['node']);
     $progress_task                    = node_load($nid);
-    $pt_wrapper                       = entity_metadata_wrapper('node',
-      $progress_task);
+    $pt_wrapper                       = entity_metadata_wrapper('node', $progress_task);
     $body                             = $pt_wrapper->body->value();
     $form['answer']['#default_value'] = $body['value'];
 
@@ -2423,12 +2366,11 @@ function ditoolsi_training_save_task_form(
       foreach ($pt_wrapper->field_progress_files->value() as $file) {
         $url                               = file_create_url($file['uri']);
         $form['pupil_files'][$file['fid']] = array(
-          '#markup' => '<div class="file-item">' . l($file['filename'], $url,
-              array(
-                'attributes' => array(
-                  'target' => '_blank',
-                ),
-              )) . '</div>',
+          '#markup' => '<div class="file-item">' . l($file['filename'], $url, array(
+              'attributes' => array(
+                'target' => '_blank',
+              ),
+            )) . '</div>',
         );
       }
 
@@ -2521,8 +2463,7 @@ function ditoolsi_training_accept_task_submit_ajax($form, &$form_state) {
   $progress = $form_state['build_info']['args'][2];
 
   $query = new EntityFieldQuery();
-  $query
-    ->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'text_task_progress')
     ->propertyCondition('uid', $progress->uid)
     ->fieldCondition('field_progress_task', 'target_id', $task->nid);
@@ -2552,8 +2493,7 @@ function ditoolsi_training_accept_task_submit_ajax($form, &$form_state) {
   $pt_wrapper->save();
   $pl_wrapper->save();
 
-  $form_state['allow_accept'] = ditoolsi_training_is_lesson_all_finished($lesson,
-    $progress->uid);
+  $form_state['allow_accept'] = ditoolsi_training_is_lesson_all_finished($lesson, $progress->uid);
   $form_state['rebuild']      = TRUE;
 }
 
@@ -2570,8 +2510,7 @@ function ditoolsi_training_save_task_submit_ajax($form, &$form_state) {
   $task_id   = $form_state['build_info']['args'][1]->nid;
 
   $query = new EntityFieldQuery();
-  $query
-    ->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'text_task_progress')
     ->propertyCondition('uid', $user->uid)
     ->fieldCondition('field_progress_task', 'target_id', $task_id);
@@ -2596,14 +2535,12 @@ function ditoolsi_training_save_task_submit_ajax($form, &$form_state) {
         ),
       ),
     );
-    $pt_wrapper                         = entity_metadata_wrapper('node',
-      $progress_task);
+    $pt_wrapper                         = entity_metadata_wrapper('node', $progress_task);
     $pt_wrapper->save();
   }
 
   $query = new EntityFieldQuery();
-  $query
-    ->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'lesson_progress')
     ->propertyCondition('uid', $user->uid)
     ->fieldCondition('field_progress_lesson_id', 'target_id', $lesson_id);
@@ -2635,8 +2572,7 @@ function ditoolsi_training_save_task_submit_ajax($form, &$form_state) {
         ),
       ),
     );
-    $pl_wrapper                         = entity_metadata_wrapper('node',
-      $progress);
+    $pl_wrapper                         = entity_metadata_wrapper('node', $progress);
   }
   $pl_wrapper->save();
 
@@ -2701,23 +2637,21 @@ function ditoolsi_training_send_review_ajax($form, $form_state) {
 
   $lesson             = $form_state['build_info']['args'][0];
   $course_id          = $lesson->field_lesson_course[LANGUAGE_NONE][0]['target_id'];
-  $is_lesson_finished = ditoolsi_training_lesson_allowed_for_review($lesson,
-    $user);
+  $is_lesson_finished = ditoolsi_training_lesson_allowed_for_review($lesson, $user);
 
   if ($is_lesson_finished) {
     $text = t('You have completed all the tasks for the lesson, send a lesson to check');
-    $text .= l(t('Send for review'),
-      'course/' . $course_id . '/' . $lesson->nid . '/to-review', array(
-        'attributes' => array(
-          'class' => array(
-            'btn',
-            'btn-default',
-            'dit-submit',
-            'use-ajax',
-            'send-to-review',
-          ),
+    $text .= l(t('Send for review'), 'course/' . $course_id . '/' . $lesson->nid . '/to-review', array(
+      'attributes' => array(
+        'class' => array(
+          'btn',
+          'btn-default',
+          'dit-submit',
+          'use-ajax',
+          'send-to-review',
         ),
-      ));
+      ),
+    ));
   }
   else {
     $allowed_statuses = array(
@@ -2799,8 +2733,7 @@ function ditoolsi_training_save_task_redaction_form(
   $form['#id'] = 'save-task-redaction-form-' . $lesson->nid . '-' . $task->nid;
   //Get default value
   $query = new EntityFieldQuery();
-  $query
-    ->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'text_task_progress')
     ->propertyCondition('uid', $account->uid)
     ->fieldCondition('field_progress_task', 'target_id', $task->nid);
@@ -2865,8 +2798,7 @@ function ditoolsi_training_save_task_redaction_form(
     );
   }
   else {
-    $is_lesson_finished = ditoolsi_training_is_lesson_complete($lesson,
-      $account);
+    $is_lesson_finished = ditoolsi_training_is_lesson_complete($lesson, $account);
 
     if (!$is_lesson_finished) {
       $form['submit'] = array(
@@ -2905,8 +2837,7 @@ function ditoolsi_training_save_task_redaction_pupil_submit(
   $task_id   = $task->nid;
 
   $query = new EntityFieldQuery();
-  $query
-    ->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'text_task_progress')
     ->propertyCondition('uid', $user->uid)
     ->fieldCondition('field_progress_task', 'target_id', $task_id);
@@ -2931,14 +2862,12 @@ function ditoolsi_training_save_task_redaction_pupil_submit(
         ),
       ),
     );
-    $pt_wrapper                         = entity_metadata_wrapper('node',
-      $progress_task);
+    $pt_wrapper                         = entity_metadata_wrapper('node', $progress_task);
     $pt_wrapper->save();
   }
 
   $query = new EntityFieldQuery();
-  $query
-    ->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'lesson_progress')
     ->propertyCondition('uid', $user->uid)
     ->fieldCondition('field_progress_lesson_id', 'target_id', $lesson_id);
@@ -2970,8 +2899,7 @@ function ditoolsi_training_save_task_redaction_pupil_submit(
         ),
       ),
     );
-    $pl_wrapper                         = entity_metadata_wrapper('node',
-      $progress);
+    $pl_wrapper                         = entity_metadata_wrapper('node', $progress);
   }
 
   $pl_wrapper->save();
@@ -3025,8 +2953,7 @@ function ditoolsi_training_send_task_redaction_pupil_submit_ajax(
   drupal_set_message(t('Your answer has been saved'));
   $lesson     = $form_state['build_info']['args'][0];
   $course_id  = $lesson->field_lesson_course[LANGUAGE_NONE][0]['target_id'];
-  $commands[] = ctools_ajax_command_redirect("course/" . $course_id . '/' . $lesson->nid,
-    0);
+  $commands[] = ctools_ajax_command_redirect("course/" . $course_id . '/' . $lesson->nid, 0);
 
   return array(
     '#type'     => 'ajax',
@@ -3041,8 +2968,7 @@ function ditoolsi_training_accept_task_redaction_submit($form, &$form_state) {
   $account  = user_load($progress->uid);
 
   $query = new EntityFieldQuery();
-  $query
-    ->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'text_task_progress')
     ->propertyCondition('uid', $progress->uid)
     ->fieldCondition('field_progress_task', 'target_id', $task->nid);
@@ -3058,9 +2984,7 @@ function ditoolsi_training_accept_task_redaction_submit($form, &$form_state) {
   $exists = FALSE;
 
   $progress_status = ditoolsi_training_get_task_progress($task, $account);
-  if ($progress_status == DITOOLSI_TRAINING_PROGRESS_STATUS_FINISHED
-    || $progress_status == DITOOLSI_TRAINING_PROGRESS_STATUS_RECAST
-  ) {
+  if ($progress_status == DITOOLSI_TRAINING_PROGRESS_STATUS_FINISHED || $progress_status == DITOOLSI_TRAINING_PROGRESS_STATUS_RECAST) {
     $redaction = count($pt_wrapper->field_progress_comments) - 1;
     $pt_wrapper->field_progress_comments[$redaction]->set($form_state['values']['answer']);
   }
@@ -3081,8 +3005,7 @@ function ditoolsi_training_accept_task_redaction_submit($form, &$form_state) {
 
   $pl_wrapper->save();
 
-  $form_state['allow_accept'] = ditoolsi_training_is_lesson_all_finished($lesson,
-    $progress->uid);
+  $form_state['allow_accept'] = ditoolsi_training_is_lesson_all_finished($lesson, $progress->uid);
   $form_state['rebuild']      = TRUE;
 }
 
@@ -3095,8 +3018,8 @@ function ditoolsi_training_accept_task_redaction_submit_ajax(
   $lesson     = $form_state['build_info']['args'][0];
   $progress   = $form_state['build_info']['args'][2];
   $course_id  = $lesson->field_lesson_course[LANGUAGE_NONE][0]['target_id'];
-  $commands[] = ctools_ajax_command_redirect("course/" . $course_id . '/' . $lesson->nid . '/' .
-    $progress->nid . '/review', 0);
+  $commands[] = ctools_ajax_command_redirect("course/" . $course_id . '/' . $lesson->nid . '/' . $progress->nid . '/review',
+    0);
 
   return array(
     '#type'     => 'ajax',
@@ -3111,8 +3034,7 @@ function ditoolsi_training_to_fix_task_redaction_submit($form, &$form_state) {
   $account  = user_load($progress->uid);
 
   $query = new EntityFieldQuery();
-  $query
-    ->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'text_task_progress')
     ->propertyCondition('uid', $progress->uid)
     ->fieldCondition('field_progress_task', 'target_id', $task->nid);
@@ -3128,9 +3050,7 @@ function ditoolsi_training_to_fix_task_redaction_submit($form, &$form_state) {
   $exists = FALSE;
 
   $progress_status = ditoolsi_training_get_task_progress($task, $account);
-  if ($progress_status == DITOOLSI_TRAINING_PROGRESS_STATUS_FINISHED
-    || $progress_status == DITOOLSI_TRAINING_PROGRESS_STATUS_RECAST
-  ) {
+  if ($progress_status == DITOOLSI_TRAINING_PROGRESS_STATUS_FINISHED || $progress_status == DITOOLSI_TRAINING_PROGRESS_STATUS_RECAST) {
     $redaction = count($pt_wrapper->field_progress_comments) - 1;
     $pt_wrapper->field_progress_comments[$redaction]->set($form_state['values']['answer']);
   }
@@ -3188,9 +3108,8 @@ function ditoolsi_training_task_redaction_form(
     '#default_value' => $body['value'],
     '#format'        => 'filtered_html',
     '#title'         => t('Redaction @redaction', array(
-        '@redaction' => $redaction_title
-      )
-    ),
+      '@redaction' => $redaction_title,
+    )),
     '#weight'        => 1,
   );
 
@@ -3271,8 +3190,7 @@ function ditoolsi_training_autotest_submit_ajax($form, &$form_state) {
   $t_wrapper = entity_metadata_wrapper('node', $task);
 
   foreach ($t_wrapper->field_autotest_questions->value() as $question) {
-    $q_wrapper                     = entity_metadata_wrapper('field_collection_item',
-      $question);
+    $q_wrapper                     = entity_metadata_wrapper('field_collection_item', $question);
     $questions[$question->item_id] = array(
       'correct' => array(),
       'weight'  => $q_wrapper->field_autotest_question_weight->value(),
@@ -3332,8 +3250,7 @@ function ditoolsi_training_autotest_ajax($form, $form_state) {
     $commands[] = ajax_command_replace('#autotest-' . $task->nid,
       '<div id="autotest-' . $task->nid . '">' . $content . '</div>');
 
-    $is_lesson_finished = ditoolsi_training_lesson_allowed_for_review($lesson,
-      $user);
+    $is_lesson_finished = ditoolsi_training_lesson_allowed_for_review($lesson, $user);
 
     if ($is_lesson_finished) {
       ctools_include('ajax');
@@ -3418,8 +3335,7 @@ function ditoolsi_training_to_fix_task_submit_ajax($form, &$form_state) {
   $progress = $form_state['build_info']['args'][2];
 
   $query = new EntityFieldQuery();
-  $query
-    ->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'text_task_progress')
     ->propertyCondition('uid', $progress->uid)
     ->fieldCondition('field_progress_task', 'target_id', $task->nid);
@@ -3451,6 +3367,7 @@ function ditoolsi_training_to_fix_task_submit_ajax($form, &$form_state) {
 
   $pt_wrapper->save();
   $pl_wrapper->save();
+
 
   $form_state['input']  = array();
   $form_state['values'] = array();
@@ -3493,8 +3410,7 @@ function ditoolsi_training_get_transfer_lesson_form($lesson, $progress) {
   $review   = 0;
   $form     = '';
 
-  $task_statuses = ditoolsi_training_get_task_status_for_review($lesson,
-    $progress);
+  $task_statuses = ditoolsi_training_get_task_status_for_review($lesson, $progress);
   $tasks_count   = count($task_statuses);
 
   foreach ($task_statuses as $value) {
@@ -3520,23 +3436,19 @@ function ditoolsi_training_get_transfer_lesson_form($lesson, $progress) {
 
       if (!empty($node->field_next_course[LANGUAGE_NONE][0]['target_id'])) {
         $next_course = $node->field_next_course[LANGUAGE_NONE][0]['target_id'];
-        $form        = drupal_get_form('ditoolsi_training_transfer_next_course_form',
-          $lesson, $progress);
+        $form        = drupal_get_form('ditoolsi_training_transfer_next_course_form', $lesson, $progress);
       }
       else {
-        $form = drupal_get_form('ditoolsi_training_transfer_finish_course_form',
-          $lesson, $progress);
+        $form = drupal_get_form('ditoolsi_training_transfer_finish_course_form', $lesson, $progress);
       }
     }
     else {
-      $form = drupal_get_form('ditoolsi_training_transfer_next_lesson_form',
-        $lesson, $progress);
+      $form = drupal_get_form('ditoolsi_training_transfer_next_lesson_form', $lesson, $progress);
 
     }
   }
   elseif (($finished + $recast) == $tasks_count) {
-    $form = drupal_get_form('ditoolsi_training_transfer_recast_lesson_form',
-      $lesson, $progress);
+    $form = drupal_get_form('ditoolsi_training_transfer_recast_lesson_form', $lesson, $progress);
   }
 
   return $form;
@@ -3547,8 +3459,7 @@ function ditoolsi_training_get_task_status_for_review($lesson, $progress) {
   $tasks_nid     = array_keys($lesson->tasks);
 
   $query = new EntityFieldQuery();
-  $query
-    ->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'text_task_progress')
     ->propertyCondition('uid', $progress->uid)
     ->fieldCondition('field_progress_task', 'target_id', $tasks_nid, 'IN');
@@ -3619,8 +3530,7 @@ function ditoolsi_training_accept_lesson_ajax($form, $form_state) {
   $lesson    = $form_state['build_info']['args'][0];
   $progress  = $form_state['build_info']['args'][1];
   $course_id = $lesson->field_lesson_course[LANGUAGE_NONE][0]['target_id'];
-  $form      = drupal_get_form('ditoolsi_training_accept_lesson_popup_form',
-    $lesson, $progress);
+  $form      = drupal_get_form('ditoolsi_training_accept_lesson_popup_form', $lesson, $progress);
   $html      = '<div id="register-popup" class="show">' . render($form) . '<div id="ditoolsi-overlay"></div></div>';
 
   $commands[] = ajax_command_remove('#register-popup');
@@ -3646,12 +3556,9 @@ function ditoolsi_training_accept_lesson_popup_form(
   $rating_type = field_get_items('node', $course, 'field_course_rating_type');
 
   $query = db_select('node', 'n');
-  $query->join('field_data_field_progress_lesson_id', 'pli',
-    'pli.entity_id = n.nid');
-  $query->join('field_data_field_lesson_progress_message', 'pm',
-    'pm.entity_id = n.nid');
-  $query
-    ->fields('n', array('nid'))
+  $query->join('field_data_field_progress_lesson_id', 'pli', 'pli.entity_id = n.nid');
+  $query->join('field_data_field_lesson_progress_message', 'pm', 'pm.entity_id = n.nid');
+  $query->fields('n', array('nid'))
     ->fields('pm', array('field_lesson_progress_message_value'))
     ->condition('pli.field_progress_lesson_id_target_id', $lesson->nid)
     ->condition('n.type', 'lesson_progress');
@@ -3761,16 +3668,13 @@ function ditoolsi_training_accept_lesson_popup_form(
   );
 
   form_load_include($form_state, 'inc', 'ditoolsi_training', 'includes/form');
-  form_load_include($form_state, 'php', 'ditoolsi_training',
-    'includes/HttpTools.class');
+  form_load_include($form_state, 'php', 'ditoolsi_training', 'includes/HttpTools.class');
 
   return $form;
 }
 
 function ditoolsi_training_accept_lesson_popup_form_ajax($form, $form_state) {
-  if (!empty($form_state['build_info']['args'])
-    && $form_state['success']
-  ) {
+  if (!empty($form_state['build_info']['args']) && $form_state['success']) {
     $lesson    = $form_state['build_info']['args'][0];
     $course_id = $lesson->field_lesson_course[LANGUAGE_NONE][0]['target_id'];
     $commands  = array();
@@ -3798,24 +3702,18 @@ function ditoolsi_training_accept_lesson_popup_form_submit(
   $course  = node_load($lesson->field_lesson_course[LANGUAGE_NONE][0]['target_id']);
   $account = user_load($progress->uid);
 
-  $flag = flag_get_user_flags('node', $lesson->nid, $progress->uid,
-    $sid = 'student_next_lesson');
+  $flag = flag_get_user_flags('node', $lesson->nid, $progress->uid, $sid = 'student_next_lesson');
 
   if (!isset($flag['student_next_lesson'])) {
-    $flag_finish = flag('flag', 'student_next_lesson', $lesson->nid, $progress,
-      TRUE);
+    $flag_finish = flag('flag', 'student_next_lesson', $lesson->nid, $progress, TRUE);
   }
 
   $course_id    = $lesson->field_lesson_course[LANGUAGE_NONE][0]['target_id'];
   $bonus_points = $form_state['values']['mark'];
 
-  db_update('ditoolsi_training_pupils_list')
-    ->fields(array(
-      'current_lesson' => ($form_state['values']['current_lesson'] + 1),
-    ))
-    ->condition('user_id', $progress->uid)
-    ->condition('course_id', $course_id)
-    ->execute();
+  db_update('ditoolsi_training_pupils_list')->fields(array(
+    'current_lesson' => ($form_state['values']['current_lesson'] + 1),
+  ))->condition('user_id', $progress->uid)->condition('course_id', $course_id)->execute();
 
   $pl_wrapper = entity_metadata_wrapper('node', $progress);
   $pl_wrapper->field_lesson_progress_mark->set($bonus_points);
@@ -3841,37 +3739,32 @@ function ditoolsi_training_accept_lesson_popup_form_submit(
     $bp_wrapper->save();
 
     //Edit user's bonus account
-    ditoolsi_bonuses_upd_course_bonus_balance($account, $course_id,
-      $bonus_points);
+    ditoolsi_bonuses_upd_course_bonus_balance($account, $course_id, $bonus_points);
   }
 
   $comment = strip_tags($form_state['values']['comment']);
   $comment = trim($comment);
 
   if ($comment) {
-    ditoolsi_training_create_private_msg($user, $account,
-      $form_state['values']['comment']);
+    ditoolsi_training_create_private_msg($user, $account, $form_state['values']['comment']);
   }
 
   $query = db_select('node', 'n');
   $query->join('field_data_field_lesson_number', 'ln', 'ln.entity_id = n.nid');
   $query->join('field_data_field_lesson_course', 'lc', 'lc.entity_id = n.nid');
-  $query
-    ->fields('n', array('nid'))
-    ->condition('ln.field_lesson_number_value',
-      ($form_state['values']['current_lesson'] + 1))
+  $query->fields('n', array('nid'))
+    ->condition('ln.field_lesson_number_value', ($form_state['values']['current_lesson'] + 1))
     ->condition('lc.field_lesson_course_target_id', $course->nid)
     ->range(0, 1);
 
   $old_lesson_title = "<b>{$lesson->title}</b>";
 
   $nid = $query->execute()->fetchField();
-// x3 зачем эта проверка и переопределение $lesson?  если nid false - то $lesson из аргумента
-//  $lesson       = $nid ? node_load($nid) : NULL;
+  // x3 зачем эта проверка и переопределение $lesson?  если nid false - то $lesson из аргумента
+  //  $lesson       = $nid ? node_load($nid) : NULL;
   $lesson       = $nid ? node_load($nid) : $lesson;
   $access_token = isset($user->data['_vk_access_token']) ? $user->data['_vk_access_token'] : '';
-  $stop         = $access_token && $comment && ($field_vk = field_get_items('user',
-      $account,
+  $stop         = $access_token && $comment && ($field_vk = field_get_items('user', $account,
       'field_vk_page')) && user_access('training notify vk') && $lesson;
   watchdog('vk_notify_access_result', $stop);
   /*Отправка писем*/
@@ -3884,8 +3777,7 @@ function ditoolsi_training_accept_lesson_popup_form_submit(
     $teacher_access_token = isset($teacher_profile->data['_vk_access_token']) ? $teacher_profile->data['_vk_access_token'] : '';
     $access_token         = $teacher_access_token;
   }
-  if ($access_token && ($access_token != '') && $comment && ($field_vk = field_get_items('user',
-      $account,
+  if ($access_token && ($access_token != '') && $comment && ($field_vk = field_get_items('user', $account,
       'field_vk_page')) && user_access('training notify vk') && $lesson
   ) {
     $parts = parse_url($field_vk[0]['value']);
@@ -3898,10 +3790,9 @@ function ditoolsi_training_accept_lesson_popup_form_submit(
       ));
       $vk_notify_next = format_string($vk_notify_next, array(
         '@points'      => $bonus_points,
-        '@lesson_link' => url("course/{$course->nid}/{$lesson->nid}",
-          array('absolute' => TRUE)),
+        '@lesson_link' => url("course/{$course->nid}/{$lesson->nid}", array('absolute' => TRUE)),
       ));
-      $comment .= $vk_notify_next;
+      $comment        .= $vk_notify_next;
 
     }
     else {
@@ -3913,10 +3804,9 @@ function ditoolsi_training_accept_lesson_popup_form_submit(
       ));
       $vk_notify_credit = format_string($vk_notify_credit, array(
         '@points'      => $bonus_points,
-        '@lesson_link' => url("course/{$course->nid}/{$lesson->nid}",
-          array('absolute' => TRUE)),
+        '@lesson_link' => url("course/{$course->nid}/{$lesson->nid}", array('absolute' => TRUE)),
       ));
-      $comment .= $vk_notify_credit;
+      $comment          .= $vk_notify_credit;
     }
 
     if (isset($parts['path'])) {
@@ -3932,36 +3822,21 @@ function ditoolsi_training_accept_lesson_popup_form_submit(
         $comment = $course->field_course_vk_notify_next_less[LANGUAGE_NONE][0]['value'] . "\n\n" . $comment;
         $comment = format_string($comment, array(
           '@points'      => $bonus_points,
-          '@lesson_link' => url("course/{$course->nid}/{$lesson->nid}",
-            array('absolute' => TRUE)),
+          '@lesson_link' => url("course/{$course->nid}/{$lesson->nid}", array('absolute' => TRUE)),
         ));
       }
       $stop = 'Stop';
       if ($access_token != NULL) {
-        db_insert('ditoolsi_training_vk_messages_queue')
-          ->fields(array(
-            'comment'      => $comment,
-            'vk_id'        => $parts['path'],
-            'access_token' => $access_token,
-          ))
-          ->execute();
+        db_insert('ditoolsi_training_vk_messages_queue')->fields(array(
+          'comment'      => $comment,
+          'vk_id'        => $parts['path'],
+          'access_token' => $access_token,
+        ))->execute();
       }
 
     }
   }
 
-  // $notification = entity_create('node', array(
-  //   'type' => 'notification',
-  //   'uid' => $user->uid,
-  //   'status' => NODE_PUBLISHED,
-  //   'title' => t('Notification for user [uid:@uid]', array(
-  //     '@uid' => $account->uid,
-  //   )),
-  // ));
-  // $n_wrapper = entity_metadata_wrapper('node', $notification);
-  // $n_wrapper->field_notification_type->set(DITOOLSI_TRAINING_TT_TRANSFER);
-  // $n_wrapper->field_notification_course->set($course_id);
-  // $n_wrapper->save();
 
   //notification rule
   $notification_options            = array();
@@ -3972,8 +3847,7 @@ function ditoolsi_training_accept_lesson_popup_form_submit(
   $notification_options['account'] = $account;
   $notification_options['term']    = $term;
 
-  rules_invoke_event('ditoolsi_training_pupils_notification',
-    $notification_options);
+  rules_invoke_event('ditoolsi_training_pupils_notification', $notification_options);
 
   if ($bonus_points > 0) {
     ditoolsi_set_account_message($account,
@@ -3989,8 +3863,7 @@ function ditoolsi_training_accept_lesson_popup_form_submit(
     $name         = '<b>' . ditoolsi_profile_name($user) . '</b>';
     $lesson_title = l($lesson->title, "course/{$course->nid}/{$lesson->nid}");
     $course_title = l($course->title, "course/{$course->nid}");
-    $rating_type  = field_get_items('node', $course,
-      'field_course_rating_type');
+    $rating_type  = field_get_items('node', $course, 'field_course_rating_type');
 
     if (isset($rating_type[0]['value']) && $rating_type[0]['value'] == DT_TRAINING_RATING_2) {
       $rate = $bonus_points ? 'зачет' : 'не зачет';
@@ -4000,8 +3873,7 @@ function ditoolsi_training_accept_lesson_popup_form_submit(
     }
 
     ditoolsi_add_notification($account,
-      $name . ' поставил вам ' . $rate . ' по уроку ' . $old_lesson_title . ' и перевел вас на следующий урок ' .
-      $lesson_title . ' курса ' . $course_title . '. Перейдите по ссылке с названием следующего урока, что бы посмотреть материалы.');
+      $name . ' поставил вам ' . $rate . ' по уроку ' . $old_lesson_title . ' и перевел вас на следующий урок ' . $lesson_title . ' курса ' . $course_title . '. Перейдите по ссылке с названием следующего урока, что бы посмотреть материалы.');
     global $user;
     $teacher         = user_load($user->uid);
     $subject_curator = "{$account->mail} выслал задания на проверку";
@@ -4011,18 +3883,22 @@ function ditoolsi_training_accept_lesson_popup_form_submit(
     $fio             = "{$fio_first_name} {$fio_middle_name} {$fio_last_name}";
     $message_curator = 'Вам отправлено задание на проверку ' . $lesson_title . '  от ученика ' . $user->mail . ' ' . $fio . ' из курса ' . $course_title;
     $message_curator .= '<br><br>Перейти к проверке можете по ссылке <a href="http://rewrite.up-lvl.ru/user">http://rewrite.up-lvl.ru/user</a>';
-    $stop = 'Stop';
+    $stop            = 'Stop';
     /*Если это не бихис bi1811@yandex.ru*/
-    if($teacher->uid != 31275) {
-      drupal_mail('system', 'mail', $teacher->mail,
-        language_default(), array(
-          'context' => array(
-            'subject' => $subject_curator,
-            'message' => $message_curator,
-          )
-        ));
+    if ($teacher->uid != 31275) {
+      drupal_mail('system', 'mail', $teacher->mail, language_default(), array(
+        'context' => array(
+          'subject' => $subject_curator,
+          'message' => $message_curator,
+        ),
+      ));
     }
   }
+
+  /*Сохраняем дату проверку учителя*/
+  global $user;
+  mgc_set_progress_update($progress->uid, $user->uid, $progress->nid);
+
   $form_state['success'] = TRUE;
 }
 
@@ -4155,8 +4031,7 @@ function ditoolsi_training_to_fix_lesson_submit_ajax($form, &$form_state) {
   $notification_options['account'] = $account;
   $notification_options['term']    = $term;
 
-  rules_invoke_event('ditoolsi_training_pupils_notification',
-    $notification_options);
+  rules_invoke_event('ditoolsi_training_pupils_notification', $notification_options);
 
   if (($field_vk_page = field_get_items('user', $account,
       'field_vk_page')) && user_access('training notify vk')
@@ -4174,17 +4049,14 @@ function ditoolsi_training_to_fix_lesson_submit_ajax($form, &$form_state) {
       ));
 
       $message = format_string($message, array(
-        '@lesson_link' => url("course/{$course->nid}/{$lesson->nid}",
-          array('absolute' => TRUE)),
+        '@lesson_link' => url("course/{$course->nid}/{$lesson->nid}", array('absolute' => TRUE)),
       ));
 
-      db_insert('ditoolsi_training_vk_messages_queue')
-        ->fields(array(
-          'comment'      => $message,
-          'vk_id'        => $field_vk_page[0]['value'],
-          'access_token' => $access_token,
-        ))
-        ->execute();
+      db_insert('ditoolsi_training_vk_messages_queue')->fields(array(
+        'comment'      => $message,
+        'vk_id'        => $field_vk_page[0]['value'],
+        'access_token' => $access_token,
+      ))->execute();
     }
   }
 
@@ -4200,8 +4072,7 @@ function ditoolsi_training_to_fix_lesson_submit_ajax($form, &$form_state) {
   ));
 
   $message = format_string($message, array(
-    '@lesson_link' => url("course/{$course->nid}/{$lesson->nid}",
-      array('absolute' => TRUE)),
+    '@lesson_link' => url("course/{$course->nid}/{$lesson->nid}", array('absolute' => TRUE)),
   ));
 
   $mail_subject = $name . ' поставил не зачет и вернул на доработку задания урока ' . $lesson->title;
@@ -4268,24 +4139,18 @@ function ditoolsi_training_buy_course_form_submit($form, &$form_state) {
   }
   else {
     drupal_set_message(t('Now you can learn in this course'));
-    db_update('ditoolsi_payment_accounts')
-      ->expression('balance', 'balance - :cost', array(
-        ':cost' => $cost,
-      ))
-      ->condition('uid', $user->uid)
-      ->execute();
-    db_merge('ditoolsi_training_pupils_list')
-      ->fields(array(
-        'course_id'      => $course->nid,
-        'user_id'        => $user->uid,
-        'current_lesson' => 1,
-        'created'        => REQUEST_TIME,
-      ))
-      ->key(array(
-        'course_id' => $course->nid,
-        'user_id'   => $user->uid,
-      ))
-      ->execute();
+    db_update('ditoolsi_payment_accounts')->expression('balance', 'balance - :cost', array(
+      ':cost' => $cost,
+    ))->condition('uid', $user->uid)->execute();
+    db_merge('ditoolsi_training_pupils_list')->fields(array(
+      'course_id'      => $course->nid,
+      'user_id'        => $user->uid,
+      'current_lesson' => 1,
+      'created'        => REQUEST_TIME,
+    ))->key(array(
+      'course_id' => $course->nid,
+      'user_id'   => $user->uid,
+    ))->execute();
   }
   $form_state['redirect'] = 'course/' . $course->nid;
 }
@@ -4327,8 +4192,7 @@ function ditoolsi_training_add_pupils_form($form, &$form_state, $course) {
 
   $select = db_select('field_data_field_lesson_course', 'field_lesson_course');
   $select->fields('field_lesson_course', array('entity_id'));
-  $select->condition('field_lesson_course.field_lesson_course_target_id',
-    $course->nid);
+  $select->condition('field_lesson_course.field_lesson_course_target_id', $course->nid);
   $results    = $select->execute()->fetchAll();
   $list       = array();
   $lesson_ids = array();
@@ -4356,14 +4220,14 @@ function ditoolsi_training_add_pupils_form($form, &$form_state, $course) {
       '#type'          => 'select',
       '#options'       => $list,
       '#default_value' => 1,
-      '#suffix'        => '</div>'
+      '#suffix'        => '</div>',
     );
   }
 
   $form['add_more'] = array(
     '#attributes' => array(
       'class' => array(
-        'add-field-pupils'
+        'add-field-pupils',
       ),
     ),
     '#type'       => 'submit',
@@ -4385,7 +4249,7 @@ function ditoolsi_training_add_pupils_form($form, &$form_state, $course) {
   $form['submit'] = array(
     '#attributes' => array(
       'class' => array(
-        'load-pupils'
+        'load-pupils',
       ),
     ),
     '#type'       => 'submit',
@@ -4413,25 +4277,20 @@ function ditoolsi_training_add_pupils_ajax($form, $form_state) {
       if (valid_email_address($value['name'])) {
         $account = user_load_by_mail($value['name']);
         if (!empty($account)) {
-          $query = db_select('ditoolsi_training_pupils_list',
-            'training_pupils_list');
+          $query = db_select('ditoolsi_training_pupils_list', 'training_pupils_list');
           $query->fields('training_pupils_list', array('id'));
           $query->condition('training_pupils_list.user_id', $account->uid);
-          $query->condition('training_pupils_list.course_id',
-            $form_state['storage']['course_id']);
+          $query->condition('training_pupils_list.course_id', $form_state['storage']['course_id']);
           $results = $query->execute()->fetchAll();
           if (!empty($results)) {
-            drupal_set_message(t('Pupil @user is already on your course',
-              array('@user' => $account->mail)), 'error');
+            drupal_set_message(t('Pupil @user is already on your course', array('@user' => $account->mail)),
+              'error');
           }
           else {
             $query = db_select('node', 'n');
-            $query->join('field_data_field_lesson_number', 'ln',
-              'ln.entity_id = n.nid');
-            $query->join('field_data_field_lesson_course', 'lc',
-              'lc.entity_id = n.nid');
-            $query
-              ->fields('n', array('nid'))
+            $query->join('field_data_field_lesson_number', 'ln', 'ln.entity_id = n.nid');
+            $query->join('field_data_field_lesson_course', 'lc', 'lc.entity_id = n.nid');
+            $query->fields('n', array('nid'))
               ->condition('ln.field_lesson_number_value', $value['lesson'])
               ->condition('lc.field_lesson_course_target_id', $course->nid)
               ->range(0, 1);
@@ -4441,21 +4300,19 @@ function ditoolsi_training_add_pupils_ajax($form, $form_state) {
 
             if ($lesson) {
               dt_training_update_start_time_progress($lesson, $account);
-              $lesson_title = l($lesson->title,
-                "course/{$course->nid}/{$lesson->nid}");
+              $lesson_title = l($lesson->title, "course/{$course->nid}/{$lesson->nid}");
               $text         = $name . ' открыл вам доступ к курсу ' . $course_title . '. Вам доступен первый урок ' . $lesson_title;
               ditoolsi_add_notification($account, $text);
             }
 
-            db_insert('ditoolsi_training_pupils_list')
-              ->fields(array(
-                'course_id'      => $form_state['storage']['course_id'],
-                'user_id'        => $account->uid,
-                'current_lesson' => $value['lesson'],
-                'created'        => REQUEST_TIME,
-                'status'         => DITOOLSI_TRAINING_PUPIL_ACTIVE,
-              ))
-              ->execute();
+            db_insert('ditoolsi_training_pupils_list')->fields(array(
+              'course_id'      => $form_state['storage']['course_id'],
+              'user_id'        => $account->uid,
+              'current_lesson' => $value['lesson'],
+              'created'        => REQUEST_TIME,
+              'status'         => DITOOLSI_TRAINING_PUPIL_ACTIVE,
+            ))->execute();
+            mgc_set_activation($account->uid, $user->uid);
             drupal_set_message(t('Pupil @user successfully added to your course',
               array('@user' => $account->mail)));
             $mail               = ditoolsi_training_get_mail_activation($course);
@@ -4473,39 +4330,34 @@ function ditoolsi_training_add_pupils_ajax($form, $form_state) {
             /*для препода на Профологии нужно сделать, чтобы письма на меил о приглашениях на платформу приходили от их имени "Навстречу стилю"*/
             if ($user->uid == 32458) {
               $email_from = 'navstrechu_stilju@up-lvl.ru';
-              drupal_mail('system', __FUNCTION__, $account->mail, $language,
-                array(
-                  'context' => array(
-                    'subject' => $mail[1]['subject'],
-                    'message' => $mail[1]['body'],
-                    //'message' => 'fffffff',
-                  ),
-
+              drupal_mail('system', __FUNCTION__, $account->mail, $language, array(
+                'context' => array(
+                  'subject' => $mail[1]['subject'],
+                  'message' => $mail[1]['body'],
+                  //'message' => 'fffffff',
                 ),
-                $email_from);
+
+              ), $email_from);
             }
             elseif ($user->uid == 32405) {
               $email_from = 'dmitriylomot@up-lvl.ru';
-              drupal_mail('system', __FUNCTION__, $account->mail, $language,
-                array(
-                  'context' => array(
-                    'subject' => $mail[1]['subject'],
-                    'message' => $mail[1]['body'],
-                    //'message' => 'fffffff',
-                  ),
-
+              drupal_mail('system', __FUNCTION__, $account->mail, $language, array(
+                'context' => array(
+                  'subject' => $mail[1]['subject'],
+                  'message' => $mail[1]['body'],
+                  //'message' => 'fffffff',
                 ),
-                $email_from);
+
+              ), $email_from);
             }
             else {
-              drupal_mail('system', __FUNCTION__, $account->mail, $language,
-                array(
-                  'context' => array(
-                    'subject' => $mail[1]['subject'],
-                    'message' => $mail[1]['body'],
-                  ),
+              drupal_mail('system', __FUNCTION__, $account->mail, $language, array(
+                'context' => array(
+                  'subject' => $mail[1]['subject'],
+                  'message' => $mail[1]['body'],
+                ),
 
-                ));
+              ));
             }
 
           }
@@ -4521,18 +4373,15 @@ function ditoolsi_training_add_pupils_ajax($form, $form_state) {
             'init'   => $value['name'],
             'access' => time(),
             'roles'  => array(
-              DITOOLSI_PUPIL_RID => $roles[DITOOLSI_PUPIL_RID]
+              DITOOLSI_PUPIL_RID => $roles[DITOOLSI_PUPIL_RID],
             ),
           );
 
           $account = user_save(NULL, $fields);
           $query   = db_select('node', 'n');
-          $query->join('field_data_field_lesson_number', 'ln',
-            'ln.entity_id = n.nid');
-          $query->join('field_data_field_lesson_course', 'lc',
-            'lc.entity_id = n.nid');
-          $query
-            ->fields('n', array('nid'))
+          $query->join('field_data_field_lesson_number', 'ln', 'ln.entity_id = n.nid');
+          $query->join('field_data_field_lesson_course', 'lc', 'lc.entity_id = n.nid');
+          $query->fields('n', array('nid'))
             ->condition('ln.field_lesson_number_value', $value['lesson'])
             ->condition('lc.field_lesson_course_target_id', $course->nid)
             ->range(0, 1);
@@ -4542,8 +4391,7 @@ function ditoolsi_training_add_pupils_ajax($form, $form_state) {
 
           if ($lesson) {
             dt_training_update_start_time_progress($lesson, $account);
-            $lesson_title = l($lesson->title,
-              "course/{$course->nid}/{$lesson->nid}");
+            $lesson_title = l($lesson->title, "course/{$course->nid}/{$lesson->nid}");
             $text         = $name . ' открыл вам доступ к курсу ' . $course_title . '. Вам доступен первый урок ' . $lesson_title;
             ditoolsi_add_notification($account, $text);
           }
@@ -4563,69 +4411,61 @@ function ditoolsi_training_add_pupils_ajax($form, $form_state) {
           ));
           $mail_body          = $mail[0]['body'] . '<br>
          Для входа используйте следующие данные:         
-         Логин: <b>' . $fields['name'] . '</b> пароль:<b>' . $fields['pass'] . '</b>' .
-            '<br>';
-//            '<br><br>* <em>Обязательно поменяйте стандартный пароль на свой!</em><br>';
+         Логин: <b>' . $fields['name'] . '</b> пароль:<b>' . $fields['pass'] . '</b>' . '<br>';
+          //            '<br><br>* <em>Обязательно поменяйте стандартный пароль на свой!</em><br>';
           $mail_body .= '<br>=======================================<br><br>' . $mail[1]['body'];
           /*mgc_send_mail($account->mail, $mail[0]['subject'], $mail[0]['body']);
 */          /*для препода на Профологии нужно сделать, чтобы письма на меил о приглашениях на платформу приходили от их имени "Навстречу стилю"*/
           if ($user->uid == 32458) {
-            drupal_mail('system', __FUNCTION__, $value['name'], $language,
-              array(
-                'context' => array(
-                  'subject' => $mail[0]['subject'],
-                  'message' => $mail[0]['body'],
-                ),
+            drupal_mail('system', __FUNCTION__, $value['name'], $language, array(
+              'context' => array(
+                'subject' => $mail[0]['subject'],
+                'message' => $mail[0]['body'],
+              ),
 
-                'account'  => $account,
-                'password' => $password,
-              )
-              , 'navstrechu_stilju@up-lvl.ru');
+              'account'  => $account,
+              'password' => $password,
+            ), 'navstrechu_stilju@up-lvl.ru');
           }
           elseif ($user->uid == 32405) {
-            drupal_mail('system', __FUNCTION__, $value['name'], $language,
-              array(
-                'context' => array(
-                  'subject' => $mail[0]['subject'],
-                  'message' => $mail[0]['body'],
-                ),
+            drupal_mail('system', __FUNCTION__, $value['name'], $language, array(
+              'context' => array(
+                'subject' => $mail[0]['subject'],
+                'message' => $mail[0]['body'],
+              ),
 
-                'account'  => $account,
-                'password' => $password,
-              )
-              , 'dmitriylomot@up-lvl.ru');
+              'account'  => $account,
+              'password' => $password,
+            ), 'dmitriylomot@up-lvl.ru');
           }
           else {
-            drupal_mail('system', __FUNCTION__, $value['name'], $language,
-              array(
-                'context'  => array(
-                  'subject' => $mail[0]['subject'],
-                  'message' => $mail[0]['body'],
-                ),
-                'account'  => $account,
-                'password' => $password,
-              ));
+            drupal_mail('system', __FUNCTION__, $value['name'], $language, array(
+              'context'  => array(
+                'subject' => $mail[0]['subject'],
+                'message' => $mail[0]['body'],
+              ),
+              'account'  => $account,
+              'password' => $password,
+            ));
           }
 
 
-//          ditoolsi_training_send_mail_to_pupil($account, $form_state['storage']['course_id']);
-          db_insert('ditoolsi_training_pupils_list')
-            ->fields(array(
-              'course_id'      => $form_state['storage']['course_id'],
-              'user_id'        => $account->uid,
-              'current_lesson' => $value['lesson'],
-              'created'        => time(),
-              'status'         => DITOOLSI_TRAINING_PUPIL_ACTIVE
-            ))
-            ->execute();
+          //          ditoolsi_training_send_mail_to_pupil($account, $form_state['storage']['course_id']);
+          db_insert('ditoolsi_training_pupils_list')->fields(array(
+            'course_id'      => $form_state['storage']['course_id'],
+            'user_id'        => $account->uid,
+            'current_lesson' => $value['lesson'],
+            'created'        => time(),
+            'status'         => DITOOLSI_TRAINING_PUPIL_ACTIVE,
+          ))->execute();
+          mgc_set_activation($account->uid, $user->uid);
           drupal_set_message(t('Pupil @user successfully added to your course',
             array('@user' => $account->mail)));
           mgc_start_learn2_from_teacher($course, $account);
         }
       }
       else {
-        drupal_set_message(t('Wrong e-mail format @email',
-          array('@email' => $value['name'])), 'error');
+        drupal_set_message(t('Wrong e-mail format @email', array('@email' => $value['name'])), 'error');
       }
     }
     else {
@@ -4681,7 +4521,7 @@ function ditoolsi_training_add_pupils_excel_form($form, &$form_state, $course) {
   ));
   $excel_link         = t('(Download example file !csv and !xls)', array(
     '!csv' => $csv_file,
-    '!xls' => $xls_file
+    '!xls' => $xls_file,
   ));
   $form['excel_link'] = array(
     '#markup' => '<div class="excel-link">' . $excel_link . '</div>',
@@ -4711,7 +4551,7 @@ function ditoolsi_training_add_pupils_excel_form($form, &$form_state, $course) {
   $form['submit'] = array(
     '#attributes' => array(
       'class' => array(
-        'load-pupils'
+        'load-pupils',
       ),
     ),
     '#type'       => 'submit',
@@ -4722,7 +4562,7 @@ function ditoolsi_training_add_pupils_excel_form($form, &$form_state, $course) {
       'wrapper'  => 'add-pupils-excel',
       'effect'   => 'fade',
       'progress' => array(
-        'type' => 'bar'
+        'type' => 'bar',
       ),
       'event'    => 'click',
     ),
@@ -4802,9 +4642,7 @@ function ditoolsi_excel_parse_data_file($file_fid) {
     if (is_array($parsed_data)) {
       foreach ($parsed_data as $sheet_key => $rows) {
         foreach ($rows as $row_key => $row) {
-          if (empty($row[DITOOLSI_RECRUITMENT_EMAIL])
-            || !valid_email_address($row[DITOOLSI_RECRUITMENT_EMAIL])
-          ) {
+          if (empty($row[DITOOLSI_RECRUITMENT_EMAIL]) || !valid_email_address($row[DITOOLSI_RECRUITMENT_EMAIL])) {
             return array(
               'error'     => DITOOLSI_RECRUITMENT_EMAIL_INVALID,
               'sheet_key' => $sheet_key,
@@ -4826,18 +4664,16 @@ function ditoolsi_excel_update_data_file($data, $course_id) {
 
   $node = node_load($course_id);
   if (!empty($data['error']) && $data['error'] == DITOOLSI_RECRUITMENT_EMAIL_INVALID) {
-    drupal_set_message(t('Your Excel file is invalid. Sheet: @sheet. Row: @row. Column: @col',
-      array(
-        '@sheet' => $data['sheet_key'],
-        '@row'   => $data['row_key'],
-        '@col'   => $data['column'],
-      )), 'error');
+    drupal_set_message(t('Your Excel file is invalid. Sheet: @sheet. Row: @row. Column: @col', array(
+      '@sheet' => $data['sheet_key'],
+      '@row'   => $data['row_key'],
+      '@col'   => $data['column'],
+    )), 'error');
 
     return FALSE;
   }
   elseif ($data == PHPEXCEL_ERROR_FILE_NOT_READABLE) {
-    drupal_set_message(t('An error occurred. Please reload page and try newly'),
-      'error');
+    drupal_set_message(t('An error occurred. Please reload page and try newly'), 'error');
 
     return FALSE;
   }
@@ -4854,8 +4690,7 @@ function ditoolsi_excel_update_data_file($data, $course_id) {
 
         if (empty($results)) {
           $query = db_select('field_data_field_lesson_course', 'lr');
-          $query->innerJoin('field_data_field_lesson_number', 'lw',
-            'lw.entity_id = lr.entity_id');
+          $query->innerJoin('field_data_field_lesson_number', 'lw', 'lw.entity_id = lr.entity_id');
           $query->fields('lr', array('entity_id'));
           $query->condition('lr.field_lesson_course_target_id', $course_id);
           $query->orderBy('lw.field_lesson_number_value', 'asc');
@@ -4863,12 +4698,10 @@ function ditoolsi_excel_update_data_file($data, $course_id) {
           $res = $query->execute()->fetchAll();
 
           $query = new EntityFieldQuery();
-          $query
-            ->entityCondition('entity_type', 'node')
+          $query->entityCondition('entity_type', 'node')
             ->entityCondition('bundle', 'lesson')
             ->fieldCondition('field_lesson_course', 'target_id', $course_id)
-            ->fieldCondition('field_lesson_number', 'value',
-              DITOOLSI_TRAINING_FIRST_LESSON);
+            ->fieldCondition('field_lesson_number', 'value', DITOOLSI_TRAINING_FIRST_LESSON);
 
           $result = $query->execute();
 
@@ -4878,18 +4711,15 @@ function ditoolsi_excel_update_data_file($data, $course_id) {
             dt_training_update_start_time_progress($lesson, $account);
           }
 
-          db_insert('ditoolsi_training_pupils_list')
-            ->fields(array(
-              'course_id'      => $course_id,
-              'user_id'        => $account->uid,
-              'current_lesson' => DITOOLSI_TRAINING_FIRST_LESSON,
-              'created'        => time(),
-              'status'         => DITOOLSI_TRAINING_PUPIL_ACTIVE
-            ))
-            ->execute();
+          db_insert('ditoolsi_training_pupils_list')->fields(array(
+            'course_id'      => $course_id,
+            'user_id'        => $account->uid,
+            'current_lesson' => DITOOLSI_TRAINING_FIRST_LESSON,
+            'created'        => time(),
+            'status'         => DITOOLSI_TRAINING_PUPIL_ACTIVE,
+          ))->execute();
 
-          drupal_set_message(t('Pupil @mail successfully added to course',
-            array('@mail' => $email)));
+          drupal_set_message(t('Pupil @mail successfully added to course', array('@mail' => $email)));
           $mail               = ditoolsi_training_get_mail_activation($node);
           $mail[1]['body']    = token_replace($mail[1]['body'], array(
             'node' => $node,
@@ -4907,8 +4737,7 @@ function ditoolsi_excel_update_data_file($data, $course_id) {
           ));
         }
         else {
-          drupal_set_message(t('Pupil @mail is already on this course',
-            array('@mail' => $email)), 'error');
+          drupal_set_message(t('Pupil @mail is already on this course', array('@mail' => $email)), 'error');
         }
       }
       else {
@@ -4921,15 +4750,14 @@ function ditoolsi_excel_update_data_file($data, $course_id) {
           'init'   => $email,
           'access' => time(),
           'roles'  => array(
-            DITOOLSI_PUPIL_RID => $roles[DITOOLSI_PUPIL_RID]
+            DITOOLSI_PUPIL_RID => $roles[DITOOLSI_PUPIL_RID],
           ),
         );
         $account = user_save('', $fields);
         $account = ditoolsi_profile_account($account, FALSE);
 
         $query = db_select('field_data_field_lesson_course', 'lr');
-        $query->innerJoin('field_data_field_lesson_number', 'lw',
-          'lw.entity_id = lr.entity_id');
+        $query->innerJoin('field_data_field_lesson_number', 'lw', 'lw.entity_id = lr.entity_id');
         $query->fields('lr', array('entity_id'));
         $query->condition('lr.field_lesson_course_target_id', $course_id);
         $query->orderBy('lw.field_lesson_number_value', 'asc');
@@ -4937,12 +4765,10 @@ function ditoolsi_excel_update_data_file($data, $course_id) {
         $res = $query->execute()->fetchAll();
 
         $query = new EntityFieldQuery();
-        $query
-          ->entityCondition('entity_type', 'node')
+        $query->entityCondition('entity_type', 'node')
           ->entityCondition('bundle', 'lesson')
           ->fieldCondition('field_lesson_course', 'target_id', $course_id)
-          ->fieldCondition('field_lesson_number', 'value',
-            DITOOLSI_TRAINING_FIRST_LESSON);
+          ->fieldCondition('field_lesson_number', 'value', DITOOLSI_TRAINING_FIRST_LESSON);
 
         $result = $query->execute();
 
@@ -4968,18 +4794,15 @@ function ditoolsi_excel_update_data_file($data, $course_id) {
           ),
         ));
 
-        db_insert('ditoolsi_training_pupils_list')
-          ->fields(array(
-            'course_id'      => $course_id,
-            'user_id'        => $account->uid,
-            'current_lesson' => DITOOLSI_TRAINING_FIRST_LESSON,
-            'created'        => time(),
-            'status'         => DITOOLSI_TRAINING_PUPIL_ACTIVE
-          ))
-          ->execute();
+        db_insert('ditoolsi_training_pupils_list')->fields(array(
+          'course_id'      => $course_id,
+          'user_id'        => $account->uid,
+          'current_lesson' => DITOOLSI_TRAINING_FIRST_LESSON,
+          'created'        => time(),
+          'status'         => DITOOLSI_TRAINING_PUPIL_ACTIVE,
+        ))->execute();
 
-        drupal_set_message(t('Pupil @mail successfully added to course',
-          array('@mail' => $email)));
+        drupal_set_message(t('Pupil @mail successfully added to course', array('@mail' => $email)));
 
         // $from = variable_get('site_mail', '');
         // $to_admin[1] = 'addminoz@gmail.com';
@@ -5098,8 +4921,7 @@ function ditoolsi_training_requests_review_form($form, &$form_state) {
   $query = ditoolsi_training_requests_review_query();
   $stop  = 'Stop';
   if (isset($form_state['values']['mail']) && $form_state['values']['mail'] !== '') {
-    $query->condition('u.mail',
-      '%' . db_like($form_state['values']['mail']) . '%', 'LIKE');
+    $query->condition('u.mail', '%' . db_like($form_state['values']['mail']) . '%', 'LIKE');
   }
 
   if (!empty($default_value)) {
@@ -5161,10 +4983,9 @@ function ditoolsi_training_requests_review_form($form, &$form_state) {
       unset($query_str2['not-finished']);
     }
 
-    array_unshift($links,
-      l('Показать все заявки', 'courses/requests-review', array(
-        'query' => $query_str2,
-      )));
+    array_unshift($links, l('Показать все заявки', 'courses/requests-review', array(
+      'query' => $query_str2,
+    )));
   }
 
   if (array_key_exists('finished', $query_str)) {
@@ -5179,22 +5000,18 @@ function ditoolsi_training_requests_review_form($form, &$form_state) {
       'flf.entity_id = lesson_id.field_progress_lesson_id_target_id');
     $query->condition('flf.field_lesson_final_value', 0);
   }
-  $results  = $query->extend('PagerDefault')
-    ->limit(MGC_REQUESTS_FOR_REVIEW_PER_PAGE)
-    ->execute()
-    ->fetchCol();
+  $results  = $query->extend('PagerDefault')->limit(MGC_REQUESTS_FOR_REVIEW_PER_PAGE)->execute()->fetchCol();
   $requests = node_load_multiple($results);
 
-  $par1 = mgc_get_requests_for_review_count();
-  $par2 = mgc_get_requests_for_review_w_empty_statuses_count();
-  $stop = 'Stop';
+  $par1  = mgc_get_requests_for_review_count();
+  $par2  = mgc_get_requests_for_review_w_empty_statuses_count();
+  $stop  = 'Stop';
   $links += array(
-    'not-finished' => l('Скрыть заявки с последнего урока',
-      'courses/requests-review', array(
-        'query' => $query_str + array('not-finished' => NULL),
-      )),
-    'finished'     => l("Показать заявки с последнего урока / {$par1} / {$par2}",
-      'courses/requests-review', array(
+    'not-finished' => l('Скрыть заявки с последнего урока', 'courses/requests-review', array(
+      'query' => $query_str + array('not-finished' => NULL),
+    )),
+    'finished'     => l("Показать заявки с последнего урока / {$par1} / {$par2}", 'courses/requests-review',
+      array(
         'query' => $query_str + array('finished' => NULL),
       )),
   );
@@ -5298,8 +5115,7 @@ function ditoolsi_training_requests_review_form($form, &$form_state) {
       )),
       'data_activity' => $date,
       'lesson_pupil'  => $lesson_number,
-      'pupil_log'     => l(t('Check task'),
-        "course/{$course_id}/{$lesson_id}/{$request->nid}/review"),
+      'pupil_log'     => l(t('Check task'), "course/{$course_id}/{$lesson_id}/{$request->nid}/review"),
       'status'        => render($select),
       'time_check'    => ($time_check && $time_sent ? '<div class="timer">' . (($time_check * 24 * 3600 + $time_sent) - REQUEST_TIME) . '</div>' : '-'),
     );
@@ -5308,12 +5124,11 @@ function ditoolsi_training_requests_review_form($form, &$form_state) {
   }
 
   $table_requests = theme('table', array(
-      'header' => $header,
-      'rows'   => $rows,
+    'header' => $header,
+    'rows'   => $rows,
 
-      'empty' => t('No requests found'),
-    )
-  );
+    'empty' => t('No requests found'),
+  ));
   $table_requests .= theme('pager');
 
   $form['table'] = array(
@@ -5384,7 +5199,7 @@ function ditoolsi_training_list_pupils_form($form, &$form_state, $course) {
     '#options'       => array(
       'any' => t('All'),
       1     => t('Active', array(), array('context' => 'Act')),
-      2     => t('Blocked', array(), array('context' => 'Block'))
+      2     => t('Blocked', array(), array('context' => 'Block')),
     ),
     '#default_value' => 0,
   );
@@ -5442,8 +5257,8 @@ function ditoolsi_training_list_pupils_form($form, &$form_state, $course) {
     '#suffix' => '</div>',
   );
 
-  $groups = get_group_list_by_teacher();
-  $groups['all'] = 'Все группы';
+  $groups                                = get_group_list_by_teacher();
+  $groups['all']                         = 'Все группы';
   $form['search_by_group']['user_group'] = array(
     '#type'          => 'select',
     '#title'         => 'Поиск по группе',
@@ -5463,21 +5278,18 @@ function ditoolsi_training_list_pupils_form($form, &$form_state, $course) {
   );
 
 
-  $query = ditoolsi_training_list_pupils_query($course)
-    ->extend('PagerDefault')
-    ->limit(30);
+  $query = ditoolsi_training_list_pupils_query($course)->extend('PagerDefault')->limit(30);
 
   if (isset($form_state['storage']['email']) && $form_state['storage']['email'] !== '') {
-    $query->condition('u.mail',
-      '%' . db_like($form_state['storage']['email']) . '%', 'LIKE');
+    $query->condition('u.mail', '%' . db_like($form_state['storage']['email']) . '%', 'LIKE');
   }
 
   if (isset($form_state['storage']['status']) && $form_state['storage']['status'] !== 'any') {
     $query->condition('pupils_list.status', $form_state['storage']['status']);
   }
 
-  if (isset($form_state['storage']['group']) && $form_state['storage']['group'] !== 'all' ) {
-    if($form_state['storage']['group'] !== '0') {
+  if (isset($form_state['storage']['group']) && $form_state['storage']['group'] !== 'all') {
+    if ($form_state['storage']['group'] !== '0') {
       $query->condition('user_group.field_user_group_tid', $form_state['storage']['group']);
     }
     else {
@@ -5486,27 +5298,17 @@ function ditoolsi_training_list_pupils_form($form, &$form_state, $course) {
   }
 
   if (isset($form_state['storage']['date_from']) && $form_state['storage']['date_from'] !== '' && isset($form_state['storage']['date_till']) && $form_state['storage']['date_till'] !== '') {
-    $query->condition('u.access',
-      strtotime($form_state['storage']['date_from']), '>=');
-    $query->condition('u.access',
-      strtotime($form_state['storage']['date_till']), '<=');
+    $query->condition('u.access', strtotime($form_state['storage']['date_from']), '>=');
+    $query->condition('u.access', strtotime($form_state['storage']['date_till']), '<=');
   }
 
   if (isset($form_state['storage']['lessons_from']) && isset($form_state['storage']['lessons_till'])) {
     // $query->condition('pupils_list.current_lesson', $form_state['storage']['lessons_from'], '>=');
     // $query->condition('pupils_list.current_lesson', $form_state['storage']['lessons_till'], '<=');
 
-    $query->condition(
-      db_or()
-        ->isNull('pupils_list.current_lesson')
-        ->condition(
-          db_and()
-            ->condition('pupils_list.current_lesson',
-              $form_state['storage']['lessons_from'], '>=')
-            ->condition('pupils_list.current_lesson',
-              $form_state['storage']['lessons_till'], '<=')
-        )
-    );
+    $query->condition(db_or()->isNull('pupils_list.current_lesson')->condition(db_and()
+      ->condition('pupils_list.current_lesson', $form_state['storage']['lessons_from'], '>=')
+      ->condition('pupils_list.current_lesson', $form_state['storage']['lessons_till'], '<=')));
   }
 
   $results = $query->execute()->fetchAll();
@@ -5516,9 +5318,9 @@ function ditoolsi_training_list_pupils_form($form, &$form_state, $course) {
     'user_mail'     => t('E-mail'),
     'data_activity' => t('Date of activity'),
     'pupil_status'  => t('Status'),
-    'pupil_group'  => t('Group'),
+    'pupil_group'   => t('Group'),
     'lesson_pupil'  => t('№ lesson'),
-    'pupil_log'     => t('History')
+    'pupil_log'     => t('History'),
   );
 
 
@@ -5531,15 +5333,15 @@ function ditoolsi_training_list_pupils_form($form, &$form_state, $course) {
     $name = $name ? implode(' ', array(
       $u_value->field_first_name_value,
       $u_value->field_middle_name_value,
-      $u_value->field_last_name_value
+      $u_value->field_last_name_value,
     )) : '';
 
-    if(empty($u_value->field_user_group_tid)){
+    if (empty($u_value->field_user_group_tid)) {
       $group_name = '--';
     }
     else {
-      $group_tid = $u_value->field_user_group_tid;
-      $group = taxonomy_term_load($group_tid);
+      $group_tid  = $u_value->field_user_group_tid;
+      $group      = taxonomy_term_load($group_tid);
       $group_name = $group->name;
     }
 
@@ -5549,11 +5351,10 @@ function ditoolsi_training_list_pupils_form($form, &$form_state, $course) {
       '#value'      => $u_value->current_lesson,
       '#attributes' => array(
         'class'   => array("lesson-select-user select-pupil-lesson-switch"),
-        'user_id' => array($u_value->user_id)
-      )
+        'user_id' => array($u_value->user_id),
+      ),
     );
-    $form['user_passed_lesson'] = getUserLessonList($course->nid, $result,
-      $u_value->user_id);
+    $form['user_passed_lesson'] = getUserLessonList($course->nid, $result, $u_value->user_id);
 
     $table_users[$u_value->user_id] = array(
       'number'        => ($page * 30) + $table_num,
@@ -5561,8 +5362,7 @@ function ditoolsi_training_list_pupils_form($form, &$form_state, $course) {
       'user_mail'     => $u_value->mail,
       'data_activity' => date('d M Y', $u_value->access),
       'pupil_status'  => $u_value->status == 1 ? t('Active', array(),
-        array('context' => 'Act')) : t('Blocked', array(),
-        array('context' => 'Block')),
+        array('context' => 'Act')) : t('Blocked', array(), array('context' => 'Block')),
       'pupil_group'   => $group_name,
       'lesson_pupil'  => drupal_render($form['lessons']),
       'pupil_log'     => drupal_render($form['user_passed_lesson']),
@@ -5620,21 +5420,21 @@ function ditoolsi_training_list_pupils_form($form, &$form_state, $course) {
   );
   $form['list-pupils-status'] = array(
     '#type'   => 'container',
-    '#suffix' => '<div class="list-pupils-status"></div>'
+    '#suffix' => '<div class="list-pupils-status"></div>',
   );
 
   $form['add_to_group'] = array(
-    '#type' => 'container',
+    '#type'       => 'container',
     '#attributes' => array(
-      'class' => array('add-to-group-wrap')
+      'class' => array('add-to-group-wrap'),
     ),
   );
 
-  if(!mgc_user_has_curator_role()){
+  if (!mgc_user_has_curator_role()) {
     $form['add_to_group']['list_group'] = array(
-      '#type' => 'select',
-      '#title' => 'Добавить в группу:',
-      '#options' => get_group_list_by_teacher(),
+      '#type'          => 'select',
+      '#title'         => 'Добавить в группу:',
+      '#options'       => get_group_list_by_teacher(),
       '#default_value' => 0,
     );
 
@@ -5650,7 +5450,7 @@ function ditoolsi_training_list_pupils_form($form, &$form_state, $course) {
   }
 
 
-  $form['#attached']          = array(
+  $form['#attached'] = array(
     'css' => array(
       drupal_get_path('theme', 'bootstrap_subtheme') . '/css/list-pupils.css',
     ),
@@ -5674,7 +5474,7 @@ function ditoolsi_training_list_pupils_ajax_callback($form, $form_state) {
   return $form;
 }
 
-function get_group_list_by_teacher(){
+function get_group_list_by_teacher() {
 
   global $user;
   $groups_term = get_groups_by_teacher($user);
@@ -5695,11 +5495,11 @@ function ditoolsi_training_add_user_to_group_ajax_callback($form, $form_state) {
 function ditoolsi_training_add_user_to_group_submit($form, &$form_state) {
   $user_ids = array_filter($form_state['values']['table']);
   $user_ids = array_values($user_ids);
-  $tid = $form_state['values']['list_group'];
+  $tid      = $form_state['values']['list_group'];
   if (!empty($user_ids)) {
     foreach ($user_ids as $uid) {
       $user = user_load($uid);
-      if($tid) {
+      if ($tid) {
         $user->field_user_group['und'][0]['tid'] = $tid;
       }
       else {
@@ -5719,16 +5519,12 @@ function ditoolsi_training_list_pupils_activate_submit($form, &$form_state) {
   $user_ids = array_unique($form_state['values']['table']);
   if (!empty($user_ids)) {
     $query = db_select('ditoolsi_training_pupils_list', 'pl');
-    $query
-      ->fields('pl')
-      ->condition('pl.course_id', $course->nid)
-      ->condition('pl.user_id', $user_ids, 'IN');
+    $query->fields('pl')->condition('pl.course_id', $course->nid)->condition('pl.user_id', $user_ids, 'IN');
 
     $result = $query->execute()->fetchAll();
 
     foreach ($result as $item) {
-      $lesson = dt_training_load_lesson_by_number($course->nid,
-        $item->current_lesson);
+      $lesson = dt_training_load_lesson_by_number($course->nid, $item->current_lesson);
 
       if ($lesson) {
         dt_training_update_start_time_progress($lesson, $item->user_id);
@@ -5805,8 +5601,7 @@ function ditoolsi_training_list_pupils_delete_submit($form, &$form_state) {
       $notification_options['account'] = $account;
       $notification_options['term']    = $term;
 
-      rules_invoke_event('ditoolsi_training_pupils_notification',
-        $notification_options);
+      rules_invoke_event('ditoolsi_training_pupils_notification', $notification_options);
     }
 
     db_delete('ditoolsi_training_pupils_list')
@@ -5850,7 +5645,7 @@ function mgc_list_all_pupils_upload($form, &$form_state) {
       $name = implode(' ', array(
         $items->field_first_name_value,
         $items->field_middle_name_value,
-        $items->field_last_name_value
+        $items->field_last_name_value,
       ));
     }
     $table_num = 1;
@@ -5859,8 +5654,7 @@ function mgc_list_all_pupils_upload($form, &$form_state) {
       $name,
       $items->mail,
       date('d M Y', $items->access),
-      $items->status == 1 ? t('Active', array(),
-        array('context' => 'Act')) : t('Blocked', array(),
+      $items->status == 1 ? t('Active', array(), array('context' => 'Act')) : t('Blocked', array(),
         array('context' => 'Block')),
       $items->current_lesson,
     );
@@ -5911,7 +5705,7 @@ function ditoolsi_training_list_pupils_upload_submit($form, &$form_state) {
         $name = implode(' ', array(
           $items->field_first_name_value,
           $items->field_middle_name_value,
-          $items->field_last_name_value
+          $items->field_last_name_value,
         ));
       }
       $table_num = 1;
@@ -5920,8 +5714,7 @@ function ditoolsi_training_list_pupils_upload_submit($form, &$form_state) {
         $name,
         $items->mail,
         date('d M Y', $items->access),
-        $items->status == 1 ? t('Active', array(),
-          array('context' => 'Act')) : t('Blocked', array(),
+        $items->status == 1 ? t('Active', array(), array('context' => 'Act')) : t('Blocked', array(),
           array('context' => 'Block')),
         $items->current_lesson,
       );
@@ -5967,8 +5760,7 @@ function ditoolsi_training_list_pupils_upload_ajax_callback(
     drupal_set_message(t('Select users'), 'error');
   }
   else {
-    $link = l(t('Download file'), $form_state['storage']['path'],
-      array('language' => LANGUAGE_NONE));
+    $link = l(t('Download file'), $form_state['storage']['path'], array('language' => LANGUAGE_NONE));
     drupal_set_message(t('Users upload'));
   }
 
@@ -6005,9 +5797,7 @@ function ditoolsi_training_list_pupils_library_form(
     $form_state['storage']['library'] = $library;
   }
 
-  $results = ditoolsi_training_add_pupils_library_query($library)
-    ->execute()
-    ->fetchAll();
+  $results = ditoolsi_training_add_pupils_library_query($library)->execute()->fetchAll();
   $header  = array(
     'number'    => t('№'),
     'user_name' => t('Name'),
@@ -6021,7 +5811,7 @@ function ditoolsi_training_list_pupils_library_form(
     $name                     = $name ? implode(' ', array(
       $items->field_first_name_value,
       $items->field_middle_name_value,
-      $items->field_last_name_value
+      $items->field_last_name_value,
     )) : $items->name;
     $table_users[$items->uid] = array(
       'number'    => $table_num,
@@ -6077,8 +5867,7 @@ function ditoolsi_training_list_pupils_library_form(
 
   $form['#attached'] = array(
     'css' => array(
-      drupal_get_path('theme',
-        'bootstrap_subtheme') . '/css/add-pupil-library.css',
+      drupal_get_path('theme', 'bootstrap_subtheme') . '/css/add-pupil-library.css',
     ),
   );
 
@@ -6097,21 +5886,19 @@ function ditoolsi_training_list_pupils_library_submit($form, &$form_state) {
     $result = $query->execute()->fetchAll();
 
     if (empty($result)) {
-      db_insert('ditoolsi_training_library_pupils')
-        ->fields(array(
-          'user_id'    => $account->uid,
-          'library_id' => $library->nid,
-          'created'    => time()
-        ))
-        ->execute();
+      db_insert('ditoolsi_training_library_pupils')->fields(array(
+        'user_id'    => $account->uid,
+        'library_id' => $library->nid,
+        'created'    => time(),
+      ))->execute();
 
       drupal_set_message(t('Pupil successfully added on your library'));
       $form_state['values']['mail'] = '';
       $form_state['input']['mail']  = '';
     }
     else {
-      drupal_set_message(t('Pupil @mail is already has access to the library',
-        array('@mail' => $mail)), 'error');
+      drupal_set_message(t('Pupil @mail is already has access to the library', array('@mail' => $mail)),
+        'error');
     }
   }
   else {
@@ -6257,26 +6044,17 @@ function ditoolsi_training_pupil_inform_form($form, &$form_state, $course) {
 
   $query = ditoolsi_training_inform_pupils_query($course);
   if (isset($form_state['storage']['user_mail']) && $form_state['storage']['user_mail'] !== '') {
-    $query->condition('u.mail',
-      '%' . db_like($form_state['storage']['user_mail']) . '%', 'LIKE');
+    $query->condition('u.mail', '%' . db_like($form_state['storage']['user_mail']) . '%', 'LIKE');
   }
-  if (isset($form_state['storage']['date_from'])
-    && $form_state['storage']['date_from'] !== ''
-    && isset($form_state['storage']['date_till'])
-    && $form_state['storage']['date_till'] !== ''
-  ) {
+  if (isset($form_state['storage']['date_from']) && $form_state['storage']['date_from'] !== '' && isset($form_state['storage']['date_till']) && $form_state['storage']['date_till'] !== '') {
     $date_from = strtotime($form_state['storage']['date_from']);
     $date_till = strtotime($form_state['storage']['date_till']);
     $query->condition('u.access', strtotime("midnight", $date_from), '>=');
     $query->condition('u.access', strtotime("tomorrow", $date_till) - 1, '<=');
   }
-  if (isset($form_state['storage']['lessons_from'])
-    && isset($form_state['storage']['lessons_till'])
-  ) {
-    $query->condition('pupils_list.current_lesson',
-      $form_state['storage']['lessons_from'], '>=');
-    $query->condition('pupils_list.current_lesson',
-      $form_state['storage']['lessons_till'], '<=');
+  if (isset($form_state['storage']['lessons_from']) && isset($form_state['storage']['lessons_till'])) {
+    $query->condition('pupils_list.current_lesson', $form_state['storage']['lessons_from'], '>=');
+    $query->condition('pupils_list.current_lesson', $form_state['storage']['lessons_till'], '<=');
   }
   $results = $query->execute()->fetchAll();
   $header  = array(
@@ -6299,8 +6077,7 @@ function ditoolsi_training_pupil_inform_form($form, &$form_state, $course) {
       'user_mail'     => $u_value->mail,
       'data_activity' => date('d M Y', $u_value->access),
       'pupil_status'  => $u_value->status == 1 ? t('Active', array(),
-        array('context' => 'Act')) : t('Blocked', array(),
-        array('context' => 'Block')),
+        array('context' => 'Act')) : t('Blocked', array(), array('context' => 'Block')),
       'lesson_pupil'  => $u_value->current_lesson,
     );
     $table_num++;
@@ -6379,8 +6156,7 @@ function ditoolsi_training_pupil_inform_search_ajax_callback(
  */
 function ditoolsi_training_inform_pupils_lesson_query($node) {
   $query = db_select('field_data_field_lesson_course', 'lr');
-  $query->innerJoin('field_data_field_lesson_number', 'lw',
-    'lw.entity_id = lr.entity_id');
+  $query->innerJoin('field_data_field_lesson_number', 'lw', 'lw.entity_id = lr.entity_id');
   $query->fields('lr', array('entity_id'));
   $query->fields('lw', array('field_lesson_number_value'));
   $query->condition('lr.field_lesson_course_target_id', $node->nid);
@@ -6414,11 +6190,10 @@ function ditoolsi_training_inform_pupils_send_submit($form, &$form_state) {
 
         if ($send_mail) {
           $recipient_message = $user_pupil->mail;
-          ditoolsi_email_send('ditoolsi_training', 'pupil_send_message',
-            $recipient_message, $language, array(
-              'body'    => $body,
-              'subject' => $subject
-            ), $mail_from, $send = TRUE);
+          ditoolsi_email_send('ditoolsi_training', 'pupil_send_message', $recipient_message, $language, array(
+            'body'    => $body,
+            'subject' => $subject,
+          ), $mail_from, $send = TRUE);
         }
       }
     }
@@ -6454,15 +6229,11 @@ function ditoolsi_training_create_private_msg(
   $or = db_or();
 
   $and = db_and();
-  $and
-    ->condition('i.recipient', $usr_from)
-    ->condition('m.author', $usr_to);
+  $and->condition('i.recipient', $usr_from)->condition('m.author', $usr_to);
   $or->condition($and);
 
   $and = db_and();
-  $and
-    ->condition('i.recipient', $usr_to)
-    ->condition('m.author', $usr_from);
+  $and->condition('i.recipient', $usr_to)->condition('m.author', $usr_from);
   $or->condition($and);
 
 
@@ -6471,25 +6242,22 @@ function ditoolsi_training_create_private_msg(
   $results = $query->execute()->fetchObject();
 
   if (!empty($results)) {
-    $mid = db_insert('pm_message')
-      ->fields(array(
-        'author'    => $usr_from,
-        'subject'   => '',
-        'body'      => $message_text,
-        'format'    => 'filtered_html',
-        'timestamp' => time(),
-      ))
-      ->execute();
+    $mid = db_insert('pm_message')->fields(array(
+      'author'    => $usr_from,
+      'subject'   => '',
+      'body'      => $message_text,
+      'format'    => 'filtered_html',
+      'timestamp' => time(),
+    ))->execute();
 
-    $query = db_insert('pm_index')
-      ->fields(array(
-        'mid',
-        'thread_id',
-        'recipient',
-        'is_new',
-        'deleted',
-        'type'
-      ));
+    $query = db_insert('pm_index')->fields(array(
+      'mid',
+      'thread_id',
+      'recipient',
+      'is_new',
+      'deleted',
+      'type',
+    ));
     $query->values(array(
       'mid'       => $mid,
       'thread_id' => $results->thread_id,
@@ -6509,25 +6277,22 @@ function ditoolsi_training_create_private_msg(
     $query->execute();
   }
   else {
-    $mid = db_insert('pm_message')
-      ->fields(array(
-        'author'    => $usr_from,
-        'subject'   => '',
-        'body'      => $message_text,
-        'format'    => 'filtered_html',
-        'timestamp' => time(),
-      ))
-      ->execute();
+    $mid = db_insert('pm_message')->fields(array(
+      'author'    => $usr_from,
+      'subject'   => '',
+      'body'      => $message_text,
+      'format'    => 'filtered_html',
+      'timestamp' => time(),
+    ))->execute();
 
-    $query = db_insert('pm_index')
-      ->fields(array(
-        'mid',
-        'thread_id',
-        'recipient',
-        'is_new',
-        'deleted',
-        'type'
-      ));
+    $query = db_insert('pm_index')->fields(array(
+      'mid',
+      'thread_id',
+      'recipient',
+      'is_new',
+      'deleted',
+      'type',
+    ));
     $query->values(array(
       'mid'       => $mid,
       'thread_id' => $mid,
@@ -6558,15 +6323,14 @@ function ditoolsi_training_inform_pupils_query($node) {
   );
   $type   = 'course';
   $query  = db_select('node', 'n');
-  $query->leftJoin('ditoolsi_training_pupils_list', 'pupils_list',
-    'pupils_list.course_id = n.nid');
+  $query->leftJoin('ditoolsi_training_pupils_list', 'pupils_list', 'pupils_list.course_id = n.nid');
   $query->innerJoin('users', 'u', 'u.uid = pupils_list.user_id');
   $query->fields('u', array('mail', 'access'));
   $query->fields('pupils_list', array(
     'user_id',
     'created',
     'status',
-    'current_lesson'
+    'current_lesson',
   ));
   $query->condition('n.nid', $node->nid);
   $query->condition('n.type', $type);
@@ -6601,8 +6365,7 @@ function ditoolsi_training_messages_rules_form($form, &$form_state, $course) {
 
   $status_options = array();
   $vocabulary     = taxonomy_vocabulary_machine_name_load('notify_events');
-  $terms          = entity_load('taxonomy_term', FALSE,
-    array('vid' => $vocabulary->vid));
+  $terms          = entity_load('taxonomy_term', FALSE, array('vid' => $vocabulary->vid));
 
   foreach ($terms as $key => $value) {
     $status_options[$key] = $value->name;
@@ -6627,7 +6390,7 @@ function ditoolsi_training_messages_rules_form($form, &$form_state, $course) {
     '#states'        => array(
       'visible' => array(
         ':input[name="rules_tree[status]"]' => array(
-          'value' => DT_TRAINING_TT_NO_ACTIVITY
+          'value' => DT_TRAINING_TT_NO_ACTIVITY,
         ),
       ),
     ),
@@ -6662,7 +6425,7 @@ function ditoolsi_training_messages_rules_form($form, &$form_state, $course) {
     '#states'       => array(
       'visible' => array(
         ':input[name="rules_tree[status]"]' => array(
-          'value' => DT_TRAINING_TT_NO_ACTIVITY
+          'value' => DT_TRAINING_TT_NO_ACTIVITY,
         ),
       ),
     ),
@@ -6676,12 +6439,9 @@ function ditoolsi_training_messages_rules_form($form, &$form_state, $course) {
   );
 
   $query = db_select('node', 'n');
-  $query->innerJoin('field_data_field_notification_type', 'ne',
-    'n.nid = ne.entity_id');
-  $query->innerJoin('taxonomy_term_data', 'tt',
-    'ne.field_notification_type_tid = tt.tid');
-  $query->innerJoin('field_data_field_notification_course', 'nc',
-    'n.nid = nc.entity_id');
+  $query->innerJoin('field_data_field_notification_type', 'ne', 'n.nid = ne.entity_id');
+  $query->innerJoin('taxonomy_term_data', 'tt', 'ne.field_notification_type_tid = tt.tid');
+  $query->innerJoin('field_data_field_notification_course', 'nc', 'n.nid = nc.entity_id');
   $query->condition('n.type', 'notification');
   $query->condition('nc.field_notification_course_target_id ', $course->nid);
   $query->fields('n', array('nid', 'title', 'status'));
@@ -6749,29 +6509,23 @@ function ditoolsi_training_messages_rules_form($form, &$form_state, $course) {
 function ditoolsi_training_messages_rules_validate($form, &$form_state) {
   $values = $form_state['values'];
   $course = $form_state['build_info']['args'][0];
-  if ($values['rules_tree']['status'] == DT_TRAINING_TT_NO_ACTIVITY
-    && empty($values['rules_tree']['days'])
-  ) {
+  if ($values['rules_tree']['status'] == DT_TRAINING_TT_NO_ACTIVITY && empty($values['rules_tree']['days'])) {
     form_set_error('rules_tree][days', t('!name field is required.', array(
       '!name' => t('Days count'),
     )));
   }
 
   $query = db_select('node', 'n');
-  $query->innerJoin('field_data_field_notification_type', 'ne',
-    'n.nid = ne.entity_id');
-  $query->innerJoin('field_data_field_notification_course', 'nc',
-    'n.nid = nc.entity_id');
+  $query->innerJoin('field_data_field_notification_type', 'ne', 'n.nid = ne.entity_id');
+  $query->innerJoin('field_data_field_notification_course', 'nc', 'n.nid = nc.entity_id');
   $query->condition('n.type', 'notification');
-  $query->condition('ne.field_notification_type_tid',
-    $values['rules_tree']['status']);
+  $query->condition('ne.field_notification_type_tid', $values['rules_tree']['status']);
   $query->condition('nc.field_notification_course_target_id ', $course->nid);
   $query->fields('n', array('nid'));
   $nodes = $query->execute()->fetchAll();
 
   if (!empty($nodes)) {
-    form_set_error('rules_tree][status',
-      t('You have already event with this type'));
+    form_set_error('rules_tree][status', t('You have already event with this type'));
   }
 }
 
@@ -6787,8 +6541,7 @@ function ditoolsi_training_messages_rules_form_submit($form, &$form_state) {
     'uid'  => $user->uid,
   ));
 
-  $n_wrapper                            = entity_metadata_wrapper('node',
-    $notification);
+  $n_wrapper                            = entity_metadata_wrapper('node', $notification);
   $n_wrapper->title                     = $values['rules_tree_content']['title'];
   $n_wrapper->body                      = $values['rules_tree_content']['body'];
   $n_wrapper->field_notification_course = $course->nid;
@@ -6903,8 +6656,7 @@ function ditoolsi_training_course_blocked_form($form, &$form_state) {
   $form['teacher'] = array(
     '#type'   => 'item',
     '#title'  => t('Teacher:'),
-    '#markup' => '<div class="text">' . l($teacher_name,
-        'user/' . $teacher->uid) . '</div>'
+    '#markup' => '<div class="text">' . l($teacher_name, 'user/' . $teacher->uid) . '</div>',
   );
 
   if (count($curator)) {
@@ -6916,8 +6668,7 @@ function ditoolsi_training_course_blocked_form($form, &$form_state) {
       $curator_name       = ditoolsi_profile_name($value->uid);
       $form['curators'][] = array(
         '#type'   => 'item',
-        '#markup' => '<div class="text">' . l($curator_name,
-            'user/' . $value->uid) . '</div>'
+        '#markup' => '<div class="text">' . l($curator_name, 'user/' . $value->uid) . '</div>',
       );
     }
   }
@@ -6954,7 +6705,7 @@ function ditoolsi_training_configure_activate_mail_form(
 ) {
   $mail   = ditoolsi_training_get_mail_activation($node);
   $titles = array(
-//    t('Message of activation account (student registration)'),
+    //    t('Message of activation account (student registration)'),
     t('Message of activation account (manual student registration)'),
     t('Adding student'),
   );
@@ -7002,8 +6753,7 @@ function ditoolsi_training_configure_activate_mail_form(
     ),
   );
 
-  form_load_include($form_state, 'module', 'ditoolsi_training',
-    'includes/form');
+  form_load_include($form_state, 'module', 'ditoolsi_training', 'includes/form');
 
   return $form;
 }
@@ -7130,15 +6880,12 @@ function ditoolsi_training_library_buy_form_submit($form, &$form_state) {
   $transaction = db_transaction();
 
   try {
-    ditoolsi_bonuses_upd_course_bonus_balance($account,
-      $form_state['course']->nid, $form_state['cost'] * -1);
-    db_insert('ditoolsi_training_library_pupils')
-      ->fields(array(
-        'user_id'    => $user->uid,
-        'library_id' => $node->nid,
-        'created'    => REQUEST_TIME,
-      ))
-      ->execute();
+    ditoolsi_bonuses_upd_course_bonus_balance($account, $form_state['course']->nid, $form_state['cost'] * -1);
+    db_insert('ditoolsi_training_library_pupils')->fields(array(
+      'user_id'    => $user->uid,
+      'library_id' => $node->nid,
+      'created'    => REQUEST_TIME,
+    ))->execute();
     drupal_set_message(t('You have become a party to the library'));
   } catch (Exception $e) {
     $transaction->rollback();
@@ -7152,10 +6899,25 @@ function mgc_send_mail($mail, $mail_subject, $mail_body) {
 
   $headers = 'MIME-Version: 1.0' . "\r\n";
   $headers .= 'Content-Type: text/html; charset=UTF-8; format=flowed' . "\r\n";
-  $headers .= 'From: ' . variable_get('site_mail',
-      'noreply@up-lvl.ru') . "\r\n";
+  $headers .= 'From: ' . variable_get('site_mail', 'noreply@up-lvl.ru') . "\r\n";
   $headers .= "X-Mailer: PHP/" . phpversion();
   mail($mail, $mail_subject, nl2br($mail_body), $headers,
     "-f " . variable_get('site_mail', 'noreply@up-lvl.ru'));
 }
 
+function mgc_set_activation($user_id, $teacher_id) {
+  db_insert('mgc_pupil_activation')->fields(array(
+    'teacher_id' => $teacher_id,
+    'user_id'    => $user_id,
+    'created'    => REQUEST_TIME,
+  ))->execute();
+}
+
+function mgc_set_progress_update($user_id, $teacher_id, $progress_id) {
+  db_insert('mgc_task_progress_update')->fields(array(
+    'teacher_id'  => $teacher_id,
+    'user_id'     => $user_id,
+    'progress_id' => $progress_id,
+    'created'     => REQUEST_TIME,
+  ))->execute();
+}

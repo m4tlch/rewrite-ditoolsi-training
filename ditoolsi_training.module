@@ -1779,7 +1779,8 @@ function ditoolsi_training_access($op) {
             case DT_TRAINING_LESSON_VISIBLE_VISIBLE_ONE_ACCESS_ONE:
             case DT_TRAINING_LESSON_VISIBLE_VISIBLE_ALL_ACCESS_ONE:
             default:
-              return $pupil && ($pupil->current_lesson == $lesson_number || $c_wrapper->field_if_lesson_open->value());
+              return $pupil && ($pupil->current_lesson === $lesson_number ||
+                  $c_wrapper->field_if_lesson_open->value());
               break;
 
             case DT_TRAINING_LESSON_VISIBLE_VISIBLE_ALL_ACCESS_ALL:
