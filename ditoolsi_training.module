@@ -155,15 +155,13 @@ function ditoolsi_training_notify_pupil() {
       ':rtime' => REQUEST_TIME,
     ));
 
-  $query
-    ->fields('n', array('uid'));
+  $query->fields('n', array('uid'));
   $query->addField('course', 'nid', 'course_id');
   $query->addField('lesson', 'nid', 'lesson_id');
   $query->addField('lesson', 'title', 'lesson_title');
   $query->addField('n', 'uid', 'user_id');
-  $query
-    ->condition('ps.field_progress_status_value',
-      DITOOLSI_TRAINING_PROGRESS_STATUS_REVIEW, '<>')
+  $query->condition('ps.field_progress_status_value',
+    DITOOLSI_TRAINING_PROGRESS_STATUS_REVIEW, '<>')
     ->condition('ps.field_progress_status_value',
       DITOOLSI_TRAINING_PROGRESS_STATUS_FINISHED, '<>')
     ->condition('lpt.field_lesson_pass_time_value', 0, '>')
@@ -230,9 +228,8 @@ function ditoolsi_training_notify_courator() {
     'course.nid = lc.field_lesson_course_target_id');
   $query->leftJoin('field_data_field_progress_notify_sent', 'pns',
     'pns.entity_id = n.nid');
-  $query
-    ->condition('ps.field_progress_status_value',
-      DITOOLSI_TRAINING_PROGRESS_STATUS_REVIEW)
+  $query->condition('ps.field_progress_status_value',
+    DITOOLSI_TRAINING_PROGRESS_STATUS_REVIEW)
     ->condition('lct.field_lesson_check_time_value', 0, '>');
   // ->condition(
   //   db_or()
@@ -321,7 +318,7 @@ function ditoolsi_training_notification_inactivity_process() {
   $pupils_query->fields('nt', array(
     'body_value',
     'field_days_of_inactivity_value',
-    'field_notification_vk_value'
+    'field_notification_vk_value',
   ));
   $pupils_result = $pupils_query->execute()->fetchAll();
 
@@ -336,17 +333,15 @@ function ditoolsi_training_notification_inactivity_process() {
       ditoolsi_email_send('ditoolsi_training', 'inactivity_message', $user_mail,
         $language, array(
           'body'    => $mail_message,
-          'subject' => t('Notification for inactivity')
+          'subject' => t('Notification for inactivity'),
         ), $mail_from, $send = TRUE);
 
       if ($value->field_notification_vk_value && $value->field_vk_page_value) {
-        db_insert('ditoolsi_training_vk_messages_queue')
-          ->fields(array(
-            'comment'      => $mail_message,
-            'vk_id'        => $value->field_vk_page_value,
-            'access_token' => $access_token,
-          ))
-          ->execute();
+        db_insert('ditoolsi_training_vk_messages_queue')->fields(array(
+          'comment'      => $mail_message,
+          'vk_id'        => $value->field_vk_page_value,
+          'access_token' => $access_token,
+        ))->execute();
       }
     }
   }
@@ -614,13 +609,13 @@ function ditoolsi_training_menu() {
   );
 
   $items['library/%node/%node'] = array(
-    'title'            => 'View the section',
-    'page callback'    => 'ditoolsi_training_section_page',
-    'page arguments'   => array(1, 2),
-    'access callback'  => 'ditoolsi_training_access',
-    'access arguments' => array('view section', 1, 2),
-    'type'             => MENU_CALLBACK,
-    'file'             => 'includes/page.inc',
+    'title'             => 'View the section',
+    'page callback'     => 'ditoolsi_training_section_page',
+    'page arguments'    => array(1, 2),
+    'access callback'   => 'ditoolsi_training_access',
+    'access arguments'  => array('view section', 1, 2),
+    'type'              => MENU_CALLBACK,
+    'file'              => 'includes/page.inc',
     'delivery callback' => 'ajax_deliver',
   );
 
@@ -826,8 +821,8 @@ function ditoolsi_training_menu() {
   $items['course/%node/request/%node/accept'] = array(
     'page callback'   => 'ditoolsi_training_accept_request_page',
     'page arguments'  => array(1, 3),
-//    'access callback' => 'ditoolsi_training_access',
-//    'access arguments' => array('request learning', 1),
+    //    'access callback' => 'ditoolsi_training_access',
+    //    'access arguments' => array('request learning', 1),
     'access callback' => TRUE,
     'type'            => MENU_CALLBACK,
     'file'            => 'includes/page.inc',
@@ -836,8 +831,8 @@ function ditoolsi_training_menu() {
   $items['course/%node/request/%node/reject'] = array(
     'page callback'   => 'ditoolsi_training_reject_request_page',
     'page arguments'  => array(1, 3),
-//    'access callback' => 'ditoolsi_training_access',
-//    'access arguments' => array('request learning', 1),
+    //    'access callback' => 'ditoolsi_training_access',
+    //    'access arguments' => array('request learning', 1),
     'access callback' => TRUE,
     'type'            => MENU_CALLBACK,
     'file'            => 'includes/page.inc',
@@ -899,6 +894,14 @@ function ditoolsi_training_menu() {
     'access callback' => TRUE,
     'type'            => MENU_CALLBACK,
     'file'            => 'includes/mgc.rewrite.helpers.inc',
+  );
+
+  $items['teach-course'] = array(
+    'page callback'    => 'mgc_teach_course_page',
+    'access callback'  => 'ditoolsi_training_access',
+    'access arguments' => array('view teach course'),
+    'type'             => MENU_CALLBACK,
+    'file'             => 'includes/page.inc',
   );
 
   return $items;
@@ -1043,8 +1046,7 @@ function ditoolsi_training_form_alter(&$form, &$form_state, $form_id) {
         $query = db_select('ditoolsi_training_curators_list', 'cl');
         $query->join('users', 'u', 'u.uid = cl.user_id');
         $query->addField('u', 'uid');
-        $query
-          ->condition('cl.course_id', $form_state['node']->nid)
+        $query->condition('cl.course_id', $form_state['node']->nid)
           ->condition('u.uid', 0, '<>');
         $uids     = $query->execute()->fetchCol();
         $accounts = user_load_multiple($uids);
@@ -1072,10 +1074,10 @@ function ditoolsi_training_form_alter(&$form, &$form_state, $form_id) {
             $checked_courators[$item['target_id']] = $item['target_id'];
           }
         }
-//        $checked_main_courators [$item['target_id']] = $form_state['node']->field_course_main_courator[LANGUAGE_NONE][0]['target_id'];
-//        if (!empty($form_state['node']->field_course_main_courator[LANGUAGE_NONE][0]['target_id'])) {
-//          $checked_main_courators[$item['target_id']] = $form_state['node']->field_course_main_courator[LANGUAGE_NONE][0]['target_id'];
-//        }
+        //        $checked_main_courators [$item['target_id']] = $form_state['node']->field_course_main_courator[LANGUAGE_NONE][0]['target_id'];
+        //        if (!empty($form_state['node']->field_course_main_courator[LANGUAGE_NONE][0]['target_id'])) {
+        //          $checked_main_courators[$item['target_id']] = $form_state['node']->field_course_main_courator[LANGUAGE_NONE][0]['target_id'];
+        //        }
         $stop                     = 'Stop';
         $form['notify_courators'] = array(
           '#type'          => 'checkboxes',
@@ -1085,13 +1087,13 @@ function ditoolsi_training_form_alter(&$form, &$form_state, $form_id) {
           '#default_value' => $checked_courators,
         );
 
-//        $form['main_courator']  = array(
-//          '#type'          => 'radios',
-//          '#title'         => $form['field_course_main_courator'][LANGUAGE_NONE]['#title'],
-//          '#options'       => $courators,
-//          '#weight'        => $form['field_course_main_courator']['#weight'],
-//          '#default_value' => !empty($form_state['node']->field_course_main_courator[LANGUAGE_NONE][0]['target_id']) ? $form_state['node']->field_course_main_courator[LANGUAGE_NONE][0]['target_id'] : 0,
-//        );
+        //        $form['main_courator']  = array(
+        //          '#type'          => 'radios',
+        //          '#title'         => $form['field_course_main_courator'][LANGUAGE_NONE]['#title'],
+        //          '#options'       => $courators,
+        //          '#weight'        => $form['field_course_main_courator']['#weight'],
+        //          '#default_value' => !empty($form_state['node']->field_course_main_courator[LANGUAGE_NONE][0]['target_id']) ? $form_state['node']->field_course_main_courator[LANGUAGE_NONE][0]['target_id'] : 0,
+        //        );
         if (!empty($form_state['node']->field_course_main_courator[LANGUAGE_NONE][0]['target_id'])) {
           $checked_main_courators[$form_state['node']->field_course_main_courator[LANGUAGE_NONE][0]['target_id']] = $form_state['node']->field_course_main_courator[LANGUAGE_NONE][0]['target_id'];
         }
@@ -1316,11 +1318,11 @@ function ditoosi_training_course_node_form_after_build($form, &$form_state) {
   $form['field_course_success_request'][LANGUAGE_NONE][0]['format']['#access']  = FALSE;
   /*Убрать дубликаты тел писем регистрации и добавки ученика из формы редактирования курса*/
   unset($form['#fieldgroups']['group_course_mail_adding']);
-//  unset($form['#groups']['group_course_mail_adding']);
+  //  unset($form['#groups']['group_course_mail_adding']);
   unset($form['#fieldgroups']['group_course_mail_activation']);
-//  unset($form['#groups']['group_course_mail_activation']);
-//  unset($form['field_course_mail_adding_body']);
-//  unset($form['field_course_mail_adding_subject']);
+  //  unset($form['#groups']['group_course_mail_activation']);
+  //  unset($form['field_course_mail_adding_body']);
+  //  unset($form['field_course_mail_adding_subject']);
 
   $form['language']['#access'] = FALSE;
   //field_group_hide_field_groups($form, array('group_1'));
@@ -1331,9 +1333,8 @@ function ditoosi_training_course_node_form_after_build($form, &$form_state) {
   }
 
   if (empty($form['field_course_image'][LANGUAGE_NONE][0]['fid']['#value'])) {
-    $btn = '<label class="select-file" for="edit-field-course-image-und-0-upload">' . t('Select a file') . '</label>';
-    $btn .= '<button type="button" target="edit-field-course-image-und-0-upload" class="btn btn-success add-button">'
-      . '<i class="fa fa-plus-circle"></i> ' . t('Add') . '</button>';
+    $btn                                                           = '<label class="select-file" for="edit-field-course-image-und-0-upload">' . t('Select a file') . '</label>';
+    $btn                                                           .= '<button type="button" target="edit-field-course-image-und-0-upload" class="btn btn-success add-button">' . '<i class="fa fa-plus-circle"></i> ' . t('Add') . '</button>';
     $form['field_course_image'][LANGUAGE_NONE][0]['#field_suffix'] = $btn;
   }
 
@@ -1620,6 +1621,11 @@ function ditoolsi_training_theme() {
         'procent_finished' => 0,
       ),
     ),
+    'mgc_teach_course_page'                  => array(
+      'path'      => $path,
+      'template'  => 'mgc-teach-course-page',
+      'variables' => array(),
+    ),
   );
 }
 
@@ -1823,8 +1829,7 @@ function ditoolsi_training_access($op) {
       $account = ditoolsi_profile_account($user);
       if (isset($account->roles[DITOOLSI_TEACHER_RID])) {
         $query = db_select('node', 'library');
-        $query
-          ->condition('library.type', 'library')
+        $query->condition('library.type', 'library')
           ->condition('library.nid', $library->nid)
           ->condition('library.uid', $account->uid);
         $result = $query->countQuery()->execute()->fetchField();
@@ -1841,8 +1846,7 @@ function ditoolsi_training_access($op) {
         $query->leftJoin('field_data_field_library_courses',
           'field_library_courses',
           'field_library_courses.field_library_courses_target_id = pupils_list.course_id');
-        $query
-          ->condition('pupils_list.course_id', $courses, 'IN')
+        $query->condition('pupils_list.course_id', $courses, 'IN')
           ->condition('pupils_list.user_id', $account->uid);
         $result = $query->countQuery()->execute()->fetchField();
 
@@ -1850,9 +1854,8 @@ function ditoolsi_training_access($op) {
           'library_pupils');
         $query->join('field_data_field_library_courses', 'courses',
           'courses.entity_id = library_pupils.library_id');
-        $query
-          ->condition('courses.field_library_courses_target_id', $courses, 'IN')
-          ->condition('library_pupils.user_id', $account->uid);
+        $query->condition('courses.field_library_courses_target_id', $courses,
+          'IN')->condition('library_pupils.user_id', $account->uid);
         $result = $result || $query->countQuery()->execute()->fetchField();
       }
 
@@ -1935,8 +1938,7 @@ function ditoolsi_training_access($op) {
         'ci.entity_id = n.nid');
       $query->join('field_data_field_request_course_status', 's',
         's.entity_id = n.nid');
-      $query
-        ->condition('n.uid', $user->uid)
+      $query->condition('n.uid', $user->uid)
         ->condition('ci.field_request_course_id_target_id', $course->nid)
         ->condition('s.field_request_course_status_value',
           DT_TRAINING_REQUEST_STATUS_NEW);
@@ -1964,6 +1966,9 @@ function ditoolsi_training_access($op) {
     case 'training toggle libraries':
       return user_access('training toggle libraries');
       break;
+
+    case 'view teach course':
+      return TRUE;
 
     case 'libraries':
       if (ditoolsi_training_access('training toggle libraries')) {
@@ -2408,7 +2413,7 @@ function ditoolsi_training_send_mail_to_pupil($account, $course_id) {
       'context' => array(
         'subject' => $title,
         'message' => $mess,
-      )
+      ),
     ), $from);
   }
 
@@ -2475,7 +2480,7 @@ function ditoolsi_training_list_pupils_query($node) {
     'user_id',
     'created',
     'status',
-    'current_lesson'
+    'current_lesson',
   ));
   $query->condition('n.nid', $node->nid);
   $query->condition('n.type', $type);
@@ -2487,15 +2492,15 @@ function ditoolsi_training_list_pupils_query($node) {
  * Function for list pupils.
  */
 function ditoolsi_training_list_pupils($node) {
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme')
-    . '/css/zebra_datepicker_bootstrap.css');
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme')
-    . '/css/ditoolsi-zebra-datepicker.css');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/zebra_datepicker_bootstrap.css');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/ditoolsi-zebra-datepicker.css');
 
-  drupal_add_js(drupal_get_path('theme', 'bootstrap_subtheme')
-    . '/js/zebra_datepicker.js');
-  drupal_add_js(drupal_get_path('module', 'ditoolsi_training')
-    . '/js/list-pupils.js');
+  drupal_add_js(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/js/zebra_datepicker.js');
+  drupal_add_js(drupal_get_path('module',
+      'ditoolsi_training') . '/js/list-pupils.js');
   $form = drupal_get_form('ditoolsi_training_list_pupils_form', $node);
 
   return render($form);
@@ -2520,8 +2525,8 @@ function ditoolsi_training_add_pupils_library($node) {
   module_load_include('inc', 'ditoolsi_training', 'includes/page');
   $html = ditoolsi_training_library_page($node, FALSE);
   $form = drupal_get_form('ditoolsi_training_list_pupils_library_form', $node);
-  drupal_add_js(drupal_get_path('module', 'ditoolsi_training')
-    . '/js/list-pupils-library.js');
+  drupal_add_js(drupal_get_path('module',
+      'ditoolsi_training') . '/js/list-pupils-library.js');
 
   return $html . render($form);
 }
@@ -2641,25 +2646,24 @@ function ditoolsi_training_courses_user_search_autocomplete($course, $string) {
 function ditoolsi_training_curator_send_messages($node) {
   $course = node_load($node->nid);
 
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme')
-    . '/css/zebra_datepicker_bootstrap.css');
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme')
-    . '/css/ditoolsi-zebra-datepicker.css');
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme')
-    . '/css/list-pupils.css');
-  drupal_add_js(drupal_get_path('theme', 'bootstrap_subtheme')
-    . '/js/zebra_datepicker.js');
-  drupal_add_js(drupal_get_path('module', 'ditoolsi_training')
-    . '/js/inform-pupils.js');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/zebra_datepicker_bootstrap.css');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/ditoolsi-zebra-datepicker.css');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/list-pupils.css');
+  drupal_add_js(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/js/zebra_datepicker.js');
+  drupal_add_js(drupal_get_path('module',
+      'ditoolsi_training') . '/js/inform-pupils.js');
   $pupil_form = drupal_get_form('ditoolsi_training_pupil_inform_form', $node);
   $rule_form  = drupal_get_form('ditoolsi_training_messages_rules_form', $node);
 
   return theme('ditoolsi_training_inform_students', array(
-      'form_rules'    => $rule_form,
-      'form_messages' => $pupil_form,
-      'course'        => $course,
-    )
-  );
+    'form_rules'    => $rule_form,
+    'form_messages' => $pupil_form,
+    'course'        => $course,
+  ));
 }
 
 /**
@@ -2706,24 +2710,22 @@ function ditoolsi_training_pupils_tendency($node) {
     'ln.entity_id = lc.entity_id');
   $query->leftJoin('ditoolsi_training_pupils_list', 'tpl',
     'tpl.user_id = n.uid AND tpl.current_lesson = ln.field_lesson_number_value');
-  $query
-    ->isNull('tpl.id')
+  $query->isNull('tpl.id')
     ->condition('lc.field_lesson_course_target_id', $node->nid);
   $query->fields('lc', array('entity_id'));
   $query->addExpression('COUNT(n.nid)', 'count');
   $result_all = $query->execute()->fetchAllKeyed(0, 1);
 
   return theme('ditoolsi_training_pupils_tendency', array(
-      'tendency'        => NULL,
-      'course'          => $node,
-      'lesson_node'     => $node->lessons,
-      'count_pupil'     => $result,
-      'count_pupil_all' => $result_all,
-      'wrapper'         => NULL,
-      'lesson'          => NULL,
-      'time'            => $time_sum,
-    )
-  );
+    'tendency'        => NULL,
+    'course'          => $node,
+    'lesson_node'     => $node->lessons,
+    'count_pupil'     => $result,
+    'count_pupil_all' => $result_all,
+    'wrapper'         => NULL,
+    'lesson'          => NULL,
+    'time'            => $time_sum,
+  ));
 }
 
 function ditoolsi_training_page_alter(&$page) {
@@ -2754,15 +2756,13 @@ function ditoolsi_training_get_cources_query(
       'pl.course_id = course.nid');
     $query->addExpression('COUNT(pl.user_id)', 'pupils');
     $query->addField('course', 'nid', 'course_id');
-    $query
-      ->condition('course.type', 'course')
-      ->condition('course.uid', $account->uid)
-//      ->condition(
-//        db_or()
-//          ->condition('course.uid', $account->uid)
-//          ->condition('course.nid', DITOOLSI_TRAINING_TEACHER_COURSE)
-//      )
-      ->groupBy('course.nid');
+    $query->condition('course.type', 'course')
+      ->condition('course.uid', $account->uid)//      ->condition(
+    //        db_or()
+    //          ->condition('course.uid', $account->uid)
+    //          ->condition('course.nid', DITOOLSI_TRAINING_TEACHER_COURSE)
+    //      )
+    ->groupBy('course.nid');
   }
   elseif (user_access('training view courses curator', $account)) {
     $query = db_select('node', 'course');
@@ -2772,8 +2772,7 @@ function ditoolsi_training_get_cources_query(
       'cl.course_id = course.nid');
     $query->addExpression('COUNT(pl.user_id)', 'pupils');
     $query->addField('course', 'nid', 'course_id');
-    $query
-      ->condition('course.type', 'course')
+    $query->condition('course.type', 'course')
       ->condition('cl.user_id', $account->uid)
       ->groupBy('course.nid');
   }
@@ -2782,8 +2781,7 @@ function ditoolsi_training_get_cources_query(
     $query->join('ditoolsi_training_pupils_list', 'pl',
       'pl.course_id = course.nid');
     $query->fields('course', array('nid', 'uid'));
-    $query
-      ->condition('course.type', 'course')
+    $query->condition('course.type', 'course')
       ->condition('pl.user_id', $account->uid);
 
     $result = $query->execute()->fetchAll();
@@ -2799,8 +2797,7 @@ function ditoolsi_training_get_cources_query(
     $query = db_select('node', 'course');
     $query->addField('course', 'nid', 'course_id');
     $query->addExpression('0', 'pupils');
-    $query
-      ->condition('course.type', 'course');
+    $query->condition('course.type', 'course');
 
     $query->leftJoin('field_data_field_course_paid_courses', 'pc',
       'pc.field_course_paid_courses_target_id = course.nid');
@@ -2819,9 +2816,7 @@ function ditoolsi_training_get_cources_query(
       $or->condition('course.nid', $nids, 'IN');
     }
 
-    $query
-      ->condition($or)
-      ->groupBy('course.nid');
+    $query->condition($or)->groupBy('course.nid');
   }
   else {
     $query = db_select('node', 'course');
@@ -2829,8 +2824,7 @@ function ditoolsi_training_get_cources_query(
       'pl.course_id = course.nid');
     $query->addField('course', 'nid', 'course_id');
     $query->addExpression('0', 'pupils');
-    $query
-      ->condition('course.type', 'course')
+    $query->condition('course.type', 'course')
       ->condition('pl.user_id', $account->uid)
       ->groupBy('course.nid');
   }
@@ -2842,38 +2836,38 @@ function ditoolsi_training_get_cources_query(
  * Function returns access for course for user
  */
 function ditoolsi_training_get_cource_access($course, $with_paid = TRUE) {
-//  global $user;
-//
-//  $cache = &drupal_static(__FUNCTION__);
-//  if (mgc_user_has_curator_role()) {
-//    $course_curator_nid = mgc_get_curator_course($user);
-//    if ($course_curator_nid) {
-//      $course_id = $course_curator_nid;
-//      $course    = node_load($course_id);
-//    }
-//  }
-//  else {
-//    if (isset($cache[$course->nid . ((int) $with_paid)])) {
-//      return $cache[$course->nid . ((int) $with_paid)];
-//    }
-//  }
-//  $access = FALSE;
-//
-//  if (!is_object($course)) {
-//    return FALSE;
-//  }
-//
-//  $query = ditoolsi_training_get_cources_query($user->uid, $with_paid);
-//  $query->condition('course.nid', $course->nid);
-//  $result = $query->execute()->fetchField();
-//
-//  if (!empty($result)) {
-//    $access = TRUE;
-//  }
-//
-//  $cache[$course->nid . ((int) $with_paid)] = $access;
-//
-//  return $access;
+  //  global $user;
+  //
+  //  $cache = &drupal_static(__FUNCTION__);
+  //  if (mgc_user_has_curator_role()) {
+  //    $course_curator_nid = mgc_get_curator_course($user);
+  //    if ($course_curator_nid) {
+  //      $course_id = $course_curator_nid;
+  //      $course    = node_load($course_id);
+  //    }
+  //  }
+  //  else {
+  //    if (isset($cache[$course->nid . ((int) $with_paid)])) {
+  //      return $cache[$course->nid . ((int) $with_paid)];
+  //    }
+  //  }
+  //  $access = FALSE;
+  //
+  //  if (!is_object($course)) {
+  //    return FALSE;
+  //  }
+  //
+  //  $query = ditoolsi_training_get_cources_query($user->uid, $with_paid);
+  //  $query->condition('course.nid', $course->nid);
+  //  $result = $query->execute()->fetchField();
+  //
+  //  if (!empty($result)) {
+  //    $access = TRUE;
+  //  }
+  //
+  //  $cache[$course->nid . ((int) $with_paid)] = $access;
+  //
+  //  return $access;
   global $user;
 
   $cache = &drupal_static(__FUNCTION__);
@@ -2914,8 +2908,7 @@ function ditoolsi_training_text_task_history($lesson, $task, $account = NULL) {
   $answer   = '';
 
   $query = new EntityFieldQuery();
-  $query
-    ->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'text_task_progress')
     ->propertyCondition('uid', $account->uid)
     ->fieldCondition('field_progress_task', 'target_id', $task->nid);
@@ -2949,11 +2942,10 @@ function ditoolsi_training_text_task_history($lesson, $task, $account = NULL) {
     foreach ($pt_wrapper->field_progress_files->value() as $file) {
       $url     = file_create_url($file['uri']);
       $files[] = l($file['filename'], $url, array(
-          'attributes' => array(
-            'target' => '_blank',
-          ),
-        )
-      );
+        'attributes' => array(
+          'target' => '_blank',
+        ),
+      ));
     }
 
     // foreach ($pt_wrapper->field_progress_links->value() as $link) {
@@ -3023,14 +3015,12 @@ function ditoolsi_training_get_libraries_query($uid = NULL) {
     $query->addExpression('GROUP_CONCAT(courses.title SEPARATOR \', \')');
 
     $query->groupBy('library.nid');
-    $query
-      ->condition('library.type', 'library')
+    $query->condition('library.type', 'library')
       ->condition('library.uid', $account->uid);
   }
   else {
     $query = db_select('ditoolsi_training_library_pupils', 'library_pupils');
-    $query
-      ->fields('library_pupils', array('library_id'))
+    $query->fields('library_pupils', array('library_id'))
       ->condition('library_pupils.user_id', $account->uid);
 
     $nids1 = $query->execute()->fetchAllKeyed(0, 0);
@@ -3038,8 +3028,7 @@ function ditoolsi_training_get_libraries_query($uid = NULL) {
     $query = db_select('ditoolsi_training_pupils_list', 'pupils_list');
     $query->join('field_data_field_library_courses', 'field_library_courses',
       'field_library_courses.field_library_courses_target_id = pupils_list.course_id');
-    $query
-      ->fields('field_library_courses', array('entity_id'))
+    $query->fields('field_library_courses', array('entity_id'))
       ->condition('pupils_list.user_id', $account->uid);
 
     $nids2 = $query->execute()->fetchAllKeyed(0, 0);
@@ -3130,15 +3119,13 @@ function ditoolsi_training_queue_function($data) {
  */
 function ditoolsi_training_user_insert(&$edit, $account, $category) {
   if (isset($edit['roles'][DITOOLSI_TEACHER_RID]) || isset($account->roles[DITOOLSI_TEACHER_RID])) {
-    db_insert('ditoolsi_training_pupils_list')
-      ->fields(array(
-        'course_id'      => DITOOLSI_TRAINING_TEACHER_COURSE,
-        'user_id'        => $account->uid,
-        'current_lesson' => 1,
-        'created'        => REQUEST_TIME,
-        'status'         => DITOOLSI_TRAINING_PUPIL_ACTIVE,
-      ))
-      ->execute();
+    db_insert('ditoolsi_training_pupils_list')->fields(array(
+      'course_id'      => DITOOLSI_TRAINING_TEACHER_COURSE,
+      'user_id'        => $account->uid,
+      'current_lesson' => 1,
+      'created'        => REQUEST_TIME,
+      'status'         => DITOOLSI_TRAINING_PUPIL_ACTIVE,
+    ))->execute();
   }
 }
 
@@ -3184,12 +3171,12 @@ function ditoolsi_training_send_vk_message($to, $message, $access_token) {
 
     $header[0] = "Accept: text/xml,application/xml,application/xhtml+xml,";
     $header[0] .= "text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
-    $header[] = "Cache-Control: max-age=0";
-    $header[] = "Connection: keep-alive";
-    $header[] = "Keep-Alive: 300";
-    $header[] = "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7";
-    $header[] = "Accept-Language: en-us,en;q=0.5";
-    $header[] = "Pragma: ";
+    $header[]  = "Cache-Control: max-age=0";
+    $header[]  = "Connection: keep-alive";
+    $header[]  = "Keep-Alive: 300";
+    $header[]  = "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7";
+    $header[]  = "Accept-Language: en-us,en;q=0.5";
+    $header[]  = "Pragma: ";
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL,
@@ -3214,7 +3201,7 @@ function ditoolsi_training_send_vk_message($to, $message, $access_token) {
         'user_id'      => $response->response[0]->uid,
         'message'      => $message,
         'v'            => 5.45,
-        'access_token' => $access_token
+        'access_token' => $access_token,
       );
       $url_test = 'https://api.vk.com/method/messages.send?' . http_build_query($params);
       $ch       = curl_init();
@@ -3259,8 +3246,7 @@ function ditoolsi_training_library_is_available($node) {
   }
 
   $query = db_select('ditoolsi_training_library_pupils', 'library_pupils');
-  $query
-    ->condition('library_pupils.user_id', $user->uid)
+  $query->condition('library_pupils.user_id', $user->uid)
     ->condition('library_pupils.library_id', $node->nid);
 
   $cache = (bool) $query->countQuery()->execute()->fetchField();
@@ -3423,8 +3409,7 @@ function dt_training_update_start_time_progress(
     $query = db_select('node', 'n');
     $query->join('field_data_field_progress_lesson_id', 'pli',
       'pli.entity_id = n.nid');
-    $query
-      ->fields('n', array('nid'))
+    $query->fields('n', array('nid'))
       ->condition('n.uid', $account->uid)
       ->condition('pli.field_progress_lesson_id_target_id', $lesson->nid)
       ->range(0, 1);
@@ -3476,8 +3461,7 @@ function dt_training_load_lesson_progress($lesson, $account) {
   $query = db_select('node', 'n');
   $query->join('field_data_field_progress_lesson_id', 'pli',
     'pli.entity_id = n.nid');
-  $query
-    ->fields('n', array('nid'))
+  $query->fields('n', array('nid'))
     ->condition('n.uid', $account->uid)
     ->condition('pli.field_progress_lesson_id_target_id', $lesson->nid)
     ->range(0, 1);
@@ -3496,8 +3480,7 @@ function dt_training_load_lesson_by_number($course_id, $lesson_number) {
   }
 
   $query = new EntityFieldQuery();
-  $query
-    ->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'lesson')
     ->fieldCondition('field_lesson_course', 'target_id', $course_id)
     ->fieldCondition('field_lesson_number', 'value', $lesson_number);
@@ -3525,7 +3508,7 @@ function getUserLessonList($course_id, $lessons, $uid) {
     '#attributes' => array(
       'class'    => array("user-passed-lesson-list"),
       'data-uid' => $uid,
-      'data-cid' => $course_id
+      'data-cid' => $course_id,
     ),
     '#prefix'     => "<a target='_blank' class='lesson-link' href='/course/$course_id/{$lessons[0]->entity_id}/$uid/view-history'>Смотреть урок №</a>",
   );
