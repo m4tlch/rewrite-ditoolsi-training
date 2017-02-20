@@ -1,6 +1,3 @@
-<?php
-$courses = ditoolsi_training_get_courses();
-?>
 <div class="all-courses-dropdown dropdown">
   <?php
   print l(t('All courses'), 'courses', array(

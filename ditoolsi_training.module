@@ -896,8 +896,9 @@ function ditoolsi_training_menu() {
     'file'            => 'includes/mgc.rewrite.helpers.inc',
   );
 
-  $items['teach-course'] = array(
+  $items['teach-course/%node'] = array(
     'page callback'    => 'mgc_teach_course_page',
+    'page arguments'   => array(1),
     'access callback'  => 'ditoolsi_training_access',
     'access arguments' => array('view teach course'),
     'type'             => MENU_CALLBACK,
@@ -1623,8 +1624,32 @@ function ditoolsi_training_theme() {
     ),
     'mgc_teach_course_page'                  => array(
       'path'      => $path,
-      'template'  => 'mgc-teach-course-page',
-      'variables' => array(),
+      'template'  => 'teach-course-page',
+      'variables' => array(
+        'node'           => new stdClass(),
+        'title'          => '',
+        'description'    => '',
+        'lessons'        => array(),
+        'wrapper'        => new stdClass(),
+        'current_lesson' => -1,
+        'pupil'          => FALSE,
+        'name'           => '',
+      ),
+    ),
+    'mgc_teach_course_list_item'             => array(
+      'path'      => $path,
+      'template'  => 'course-list-item-teacher',
+      'variables' => array(
+        'node'        => new stdClass(),
+        'picture'     => NULL,
+        'title'       => '',
+        'description' => '',
+        'type'        => '',
+        'wrapper'     => new stdClass(),
+        'pupils'      => 0,
+        'blocked'     => FALSE,
+        'result'      => array(),
+      ),
     ),
   );
 }
@@ -1779,8 +1804,7 @@ function ditoolsi_training_access($op) {
             case DT_TRAINING_LESSON_VISIBLE_VISIBLE_ONE_ACCESS_ONE:
             case DT_TRAINING_LESSON_VISIBLE_VISIBLE_ALL_ACCESS_ONE:
             default:
-              return $pupil && ($pupil->current_lesson === $lesson_number ||
-                  $c_wrapper->field_if_lesson_open->value());
+              return $pupil && ($pupil->current_lesson === $lesson_number || $c_wrapper->field_if_lesson_open->value());
               break;
 
             case DT_TRAINING_LESSON_VISIBLE_VISIBLE_ALL_ACCESS_ALL:
@@ -2759,11 +2783,11 @@ function ditoolsi_training_get_cources_query(
     $query->addField('course', 'nid', 'course_id');
     $query->condition('course.type', 'course')
       ->condition('course.uid', $account->uid)//      ->condition(
-    //        db_or()
-    //          ->condition('course.uid', $account->uid)
-    //          ->condition('course.nid', DITOOLSI_TRAINING_TEACHER_COURSE)
-    //      )
-    ->groupBy('course.nid');
+      //        db_or()
+      //          ->condition('course.uid', $account->uid)
+      //          ->condition('course.nid', DITOOLSI_TRAINING_TEACHER_COURSE)
+      //      )
+      ->groupBy('course.nid');
   }
   elseif (user_access('training view courses curator', $account)) {
     $query = db_select('node', 'course');

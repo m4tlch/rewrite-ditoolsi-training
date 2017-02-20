@@ -8,7 +8,8 @@ function ditoolsi_training_page() {
   $query   = ditoolsi_training_get_cources_query(NULL, TRUE);
 
   if (isset($account->data['_order_courses']) && is_array($account->data['_order_courses'])) {
-    $query->orderBy('field(course.nid, ' . implode(', ', $account->data['_order_courses']) . ')');
+    $query->orderBy('field(course.nid, ' . implode(', ',
+        $account->data['_order_courses']) . ')');
   }
   else {
     $query->orderBy('course.created', 'desc');
@@ -41,7 +42,8 @@ function ditoolsi_training_page() {
     $item->title   = $node->title;
 
     $description       = $item->wrapper->body->value();
-    $item->description = check_markup($description['value'], $description['format']);
+    $item->description = check_markup($description['value'],
+      $description['format']);
     $item->type        = $item->wrapper->field_course_type->value();
     $item->pupils      = $result[$node->nid];
     $item->blocked     = ditoolsi_training_is_user_blocked($node);
@@ -55,7 +57,8 @@ function ditoolsi_training_page() {
   ));
 
   drupal_add_library('system', 'ui.sortable');
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/css/courses-list.css');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/courses-list.css');
 
   return $page;
 }
@@ -72,9 +75,12 @@ function ditoolsi_training_course_page($course) {
 
   drupal_add_js('https://www.youtube.com/iframe_api', 'external');
 
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/css/course.css');
-  drupal_add_js(drupal_get_path('theme', 'bootstrap_subtheme') . '/js/jquery/jquery.readmore.min.js');
-  drupal_add_js(drupal_get_path('module', 'ditoolsi_training') . '/js/course.js');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/course.css');
+  drupal_add_js(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/js/jquery/jquery.readmore.min.js');
+  drupal_add_js(drupal_get_path('module',
+      'ditoolsi_training') . '/js/course.js');
 
 
   $wrapper = entity_metadata_wrapper('node', $course);
@@ -160,7 +166,8 @@ function ditoolsi_training_course_page($course) {
           drupal_set_message(t('You accessible lesson #@number, review the material and go through the homework. !link',
             array(
               '@number' => $number,
-              '!link'   => '<br>' . l(t('Go to a lesson'), 'course/' . $course->nid . '/' . $lesson->nid),
+              '!link'   => '<br>' . l(t('Go to a lesson'),
+                  'course/' . $course->nid . '/' . $lesson->nid),
             )));
           user_cookie_save(array('next_lesson' => $lesson->nid));
           $has_actual_lesson = TRUE;
@@ -169,7 +176,9 @@ function ditoolsi_training_course_page($course) {
           $task_number = -1;
 
           foreach ($pl_wrapper->field_progress_tasks->value() as $progress_task) {
-            if ($progress_status = field_get_items('field_collection_item', $progress_task, 'field_progress_status')) {
+            if ($progress_status = field_get_items('field_collection_item',
+              $progress_task, 'field_progress_status')
+            ) {
               if (in_array($progress_status[0]['value'], array(
                 DITOOLSI_TRAINING_PROGRESS_STATUS_NEW,
                 DITOOLSI_TRAINING_PROGRESS_STATUS_RECAST,
@@ -194,11 +203,13 @@ function ditoolsi_training_course_page($course) {
             $task_number = -1;
           }
 
-          drupal_set_message(t('Teacher asks to complete your homework. !link', array(
-            '!link' => '<br>' . l(t('Go to a task'), 'course/' . $course->nid . '/' . $lesson->nid, array(
-                  'fragment' => 'to-task-' . $task_number,
-                )),
-          )));
+          drupal_set_message(t('Teacher asks to complete your homework. !link',
+            array(
+              '!link' => '<br>' . l(t('Go to a task'),
+                  'course/' . $course->nid . '/' . $lesson->nid, array(
+                    'fragment' => 'to-task-' . $task_number,
+                  )),
+            )));
           user_cookie_save(array('next_lesson' => $lesson->nid));
           $has_actual_lesson = TRUE;
         }
@@ -209,7 +220,8 @@ function ditoolsi_training_course_page($course) {
         drupal_set_message(t('You accessible lesson #@number, review the material and go through the homework. !link',
           array(
             '@number' => $number,
-            '!link'   => '<br>' . l(t('Go to a lesson'), 'course/' . $course->nid . '/' . $lesson->nid),
+            '!link'   => '<br>' . l(t('Go to a lesson'),
+                'course/' . $course->nid . '/' . $lesson->nid),
           )));
         user_cookie_save(array('next_lesson' => $lesson->nid));
         $has_actual_lesson = TRUE;
@@ -235,26 +247,35 @@ function ditoolsi_training_course_page($course) {
 
     $query->condition($or);
     $query->join('node', 'n', 'n.nid = pl.course_id');
-    $query->join('field_data_field_lesson_course', 'lc', 'lc.field_lesson_course_target_id = n.nid');
+    $query->join('field_data_field_lesson_course', 'lc',
+      'lc.field_lesson_course_target_id = n.nid');
     $query->join('field_data_field_lesson_number', 'ln',
       'ln.entity_id = lc.entity_id AND ln.field_lesson_number_value = pl.current_lesson');
     $query->leftJoin('field_data_field_progress_lesson_id', 'pli',
       'pli.field_progress_lesson_id_target_id = lc.entity_id');
-    $query->leftJoin('field_data_field_progress_status', 'ps', 'ps.entity_id = pli.entity_id');
+    $query->leftJoin('field_data_field_progress_status', 'ps',
+      'ps.entity_id = pli.entity_id');
 
-    $object = $query->orderBy('ln.field_lesson_number_value', 'desc')->distinct()->execute()->fetchObject();
+    $object = $query->orderBy('ln.field_lesson_number_value', 'desc')
+      ->distinct()
+      ->execute()
+      ->fetchObject();
 
     if ($object) {
       if (isset($status) && $status == DITOOLSI_TRAINING_PROGRESS_STATUS_REVIEW) {
-        drupal_set_message(t('Your assignment for this course now checked. You can !link in other course', array(
-            '!link' => l(t('begin the lessons'), 'course/' . $object->course_id . '/' . $object->entity_id),
+        drupal_set_message(t('Your assignment for this course now checked. You can !link in other course',
+          array(
+            '!link' => l(t('begin the lessons'),
+              'course/' . $object->course_id . '/' . $object->entity_id),
           )));
         unset($in_review);
       }
       elseif ($pupil) {
         if ($pupil->started) {
-          drupal_set_message(t('Not available to carry out tasks for this course. You can !link in other course', array(
-              '!link' => l(t('begin the lessons'), 'course/' . $object->course_id . '/' . $object->entity_id),
+          drupal_set_message(t('Not available to carry out tasks for this course. You can !link in other course',
+            array(
+              '!link' => l(t('begin the lessons'),
+                'course/' . $object->course_id . '/' . $object->entity_id),
             )));
         }
         else {
@@ -278,7 +299,8 @@ function ditoolsi_training_course_page($course) {
   $html = theme('ditoolsi_training_course_page', array(
     'node'           => $course,
     'title'          => $course->title,
-    'description'    => isset($body['value']) ? check_markup($body['value'], $body['format']) : '',
+    'description'    => isset($body['value']) ? check_markup($body['value'],
+      $body['format']) : '',
     'lessons'        => $lessons,
     'wrapper'        => $wrapper,
     'current_lesson' => $current_lesson,
@@ -324,10 +346,14 @@ function ditoolsi_training_lesson_page($course, $lesson) {
 
   drupal_add_js('https://www.youtube.com/iframe_api', 'external');
 
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/css/lesson.css');
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/css/jquery/jquery.sliderTabs.min.css');
-  drupal_add_js(drupal_get_path('theme', 'bootstrap_subtheme') . '/js/jquery/jquery.sliderTabs.js');
-  drupal_add_js(drupal_get_path('module', 'ditoolsi_training') . '/js/lesson.js');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/lesson.css');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/jquery/jquery.sliderTabs.min.css');
+  drupal_add_js(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/js/jquery/jquery.sliderTabs.js');
+  drupal_add_js(drupal_get_path('module',
+      'ditoolsi_training') . '/js/lesson.js');
 
   $wrapper = entity_metadata_wrapper('node', $lesson);
 
@@ -337,16 +363,22 @@ function ditoolsi_training_lesson_page($course, $lesson) {
 
   if ($nids) {
     $query = db_select('node', 'n');
-    $query->join('field_data_field_progress_lesson_id', 'lesson_id', 'lesson_id.entity_id = n.nid');
-    $query->join('field_data_field_progress_tasks', 'progress_tasks', 'progress_tasks.entity_id = n.nid');
+    $query->join('field_data_field_progress_lesson_id', 'lesson_id',
+      'lesson_id.entity_id = n.nid');
+    $query->join('field_data_field_progress_tasks', 'progress_tasks',
+      'progress_tasks.entity_id = n.nid');
     $query->join('field_data_field_progress_task_progress', 'task_progress',
       'task_progress.entity_id = progress_tasks.field_progress_tasks_value');
     $query->join('node', 'node_progress_task',
       'node_progress_task.nid = task_progress.field_progress_task_progress_target_id');
-    $query->join('field_data_field_progress_task', 'progress_task', 'progress_task.entity_id = node_progress_task.nid');
-    $query->join('node', 'node_task', 'node_task.nid = progress_task.field_progress_task_target_id');
-    $query->join('field_data_field_progress_time_lock', 'time_lock', 'time_lock.entity_id = node_progress_task.nid');
-    $query->join('field_data_field_autotest_freeze_time', 'freeze_time', 'freeze_time.entity_id = node_task.nid');
+    $query->join('field_data_field_progress_task', 'progress_task',
+      'progress_task.entity_id = node_progress_task.nid');
+    $query->join('node', 'node_task',
+      'node_task.nid = progress_task.field_progress_task_target_id');
+    $query->join('field_data_field_progress_time_lock', 'time_lock',
+      'time_lock.entity_id = node_progress_task.nid');
+    $query->join('field_data_field_autotest_freeze_time', 'freeze_time',
+      'freeze_time.entity_id = node_task.nid');
 
     $query->fields('node_progress_task', array('nid'))
       ->condition('n.type', 'lesson_progress')
@@ -356,8 +388,10 @@ function ditoolsi_training_lesson_page($course, $lesson) {
       ->condition('n.uid', $user->uid)
       ->condition('node_progress_task.uid', $user->uid);
 
-    $query->addField('time_lock', 'field_progress_time_lock_value', 'time_lock');
-    $query->addField('freeze_time', 'field_autotest_freeze_time_value', 'freeze_time');
+    $query->addField('time_lock', 'field_progress_time_lock_value',
+      'time_lock');
+    $query->addField('freeze_time', 'field_autotest_freeze_time_value',
+      'freeze_time');
 
     $items = $query->execute()->fetchAll();
   }
@@ -386,10 +420,12 @@ function ditoolsi_training_lesson_page($course, $lesson) {
 
   $current_lesson = ditoolsi_training_get_current_lesson($course);
   $lessons        = ditoolsi_training_get_lessons($course, $current_lesson);
-  $flag           = flag_get_user_flags('node', $lesson->nid, $user->uid, $sid = NULL);
+  $flag           = flag_get_user_flags('node', $lesson->nid, $user->uid,
+    $sid = NULL);
 
   if (!isset($flag['mark_first_time_student'])) {
-    $flag_pupil = flag('flag', 'mark_first_time_student', $lesson->nid, $user, TRUE);
+    $flag_pupil = flag('flag', 'mark_first_time_student', $lesson->nid, $user,
+      TRUE);
   }
 
 
@@ -408,7 +444,8 @@ function ditoolsi_training_lesson_page($course, $lesson) {
       $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'lesson_progress')
         ->propertyCondition('uid', $user->uid)
-        ->fieldCondition('field_progress_lesson_id', 'target_id', $lesson_item->nid);
+        ->fieldCondition('field_progress_lesson_id', 'target_id',
+          $lesson_item->nid);
 
       $result = $query->execute();
       $stop   = 'Stop';
@@ -420,7 +457,9 @@ function ditoolsi_training_lesson_page($course, $lesson) {
         $stop        = 'Stop';
         foreach ($pl_wrapper->field_progress_tasks->value() as $progress_task) {
           $stop = 'Stop';
-          if ($progress_status = field_get_items('field_collection_item', $progress_task, 'field_progress_status')) {
+          if ($progress_status = field_get_items('field_collection_item',
+            $progress_task, 'field_progress_status')
+          ) {
             $stop = 'Stop';
             if (in_array($progress_status[0]['value'], array(
               DITOOLSI_TRAINING_PROGRESS_STATUS_NEW,
@@ -461,19 +500,22 @@ function ditoolsi_training_lesson_page($course, $lesson) {
           drupal_set_message(t('You accessible task #@number, review the material and go through the homework. !link',
             array(
               '@number' => $task_number < 0 ? 1 : $task_number + 1,
-              '!link'   => '<br>' . l(t('Go to a task'), 'course/' . $course->nid . '/' . $lesson->nid, array(
-                  'fragment' => 'to-task-' . ($task_number < 0 ? 0 : $task_number),
-                )),
+              '!link'   => '<br>' . l(t('Go to a task'),
+                  'course/' . $course->nid . '/' . $lesson->nid, array(
+                    'fragment' => 'to-task-' . ($task_number < 0 ? 0 : $task_number),
+                  )),
             )));
           user_cookie_save(array('next_lesson' => $lesson->nid));
           $has_actual_lesson = TRUE;
         }
         elseif ($status == DITOOLSI_TRAINING_PROGRESS_STATUS_RECAST) {
-          drupal_set_message(t('Teacher asks to complete your homework. !link', array(
-            '!link' => '<br>' . l(t('Go to a task'), 'course/' . $course->nid . '/' . $lesson->nid, array(
-                  'fragment' => 'to-task-' . $task_number,
-                )),
-          )));
+          drupal_set_message(t('Teacher asks to complete your homework. !link',
+            array(
+              '!link' => '<br>' . l(t('Go to a task'),
+                  'course/' . $course->nid . '/' . $lesson->nid, array(
+                    'fragment' => 'to-task-' . $task_number,
+                  )),
+            )));
           user_cookie_save(array('next_lesson' => $lesson->nid));
           $has_actual_lesson = TRUE;
         }
@@ -483,9 +525,10 @@ function ditoolsi_training_lesson_page($course, $lesson) {
         drupal_set_message(t('You accessible task #@number, review the material and go through the homework. !link',
           array(
             '@number' => 1,
-            '!link'   => '<br>' . l(t('Go to a task'), 'course/' . $course->nid . '/' . $lesson_item->nid, array(
-                'fragment' => 'to-task-0',
-              )),
+            '!link'   => '<br>' . l(t('Go to a task'),
+                'course/' . $course->nid . '/' . $lesson_item->nid, array(
+                  'fragment' => 'to-task-0',
+                )),
           )));
         user_cookie_save(array('next_lesson' => $lesson_item->nid));
         $has_actual_lesson = TRUE;
@@ -511,19 +554,26 @@ function ditoolsi_training_lesson_page($course, $lesson) {
 
     $query->condition($or);
     $query->join('node', 'n', 'n.nid = pl.course_id');
-    $query->join('field_data_field_lesson_course', 'lc', 'lc.field_lesson_course_target_id = n.nid');
+    $query->join('field_data_field_lesson_course', 'lc',
+      'lc.field_lesson_course_target_id = n.nid');
     $query->join('field_data_field_lesson_number', 'ln',
       'ln.entity_id = lc.entity_id AND ln.field_lesson_number_value = pl.current_lesson');
     $query->leftJoin('field_data_field_progress_lesson_id', 'pli',
       'pli.field_progress_lesson_id_target_id = lc.entity_id');
-    $query->leftJoin('field_data_field_progress_status', 'ps', 'ps.entity_id = pli.entity_id');
+    $query->leftJoin('field_data_field_progress_status', 'ps',
+      'ps.entity_id = pli.entity_id');
 
-    $object = $query->orderBy('ln.field_lesson_number_value', 'desc')->distinct()->execute()->fetchObject();
+    $object = $query->orderBy('ln.field_lesson_number_value', 'desc')
+      ->distinct()
+      ->execute()
+      ->fetchObject();
 
     if ($object) {
       if (isset($status) && $status == DITOOLSI_TRAINING_PROGRESS_STATUS_REVIEW) {
-        drupal_set_message(t('Your assignment for this course now checked. You can !link in other course', array(
-            '!link' => l(t('begin the lessons'), 'course/' . $object->course_id . '/' . $object->entity_id),
+        drupal_set_message(t('Your assignment for this course now checked. You can !link in other course',
+          array(
+            '!link' => l(t('begin the lessons'),
+              'course/' . $object->course_id . '/' . $object->entity_id),
           )));
         unset($in_review);
       }
@@ -551,17 +601,22 @@ function ditoolsi_training_lesson_page($course, $lesson) {
 
 function ditoolsi_training_lesson_history_page($course, $lesson, $account) {
 
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/css/lesson.css');
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/css/jquery/jquery.sliderTabs.min.css');
-  drupal_add_js(drupal_get_path('theme', 'bootstrap_subtheme') . '/js/jquery/jquery.sliderTabs.js');
-  drupal_add_js(drupal_get_path('module', 'ditoolsi_training') . '/js/lesson.js');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/lesson.css');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/jquery/jquery.sliderTabs.min.css');
+  drupal_add_js(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/js/jquery/jquery.sliderTabs.js');
+  drupal_add_js(drupal_get_path('module',
+      'ditoolsi_training') . '/js/lesson.js');
 
   $wrapper = entity_metadata_wrapper('node', $lesson);
 
   module_load_include('inc', 'ditoolsi_training', 'includes/form');
 
   $current_lesson = ditoolsi_training_get_current_lesson($course, $account);
-  $lessons        = ditoolsi_training_get_lessons($course, $current_lesson, $account);
+  $lessons        = ditoolsi_training_get_lessons($course, $current_lesson,
+    $account);
   $stop           = 'Stop';
 
   return theme('ditoolsi_training_lesson_page', array(
@@ -582,12 +637,16 @@ function ditoolsi_training_requests_review_page($course) {
   $nids    = array_keys($course->lessons);
 
   $query = db_select('node', 'n');
-  $query->join('field_data_field_progress_lesson_id', 'lesson_id', 'lesson_id.entity_id = n.nid');
+  $query->join('field_data_field_progress_lesson_id', 'lesson_id',
+    'lesson_id.entity_id = n.nid');
   $query->join('field_data_field_lesson_course', 'course',
     'course.entity_id = lesson_id.field_progress_lesson_id_target_id');
-  $query->join('node', 'node_course', 'node_course.nid = course.field_lesson_course_target_id');
-  $query->join('field_data_field_progress_status', 'progress_status', 'progress_status.entity_id = n.nid');
-  $query->condition('progress_status.field_progress_status_value', DITOOLSI_TRAINING_PROGRESS_STATUS_REVIEW)
+  $query->join('node', 'node_course',
+    'node_course.nid = course.field_lesson_course_target_id');
+  $query->join('field_data_field_progress_status', 'progress_status',
+    'progress_status.entity_id = n.nid');
+  $query->condition('progress_status.field_progress_status_value',
+    DITOOLSI_TRAINING_PROGRESS_STATUS_REVIEW)
     ->condition('node_course.nid', $course->nid)
     ->fields('n', array('nid'));
 
@@ -603,10 +662,14 @@ function ditoolsi_training_requests_review_page($course) {
 
 function ditoolsi_training_check_lesson_page($course, $lesson, $progress) {
 
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/css/lesson.css');
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/css/jquery/jquery.sliderTabs.min.css');
-  drupal_add_js(drupal_get_path('theme', 'bootstrap_subtheme') . '/js/jquery/jquery.sliderTabs.js');
-  drupal_add_js(drupal_get_path('module', 'ditoolsi_training') . '/js/lesson.js');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/lesson.css');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/jquery/jquery.sliderTabs.min.css');
+  drupal_add_js(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/js/jquery/jquery.sliderTabs.js');
+  drupal_add_js(drupal_get_path('module',
+      'ditoolsi_training') . '/js/lesson.js');
 
   module_load_include('inc', 'ditoolsi_training', 'includes/form');
 
@@ -709,7 +772,8 @@ function ditoolsi_training_autotest_start_page($task) {
         ),
       ),
     );
-    $pl_wrapper                         = entity_metadata_wrapper('node', $progress);
+    $pl_wrapper                         = entity_metadata_wrapper('node',
+      $progress);
     $pl_wrapper->save();
   }
 
@@ -752,7 +816,8 @@ function ditoolsi_training_autotest_start_page($task) {
     ),
   );
 
-  $form       = drupal_get_form('ditoolsi_training_autotest_form', $lesson, $task);
+  $form       = drupal_get_form('ditoolsi_training_autotest_form', $lesson,
+    $task);
   $commands   = array();
   $commands[] = ajax_command_replace('#autotest-' . $task->nid,
     '<div id="autotest-' . $task->nid . '">' . render($form) . '</div>');
@@ -770,14 +835,18 @@ function ditoolsi_training_autotest_check_page($task) {
   $commands = array();
 
   $query = db_select('node', 'n');
-  $query->join('field_data_field_progress_lesson_id', 'lesson_id', 'lesson_id.entity_id = n.nid');
-  $query->join('field_data_field_progress_tasks', 'progress_tasks', 'progress_tasks.entity_id = n.nid');
+  $query->join('field_data_field_progress_lesson_id', 'lesson_id',
+    'lesson_id.entity_id = n.nid');
+  $query->join('field_data_field_progress_tasks', 'progress_tasks',
+    'progress_tasks.entity_id = n.nid');
   $query->join('field_data_field_progress_task_progress', 'task_progress',
     'task_progress.entity_id = progress_tasks.field_progress_tasks_value');
   $query->join('node', 'node_progress_task',
     'node_progress_task.nid = task_progress.field_progress_task_progress_target_id');
-  $query->join('field_data_field_progress_task', 'progress_task', 'progress_task.entity_id = node_progress_task.nid');
-  $query->join('node', 'node_task', 'node_task.nid = progress_task.field_progress_task_target_id');
+  $query->join('field_data_field_progress_task', 'progress_task',
+    'progress_task.entity_id = node_progress_task.nid');
+  $query->join('node', 'node_task',
+    'node_task.nid = progress_task.field_progress_task_target_id');
   $query->join('field_data_field_autotest_time_completion', 'time_completion',
     'time_completion.entity_id = node_task.nid');
   $query->join('field_data_field_progress_start_autotest', 'start_autotest',
@@ -791,8 +860,10 @@ function ditoolsi_training_autotest_check_page($task) {
     ->condition('n.uid', $user->uid)
     ->condition('node_progress_task.uid', $user->uid);
 
-  $query->addField('time_completion', 'field_autotest_time_completion_value', 'time_completion');
-  $query->addField('start_autotest', 'field_progress_start_autotest_value', 'start_autotest');
+  $query->addField('time_completion', 'field_autotest_time_completion_value',
+    'time_completion');
+  $query->addField('start_autotest', 'field_progress_start_autotest_value',
+    'start_autotest');
 
   $result          = $query->execute()->fetchObject();
   $time_completion = $result->time_completion * 60;
@@ -853,7 +924,8 @@ function ditoolsi_training_to_review_page($course, $lesson) {
 
       $lesson_low_score            = $lesson->field_low_score['und'][0]['value'];
       $lesson_high_score           = $lesson->field_high_score['und'][0]['value'];
-      $bonus_points                = rand($lesson_low_score, $lesson_high_score);
+      $bonus_points                = rand($lesson_low_score,
+        $lesson_high_score);
       $progess_message             = $autocomments[array_rand($autocomments)];
       $progess_message             = str_replace(array(
         "\n",
@@ -893,7 +965,8 @@ function ditoolsi_training_to_review_page($course, $lesson) {
       $teacher = ditoolsi_profile_account($course->uid);
       ditoolsi_add_notification($teacher, $text);
 
-      _mgc_training_accept_lesson($node, $lesson, $bonus_points, $progess_message, $teacher);
+      _mgc_training_accept_lesson($node, $lesson, $bonus_points,
+        $progess_message, $teacher);
       $text = 'Ваши задания урока ' . $lesson_title . ' курса ' . $course_title . ' отправлены на проверку куратору и будут скоро проверены.';
       ditoolsi_add_notification($user, $text);
       $stop = 'Stop';
@@ -930,7 +1003,8 @@ function ditoolsi_training_to_review_page($course, $lesson) {
       drupal_set_message(t('The lesson has been sent for review'));
 
       $name         = '<b>' . ditoolsi_profile_name($user) . '</b>';
-      $lesson_title = l($lesson->title, "course/{$course->nid}/{$lesson->nid}/{$nid}/review");
+      $lesson_title = l($lesson->title,
+        "course/{$course->nid}/{$lesson->nid}/{$nid}/review");
       $course_title = l($course->title, "course/{$course->nid}");
       $query        = db_select('ditoolsi_training_curators_list', 'tcl');
       $query->condition('tcl.course_id', $course->nid);
@@ -984,10 +1058,12 @@ function _mgc_training_accept_lesson(
   node_save($progress);
   $account = user_load($progress->uid);
 
-  $flag = flag_get_user_flags('node', $lesson->nid, $progress->uid, $sid = 'student_next_lesson');
+  $flag = flag_get_user_flags('node', $lesson->nid, $progress->uid,
+    $sid = 'student_next_lesson');
 
   if (!isset($flag['student_next_lesson'])) {
-    $flag_finish = flag('flag', 'student_next_lesson', $lesson->nid, $progress, TRUE);
+    $flag_finish = flag('flag', 'student_next_lesson', $lesson->nid, $progress,
+      TRUE);
   }
 
   $course_id   = $lesson->field_lesson_course[LANGUAGE_NONE][0]['target_id'];
@@ -995,9 +1071,13 @@ function _mgc_training_accept_lesson(
   $next_lesson = $lesson->field_lesson_number['und'][0]['value'];
   $stop        = 'Stop';
 
-  db_update('ditoolsi_training_pupils_list')->fields(array(
-    'current_lesson' => ($next_lesson + 1),
-  ))->condition('user_id', $progress->uid)->condition('course_id', $course_id)->execute();
+  db_update('ditoolsi_training_pupils_list')
+    ->fields(array(
+      'current_lesson' => ($next_lesson + 1),
+    ))
+    ->condition('user_id', $progress->uid)
+    ->condition('course_id', $course_id)
+    ->execute();
 
   $pl_wrapper = entity_metadata_wrapper('node', $progress);
   $pl_wrapper->field_lesson_progress_mark->set($bonus_points);
@@ -1021,21 +1101,25 @@ function _mgc_training_accept_lesson(
     $bp_wrapper->save();
 
     //Edit user's bonus account
-    ditoolsi_bonuses_upd_course_bonus_balance($pupil_account, $course_id, $bonus_points);
+    ditoolsi_bonuses_upd_course_bonus_balance($pupil_account, $course_id,
+      $bonus_points);
   }
 
   $comment = strip_tags($progess_message);
   $comment = trim($comment);
 
   if ($comment) {
-    _mgc_training_create_private_msg($teacher_account, $pupil_account, $progess_message);
+    _mgc_training_create_private_msg($teacher_account, $pupil_account,
+      $progess_message);
   }
   /*Отправка писем*/
   mgc_send_mail_notification($bonus_points, $course, $account, $node, $comment);
 
   $access_token = isset($teacher_account->data['_vk_access_token']) ? $teacher_account->data['_vk_access_token'] : '';
   $stop         = 'Stop';
-  if ($access_token && $comment && ($field_vk = field_get_items('user', $account, 'field_vk_page'))) {
+  if ($access_token && $comment && ($field_vk = field_get_items('user',
+      $account, 'field_vk_page'))
+  ) {
     $parts = parse_url($field_vk[0]['value']);
 
     if ($bonus_points) {
@@ -1072,7 +1156,8 @@ function _mgc_training_accept_lesson(
         $comment = $course->field_course_vk_notify_next_less[LANGUAGE_NONE][0]['value'] . "\n\n" . $comment;
         $comment = format_string($comment, array(
           '@points'      => $bonus_points,
-          '@lesson_link' => url("course/{$course->nid}/{$lesson->nid}", array('absolute' => TRUE)),
+          '@lesson_link' => url("course/{$course->nid}/{$lesson->nid}",
+            array('absolute' => TRUE)),
         ));
       }
       $stop = 'Stop';
@@ -1094,10 +1179,12 @@ function _mgc_training_accept_lesson(
   $notification_options['account'] = $account;
   $notification_options['term']    = $term;
 
-  rules_invoke_event('ditoolsi_training_pupils_notification', $notification_options);
+  rules_invoke_event('ditoolsi_training_pupils_notification',
+    $notification_options);
 
   if ($bonus_points > 0) {
-    ditoolsi_set_account_message($account, t('The teacher has put you an estimate made for @rate lesson', array(
+    ditoolsi_set_account_message($account,
+      t('The teacher has put you an estimate made for @rate lesson', array(
         '@rate' => $bonus_points,
       )));
   }
@@ -1120,7 +1207,8 @@ function _mgc_training_accept_lesson(
     $name         = '<b>' . ditoolsi_profile_name($user) . '</b>';
     $lesson_title = l($lesson->title, "course/{$course->nid}/{$lesson->nid}");
     $course_title = l($course->title, "course/{$course->nid}");
-    $rating_type  = field_get_items('node', $course, 'field_course_rating_type');
+    $rating_type  = field_get_items('node', $course,
+      'field_course_rating_type');
 
     if (isset($rating_type[0]['value']) && $rating_type[0]['value'] == DT_TRAINING_RATING_2) {
       $rate = $bonus_points ? 'зачет' : 'не зачет';
@@ -1353,19 +1441,24 @@ function ditoolsi_training_pupil_switch_lesson_content() {
 
     if (defined('DT_TRAINING_PROMO_COURSE_' . $_POST['cID'])) {
       $query = db_select('node', 'n');
-      $query->join('field_data_field_progress_lesson_id', 'pli', 'pli.entity_id = n.nid');
-      $query->join('field_data_field_lesson_course', 'lc', 'lc.entity_id = pli.field_progress_lesson_id_target_id');
-      $query->join('field_data_field_lesson_number', 'ln', 'ln.entity_id = lc.entity_id');
+      $query->join('field_data_field_progress_lesson_id', 'pli',
+        'pli.entity_id = n.nid');
+      $query->join('field_data_field_lesson_course', 'lc',
+        'lc.entity_id = pli.field_progress_lesson_id_target_id');
+      $query->join('field_data_field_lesson_number', 'ln',
+        'ln.entity_id = lc.entity_id');
       $query->fields('n', array('nid'))
         ->condition('lc.field_lesson_course_target_id', $_POST['cID'])
         ->condition('n.uid', $_POST['uID'])
-        ->condition('ln.field_lesson_number_value', $_POST['lesson_switch'], '>=');
+        ->condition('ln.field_lesson_number_value', $_POST['lesson_switch'],
+          '>=');
 
       $nids  = $query->execute()->fetchCol();
       $nodes = node_load_multiple($nids);
 
       foreach ($nodes as $node) {
-        foreach (field_get_items('node', $node, 'field_progress_tasks') as $value) {
+        foreach (field_get_items('node', $node,
+          'field_progress_tasks') as $value) {
           $fc_item = field_collection_item_load($value['value']);
 
           if (isset($fc_item->field_progress_task_progress[LANGUAGE_NONE][0]['target_id'])) {
@@ -1451,7 +1544,8 @@ function ditoolsi_training_libraries_page() {
 
   drupal_add_js(array('descriptionType' => 'libraries'), 'setting');
   libraries_load('alertify.js');
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/css/libraries-list.css');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/libraries-list.css');
 
   return $page;
 }
@@ -1468,17 +1562,20 @@ function dt_training_toggle_libraries_page() {
 function ditoolsi_training_library_page($library, $page = TRUE) {
   global $user;
 
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/css/libraries.css');
-  drupal_add_js(drupal_get_path('module', 'ditoolsi_training') . '/js/library.js');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/libraries.css');
+  drupal_add_js(drupal_get_path('module',
+      'ditoolsi_training') . '/js/library.js');
 
   $wrapper  = entity_metadata_wrapper('node', $library);
   $body     = $wrapper->body->value();
   $sections = ditoolsi_training_get_section($library->nid);
   if (isset($user->roles[DITOOLSI_TEACHER_RID]) || isset($user->roles[DITOOLSI_ADMIN_RID])) {
     $query = db_select('node', 'library');
-    $query->leftJoin('field_data_field_library_courses', 'field_library_courses',
-      'field_library_courses.entity_id = library.nid');
-    $query->leftJoin('node', 'courses', 'courses.nid = field_library_courses.field_library_courses_target_id');
+    $query->leftJoin('field_data_field_library_courses',
+      'field_library_courses', 'field_library_courses.entity_id = library.nid');
+    $query->leftJoin('node', 'courses',
+      'courses.nid = field_library_courses.field_library_courses_target_id');
     $query->addExpression('library.nid');
     $query->addExpression('GROUP_CONCAT(courses.title SEPARATOR \', \')');
 
@@ -1491,8 +1588,10 @@ function ditoolsi_training_library_page($library, $page = TRUE) {
   }
   else {
     $query = db_select('node', 'library');
-    $query->join('field_data_field_library_courses', 'courses', 'courses.entity_id = library.nid');
-    $query->join('node', 'course', 'courses.field_library_courses_target_id = course.nid');
+    $query->join('field_data_field_library_courses', 'courses',
+      'courses.entity_id = library.nid');
+    $query->join('node', 'course',
+      'courses.field_library_courses_target_id = course.nid');
 
     $query->addExpression('library.nid');
     $query->addExpression('GROUP_CONCAT(course.title SEPARATOR \', \')');
@@ -1505,7 +1604,8 @@ function ditoolsi_training_library_page($library, $page = TRUE) {
   $html = theme('ditoolsi_training_library_page', array(
     'node'        => $library,
     'title'       => $library->title,
-    'description' => isset($body['value']) ? check_markup($body['value'], $body['format']) : '',
+    'description' => isset($body['value']) ? check_markup($body['value'],
+      $body['format']) : '',
     'sections'    => $sections,
     'wrapper'     => $wrapper,
     'courses'     => $courses,
@@ -1521,8 +1621,10 @@ function ditoolsi_training_section_page($library, $section) {
 
   $commands = array();
 
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/css/section.css');
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/css/jquery/jquery.sliderTabs.min.css');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/section.css');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/jquery/jquery.sliderTabs.min.css');
 
   $wrapper = entity_metadata_wrapper('node', $section);
 
@@ -1532,7 +1634,8 @@ function ditoolsi_training_section_page($library, $section) {
     'library' => $library,
   ));
   ctools_include('ajax');
-  $commands[] = ajax_command_replace('#section', '<div id="section">' . $html . '</div>');
+  $commands[] = ajax_command_replace('#section',
+    '<div id="section">' . $html . '</div>');
 
   // ajax_deliver(array('#type' => 'ajax', '#commands' => $commands));
   return [
@@ -1547,9 +1650,12 @@ function ditoolsi_training_section_page($library, $section) {
 function ditoolsi_training_project_team($course) {
   global $user;
 
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/css/course.css');
-  drupal_add_js(drupal_get_path('theme', 'bootstrap_subtheme') . '/js/jquery/jquery.readmore.min.js');
-  drupal_add_js(drupal_get_path('module', 'ditoolsi_training') . '/js/course.js');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/course.css');
+  drupal_add_js(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/js/jquery/jquery.readmore.min.js');
+  drupal_add_js(drupal_get_path('module',
+      'ditoolsi_training') . '/js/course.js');
 
   $wrapper = entity_metadata_wrapper('node', $course);
   $body    = $wrapper->body->value();
@@ -1568,7 +1674,8 @@ function ditoolsi_training_project_team($course) {
   return theme('ditoolsi_training_project_team_page', array(
     'node'        => $course,
     'title'       => $course->title,
-    'description' => isset($body['value']) ? check_markup($body['value'], $body['format']) : '',
+    'description' => isset($body['value']) ? check_markup($body['value'],
+      $body['format']) : '',
     'lessons'     => NULL,
     'wrapper'     => $wrapper,
     'teacher'     => $autor,
@@ -1583,10 +1690,14 @@ function ditoolsi_training_project_team($course) {
 function ditoolsi_training_pupil_achievements($course) {
   global $user;
 
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/css/course.css');
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/css/statistic.css');
-  drupal_add_js(drupal_get_path('theme', 'bootstrap_subtheme') . '/js/jquery/jquery.readmore.min.js');
-  drupal_add_js(drupal_get_path('module', 'ditoolsi_training') . '/js/course.js');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/course.css');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/statistic.css');
+  drupal_add_js(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/js/jquery/jquery.readmore.min.js');
+  drupal_add_js(drupal_get_path('module',
+      'ditoolsi_training') . '/js/course.js');
 
   $wrapper = entity_metadata_wrapper('node', $course);
   $body    = $wrapper->body->value();
@@ -1655,7 +1766,8 @@ function ditoolsi_training_pupil_achievements($course) {
   $html .= theme('ditoolsi_training_pupil_achievements', array(
     'course'       => $course,
     'wrapper'      => $wrapper,
-    'description'  => isset($body['value']) ? check_markup($body['value'], $body['format']) : '',
+    'description'  => isset($body['value']) ? check_markup($body['value'],
+      $body['format']) : '',
     'pupil'        => $pupil,
     'count_time'   => $count_time,
     'middle_time'  => isset($middle_time) ? $middle_time : NULL,
@@ -1680,7 +1792,8 @@ function ditoolsi_training_course_page_blocked($js = NULL) {
       'args' => array(arg(2)),
     ),
   );
-  $output     = ctools_modal_form_wrapper('ditoolsi_training_course_blocked_form', $form_state);
+  $output     = ctools_modal_form_wrapper('ditoolsi_training_course_blocked_form',
+    $form_state);
   print ajax_render($output);
   drupal_exit();
 }
@@ -1689,8 +1802,10 @@ function ditoolsi_training_task_redaction_page($course, $lesson, $task) {
   global $user;
 
   module_load_include('inc', 'ditoolsi_training', 'includes/form');
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/css/lesson.css');
-  drupal_add_js(drupal_get_path('module', 'ditoolsi_training') . '/js/task-redaction.js');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/lesson.css');
+  drupal_add_js(drupal_get_path('module',
+      'ditoolsi_training') . '/js/task-redaction.js');
   drupal_add_js(array(
     'ditoolsi' => array(
       'pupil' => TRUE,
@@ -1707,11 +1822,12 @@ function ditoolsi_training_task_redaction_page($course, $lesson, $task) {
   $task_file    = $t_wrapper->field_text_task_file->value();
 
   if (!empty($task_file)) {
-    $file_url = l($task_file['filename'], file_create_url($task_file['uri']), array(
-      'attributes' => array(
-        'target' => '_blank',
-      ),
-    ));
+    $file_url = l($task_file['filename'], file_create_url($task_file['uri']),
+      array(
+        'attributes' => array(
+          'target' => '_blank',
+        ),
+      ));
   }
   else {
     $file_url = t('None');
@@ -1740,10 +1856,12 @@ function ditoolsi_training_task_redaction_page($course, $lesson, $task) {
   }
 
   if (!$history) {
-    $form = drupal_get_form('ditoolsi_training_save_task_redaction_form', $lesson, $task);
+    $form = drupal_get_form('ditoolsi_training_save_task_redaction_form',
+      $lesson, $task);
   }
   else {
-    $form = drupal_get_form('ditoolsi_training_task_redaction_form', $task, 'body');
+    $form = drupal_get_form('ditoolsi_training_task_redaction_form', $task,
+      'body');
   }
 
   drupal_add_library('system', 'drupal.ajax');
@@ -1768,8 +1886,10 @@ function ditoolsi_training_review_task_redaction_page(
   $task
 ) {
   module_load_include('inc', 'ditoolsi_training', 'includes/form');
-  drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/css/lesson.css');
-  drupal_add_js(drupal_get_path('module', 'ditoolsi_training') . '/js/task-redaction.js');
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/lesson.css');
+  drupal_add_js(drupal_get_path('module',
+      'ditoolsi_training') . '/js/task-redaction.js');
   drupal_add_js(array(
     'ditoolsi' => array(
       'pupil' => FALSE,
@@ -1807,10 +1927,12 @@ function ditoolsi_training_review_task_redaction_page(
 
 
   if (!$history) {
-    $form = drupal_get_form('ditoolsi_training_save_task_redaction_form', $lesson, $task, $progress);
+    $form = drupal_get_form('ditoolsi_training_save_task_redaction_form',
+      $lesson, $task, $progress);
   }
   else {
-    $form = drupal_get_form('ditoolsi_training_task_redaction_form', $task, 'body');
+    $form = drupal_get_form('ditoolsi_training_task_redaction_form', $task,
+      'body');
   }
 
   return theme('ditoolsi_training_task_redaction_page', array(
@@ -1831,7 +1953,8 @@ function ditoolsi_training_task_redaction($task, $redaction) {
   drupal_add_library('system', 'drupal.ajax');
   module_load_include('inc', 'ditoolsi_training', 'includes/form');
 
-  $form_redaction = drupal_get_form('ditoolsi_training_task_redaction_form', $task, $redaction);
+  $form_redaction = drupal_get_form('ditoolsi_training_task_redaction_form',
+    $task, $redaction);
 
   $commands   = array();
   $commands[] = ajax_command_replace('#task-redaction',
@@ -2153,7 +2276,8 @@ function dt_training_ege_course_register_page() {
     $user = user_load($uid);
     user_login_finalize();
     user_save($user);
-    drupal_set_message(t('Congratulations!!! You have successfully signed up on the site. '), 'status');
+    drupal_set_message(t('Congratulations!!! You have successfully signed up on the site. '),
+      'status');
     $target = $find = '';
 
     module_load_include('php', 'ditoolsi', 'classes/GetResponseAPI.class');
@@ -2391,7 +2515,8 @@ function dt_training_socfit_course_register_page() {
     $user = user_load($uid);
     user_login_finalize();
     user_save($user);
-    drupal_set_message(t('Congratulations!!! You have successfully signed up on the site. '), 'status');
+    drupal_set_message(t('Congratulations!!! You have successfully signed up on the site. '),
+      'status');
     $target = $find = '';
 
     module_load_include('php', 'ditoolsi', 'classes/GetResponseAPI.class');
@@ -2511,7 +2636,9 @@ function dt_training_promo_course_register_page() {
 
 Желаем Вам успешного прохождения Курса! Ваша Академия.';
 
-      if (isset($parts['path']) && $access_token && user_access('training notify vk', $teacher)) {
+      if (isset($parts['path']) && $access_token && user_access('training notify vk',
+          $teacher)
+      ) {
         $parts['path'] = ltrim($parts['path'], '/');
         if ($access_token != NULL) {
           db_insert('ditoolsi_training_vk_messages_queue')->fields(array(
@@ -2524,9 +2651,11 @@ function dt_training_promo_course_register_page() {
     }
   }
 
-  require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'ditoolsi_profile') . '/bitrix24Lead.class.php');
+  require_once(DRUPAL_ROOT . '/' . drupal_get_path('module',
+      'ditoolsi_profile') . '/bitrix24Lead.class.php');
 
-  $bitrix24Lead = new bitrix24Lead(BITRIX24_LOGIN, BITRIX24_PASSWORD, BITRIX24_PREFIX);
+  $bitrix24Lead = new bitrix24Lead(BITRIX24_LOGIN, BITRIX24_PASSWORD,
+    BITRIX24_PREFIX);
   $bitrix24Lead->setTitle('Регистрация на промокурс - ' . $node->title)
     ->setValue('NAME', $name)
     ->setValue('PHONE_MOBILE', '')
@@ -2556,7 +2685,8 @@ function dt_training_promo_course_register_page() {
 Сейчас Вам нужно посмотреть первый видеоурок и выполнить !task.<br>
 Мы желаем Вам успехов в освоении курса! Пора сделать первый шаг))', array(
       '@course_title' => $node->title,
-      '!link'         => l(t('первый видеоурок'), 'course/' . $node->nid . '/' . $lesson_id),
+      '!link'         => l(t('первый видеоурок'),
+        'course/' . $node->nid . '/' . $lesson_id),
       '!task'         => l(t('первые задания к уроку'), '', array(
         'external' => TRUE,
         'fragment' => 'to-task-0',
@@ -2584,11 +2714,15 @@ function ditoolsi_training_library_buy_page($node) {
 
   $token = isset($_GET['token']) ? $_GET['token'] : FALSE;
 
-  if (!drupal_valid_token($token, 'buy-library-' . $node->nid . '-' . session_id())) {
+  if (!drupal_valid_token($token,
+    'buy-library-' . $node->nid . '-' . session_id())
+  ) {
     return MENU_ACCESS_DENIED;
   }
 
-  if (($cost = field_get_items('node', $node, 'field_library_cost')) && !empty($cost[0]['value'])) {
+  if (($cost = field_get_items('node', $node,
+      'field_library_cost')) && !empty($cost[0]['value'])
+  ) {
     module_load_include('inc', 'ditoolsi_training', 'includes/form');
 
     return drupal_get_form('ditoolsi_training_library_buy_form', $node);
@@ -2618,7 +2752,9 @@ function ditoolsi_training_accept_request_page($course, $request) {
 
   $token = isset($_GET['token']) ? $_GET['token'] : '';
 
-  if (!drupal_valid_token($token, "request-{$course->nid}-{$request->nid}-accept")) {
+  if (!drupal_valid_token($token,
+    "request-{$course->nid}-{$request->nid}-accept")
+  ) {
     //    return MENU_ACCESS_DENIED;
   }
 
@@ -2666,7 +2802,9 @@ function ditoolsi_training_accept_request_page($course, $request) {
 function ditoolsi_training_reject_request_page($course, $request) {
   $token = isset($_GET['token']) ? $_GET['token'] : '';
 
-  if (!drupal_valid_token($token, "request-{$course->nid}-{$request->nid}-reject")) {
+  if (!drupal_valid_token($token,
+    "request-{$course->nid}-{$request->nid}-reject")
+  ) {
     //    return MENU_ACCESS_DENIED;
   }
 
@@ -2817,7 +2955,8 @@ function dt_training_ereg_check_page() {
           $data['to']      = $mail;
           file_get_contents('http://obuchenie.fincult.ru/mail.php?' . http_build_query($data));
 
-          $data['subject'] = 'У Вас новый ученик - ' . variable_get('site_name', '');
+          $data['subject'] = 'У Вас новый ученик - ' . variable_get('site_name',
+              '');
           $data['body']    = '
   ************************************************************************
 
@@ -2834,10 +2973,12 @@ function dt_training_ereg_check_page() {
         else {
           ditoolsi_profile_send_mail_to_user($name, $mail);
           $from = variable_get('site_mail');
-          drupal_mail('system', 'mail', $teacher->mail, language_default(), array(
-            'context' => array(
-              'subject' => 'У Вас новый ученик - ' . variable_get('site_name', ''),
-              'message' => '
+          drupal_mail('system', 'mail', $teacher->mail, language_default(),
+            array(
+              'context' => array(
+                'subject' => 'У Вас новый ученик - ' . variable_get('site_name',
+                    ''),
+                'message' => '
   ************************************************************************
 
    ID Ученика: ' . $uid . '
@@ -2847,8 +2988,8 @@ function dt_training_ereg_check_page() {
 
   ************************************************************************
   ',
-            ),
-          ), $from);
+              ),
+            ), $from);
         }
 
 
@@ -2933,13 +3074,15 @@ function dt_training_epass_page() {
   $response = array();
 
   if ($account = user_load_by_name($name)) {
-    $mail               = _user_mail_notify('password_reset', $account, $language);
+    $mail               = _user_mail_notify('password_reset', $account,
+      $language);
     $response['notify'] = t('Further instructions have been sent to your e-mail address.');
     if (!empty($mail)) {
-      watchdog('user', 'Password reset instructions mailed to %name at %email.', array(
-        '%name'  => $account->name,
-        '%email' => $account->mail,
-      ));
+      watchdog('user', 'Password reset instructions mailed to %name at %email.',
+        array(
+          '%name'  => $account->name,
+          '%email' => $account->mail,
+        ));
     }
   }
   else {
@@ -3024,14 +3167,16 @@ function ditoolsi_training_course_request_page($course) {
     $phone = $account->field_phone[LANGUAGE_NONE][0]['value'];
   }
 
-  $text = 'У вас новая заявка на курс: "' . l($course->title, "node/{$course->nid}") . '"
+  $text = 'У вас новая заявка на курс: "' . l($course->title,
+      "node/{$course->nid}") . '"
 
 Клиент: 
 Имя: ' . ditoolsi_profile_name($user) . '
 Телефон: ' . $phone . '
 E-mail: ' . $user->mail;
 
-  drupal_mail('system', __FUNCTION__, ditoolsi_profile_account($course)->mail, language_default(), array(
+  drupal_mail('system', __FUNCTION__, ditoolsi_profile_account($course)->mail,
+    language_default(), array(
       'context' => array(
         'subject' => 'Новая заявка на курс в Профологии',
         'message' => $text,
@@ -3064,8 +3209,10 @@ function dt_training_toggle_statistic_block($node) {
 
   if (!empty($node->field_course_visible_sb[LANGUAGE_NONE][0]['value'])) {
     $node->field_course_visible_sb = array();
-    $commands[]                    = ajax_command_html('#toggle-statistic-block', t('Show block with statistics'));
-    $commands[]                    = ajax_command_invoke('#statistic-block', 'empty');
+    $commands[]                    = ajax_command_html('#toggle-statistic-block',
+      t('Show block with statistics'));
+    $commands[]                    = ajax_command_invoke('#statistic-block',
+      'empty');
   }
   else {
     ctools_include('ajax');
@@ -3104,7 +3251,8 @@ function dt_training_start_learn2_page($node) {
     ->fields('lc', array('entity_id'));
 
   $query->join('node', 'n', 'n.nid = pl.course_id');
-  $query->leftJoin('field_data_field_lesson_course', 'lc', 'lc.field_lesson_course_target_id = n.nid');
+  $query->leftJoin('field_data_field_lesson_course', 'lc',
+    'lc.field_lesson_course_target_id = n.nid');
   $query->leftJoin('field_data_field_lesson_number', 'ln',
     'ln.entity_id = lc.entity_id AND ln.field_lesson_number_value = pl.current_lesson');
 
@@ -3119,15 +3267,20 @@ function dt_training_start_learn2_page($node) {
   }
 
   if (!$pupil->current_lesson) {
-    db_update('ditoolsi_training_pupils_list')->fields(array(
-      'current_lesson' => 1,
-    ))->condition('user_id', $user->uid)->condition('course_id', $node->nid)->execute();
+    db_update('ditoolsi_training_pupils_list')
+      ->fields(array(
+        'current_lesson' => 1,
+      ))
+      ->condition('user_id', $user->uid)
+      ->condition('course_id', $node->nid)
+      ->execute();
 
     $pupil->current_lesson = 1;
   }
 
   if (!$pupil->entity_id) {
-    $lesson = dt_training_load_lesson_by_number($node->nid, $pupil->current_lesson);
+    $lesson = dt_training_load_lesson_by_number($node->nid,
+      $pupil->current_lesson);
   }
   else {
     $lesson = node_load($pupil->entity_id);
@@ -3187,7 +3340,8 @@ function mgc_pro_bibneva_course_register_page() {
     return;
   }
   elseif (!defined('DT_TRAINING_BIBNEVA_COURSE_' . $course_id)) {
-    watchdog(__FUNCTION__, 'invalid course_id' . 'DT_TRAINING_BIBNEVA_COURSE_' . $course_id);
+    watchdog(__FUNCTION__,
+      'invalid course_id' . 'DT_TRAINING_BIBNEVA_COURSE_' . $course_id);
     print 'invalid course_id';
 
     return;
@@ -3245,7 +3399,8 @@ function mgc_pro_bibneva_course_register_page() {
 Сейчас Вам нужно посмотреть первый видеоурок и выполнить !task.<br>
 Мы желаем Вам успехов в освоении курса! Пора сделать первый шаг))', array(
       '@course_title' => $node->title,
-      '!link'         => l(t('первый видеоурок'), 'course/' . $node->nid . '/' . $lesson_id),
+      '!link'         => l(t('первый видеоурок'),
+        'course/' . $node->nid . '/' . $lesson_id),
       '!task'         => l(t('первые задания к уроку'), '', array(
         'external' => TRUE,
         'fragment' => 'to-task-0',
@@ -3348,6 +3503,250 @@ function mgc_pro_bibneva_course_check_page() {
   drupal_json_output($response);
 }
 
-function mgc_teach_course_page() {
-  return theme('mgc_teach_course_page', array());
+function mgc_teach_course_page($course) {
+  global $user;
+
+  $variable = variable_get('training_first_session', array());
+  drupal_add_js(array(
+    'dtTraining' => array(
+      'firstSessionVideo' => isset($variable['video']) ? $variable['video'] : '',
+    ),
+  ), 'setting');
+
+  drupal_add_js('https://www.youtube.com/iframe_api', 'external');
+
+  drupal_add_css(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/css/course.css');
+  drupal_add_js(drupal_get_path('theme',
+      'bootstrap_subtheme') . '/js/jquery/jquery.readmore.min.js');
+  drupal_add_js(drupal_get_path('module',
+      'ditoolsi_training') . '/js/course.js');
+
+
+  $wrapper = entity_metadata_wrapper('node', $course);
+  $body    = $wrapper->body->value();
+
+  $pupil = db_select('ditoolsi_training_pupils_list', 'pl')
+    ->fields('pl', array('current_lesson', 'status', 'started'))
+    ->condition('pl.user_id', $user->uid)
+    ->condition('pl.course_id', $course->nid)
+    ->execute()
+    ->fetchObject();
+
+  if ($pupil && !$pupil->status) {
+    drupal_set_title($course->title);
+    if (!empty($course->field_course_main_courator[LANGUAGE_NONE])) {
+      $uid          = $course->field_course_main_courator[LANGUAGE_NONE][0]['target_id'];
+      $name         = ditoolsi_profile_name($uid);
+      $message_link = l($name, 'im/user-load/' . $uid, array(
+        'attributes' => array(
+          'target' => '_blank',
+        ),
+      ));
+    }
+    else {
+      $message_link = l('Список контактов', 'im/list-contacts', array(
+        'attributes' => array(
+          'target' => '_blank',
+        ),
+      ));
+    }
+
+    return '<p>Этот курс для Вас заблокирован. За информацией Вы можете обратиться к куратору ' . $message_link . '</p>';
+  }
+
+  // if ($pupil && empty($pupil->started)) {
+  //   db_update('ditoolsi_training_pupils_list')
+  //     ->fields(array(
+  //       'started' => REQUEST_TIME,
+  //     ))
+  //     ->condition('user_id', $user->uid)
+  //     ->condition('course_id', $course->nid)
+  //     ->execute();
+  // }
+
+  $name              = ditoolsi_profile_name($course->uid);
+  $current_lesson    = ditoolsi_training_get_current_lesson($course);
+  $lessons           = ditoolsi_training_get_lessons($course, $current_lesson);
+  $has_actual_lesson = FALSE;
+  $in_review         = TRUE;
+
+  foreach ($lessons as $lesson) {
+    if ($pupil && empty($lesson->progress)) {
+      dt_training_update_start_time_progress($lesson, $user);
+    }
+
+    if ($pupil && $lesson->field_lesson_number[LANGUAGE_NONE][0]['value'] == $pupil->current_lesson) {
+      $query = new EntityFieldQuery();
+      $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'lesson_progress')
+        ->propertyCondition('uid', $user->uid)
+        ->fieldCondition('field_progress_lesson_id', 'target_id', $lesson->nid);
+
+      $result = $query->execute();
+
+      if (isset($result['node'])) {
+        $nid        = key($result['node']);
+        $progress   = node_load($nid);
+        $pl_wrapper = entity_metadata_wrapper('node', $progress);
+
+        if (isset($progress->field_progress_status[LANGUAGE_NONE][0]['value'])) {
+          $status = $progress->field_progress_status[LANGUAGE_NONE][0]['value'];
+        }
+        else {
+          $status = -1;
+        }
+
+        if ($status == DITOOLSI_TRAINING_PROGRESS_STATUS_TO_REVIEW) {
+          drupal_set_message(t('You can send a lesson for review'));
+          $has_actual_lesson = TRUE;
+        }
+        elseif ($status == DITOOLSI_TRAINING_PROGRESS_STATUS_NEW && $pupil->started) {
+          $number = $lesson->field_lesson_number[LANGUAGE_NONE][0]['value'];
+          drupal_set_message(t('You accessible lesson #@number, review the material and go through the homework. !link',
+            array(
+              '@number' => $number,
+              '!link'   => '<br>' . l(t('Go to a lesson'),
+                  'course/' . $course->nid . '/' . $lesson->nid),
+            )));
+          user_cookie_save(array('next_lesson' => $lesson->nid));
+          $has_actual_lesson = TRUE;
+        }
+        elseif ($status == DITOOLSI_TRAINING_PROGRESS_STATUS_RECAST) {
+          $task_number = -1;
+
+          foreach ($pl_wrapper->field_progress_tasks->value() as $progress_task) {
+            if ($progress_status = field_get_items('field_collection_item',
+              $progress_task, 'field_progress_status')
+            ) {
+              if (in_array($progress_status[0]['value'], array(
+                DITOOLSI_TRAINING_PROGRESS_STATUS_NEW,
+                DITOOLSI_TRAINING_PROGRESS_STATUS_RECAST,
+                DITOOLSI_TRAINING_PROGRESS_STATUS_TO_REVIEW,
+              ))) {
+                $task_progress = node_load($progress_task->field_progress_task_progress[LANGUAGE_NONE][0]['target_id']);
+                $task1         = node_load($task_progress->field_progress_task[LANGUAGE_NONE][0]['target_id']);
+                $task_number   = 0;
+                foreach ($lesson->tasks as $task) {
+                  if ($task->nid == $task1->nid) {
+                    $valid_task_number = TRUE;
+                    break;
+                  }
+                  $task_number++;
+                }
+                break;
+              }
+            }
+          }
+
+          if (empty($valid_task_number)) {
+            $task_number = -1;
+          }
+
+          drupal_set_message(t('Teacher asks to complete your homework. !link',
+            array(
+              '!link' => '<br>' . l(t('Go to a task'),
+                  'course/' . $course->nid . '/' . $lesson->nid, array(
+                    'fragment' => 'to-task-' . $task_number,
+                  )),
+            )));
+          user_cookie_save(array('next_lesson' => $lesson->nid));
+          $has_actual_lesson = TRUE;
+        }
+        break;
+      }
+      elseif ($pupil->started) {
+        $number = $lesson->field_lesson_number[LANGUAGE_NONE][0]['value'];
+        drupal_set_message(t('You accessible lesson #@number, review the material and go through the homework. !link',
+          array(
+            '@number' => $number,
+            '!link'   => '<br>' . l(t('Go to a lesson'),
+                'course/' . $course->nid . '/' . $lesson->nid),
+          )));
+        user_cookie_save(array('next_lesson' => $lesson->nid));
+        $has_actual_lesson = TRUE;
+      }
+      break;
+    }
+  }
+
+  if (!$has_actual_lesson) {
+    $query = db_select('ditoolsi_training_pupils_list', 'pl')
+      ->fields('pl', array('current_lesson', 'course_id', 'user_id'))
+      ->fields('lc', array('entity_id'))
+      ->fields('ps', array('field_progress_status_value'))
+      ->condition('pl.user_id', $user->uid)
+      ->condition('pl.course_id', $course->nid, '<>');
+
+    $or = db_or();
+    $or->condition('ps.field_progress_status_value', array(
+      DITOOLSI_TRAINING_PROGRESS_STATUS_NEW,
+      DITOOLSI_TRAINING_PROGRESS_STATUS_RECAST,
+      DITOOLSI_TRAINING_PROGRESS_STATUS_TO_REVIEW,
+    ), 'IN')->isNull('ps.field_progress_status_value');
+
+    $query->condition($or);
+    $query->join('node', 'n', 'n.nid = pl.course_id');
+    $query->join('field_data_field_lesson_course', 'lc',
+      'lc.field_lesson_course_target_id = n.nid');
+    $query->join('field_data_field_lesson_number', 'ln',
+      'ln.entity_id = lc.entity_id AND ln.field_lesson_number_value = pl.current_lesson');
+    $query->leftJoin('field_data_field_progress_lesson_id', 'pli',
+      'pli.field_progress_lesson_id_target_id = lc.entity_id');
+    $query->leftJoin('field_data_field_progress_status', 'ps',
+      'ps.entity_id = pli.entity_id');
+
+    $object = $query->orderBy('ln.field_lesson_number_value', 'desc')
+      ->distinct()
+      ->execute()
+      ->fetchObject();
+
+    if ($object) {
+      if (isset($status) && $status == DITOOLSI_TRAINING_PROGRESS_STATUS_REVIEW) {
+        drupal_set_message(t('Your assignment for this course now checked. You can !link in other course',
+          array(
+            '!link' => l(t('begin the lessons'),
+              'course/' . $object->course_id . '/' . $object->entity_id),
+          )));
+        unset($in_review);
+      }
+      elseif ($pupil) {
+        if ($pupil->started) {
+          drupal_set_message(t('Not available to carry out tasks for this course. You can !link in other course',
+            array(
+              '!link' => l(t('begin the lessons'),
+                'course/' . $object->course_id . '/' . $object->entity_id),
+            )));
+        }
+        else {
+          $url = url("course/{$course->nid}/start-learn2");
+          drupal_set_message("Для начала обучения нажмите <a href='{$url}'>начать обучение</a>");
+        }
+        // drupal_set_message('Нет доступных к выполнению заданий на этом курсе. Вы можете <a href="' . url('course/' . $object->course_id . '/' . $object->entity_id) . '">приступить к выполнению уроков</a> на другом курсе');
+        unset($in_review);
+      }
+    }
+    elseif ($pupil && !$pupil->started) {
+      $url = url("course/{$course->nid}/start-learn2");
+      drupal_set_message("Для начала обучения нажмите <a href='{$url}'>начать обучение</a>");
+    }
+  }
+
+  if (isset($status) && isset($in_review) && $status == DITOOLSI_TRAINING_PROGRESS_STATUS_REVIEW) {
+    drupal_set_message(t('Your task now at checkout. Wait for the verification'));
+  }
+
+  $html = theme('mgc_teach_course_page', array(
+    'node'           => $course,
+    'title'          => $course->title,
+    'description'    => isset($body['value']) ? check_markup($body['value'],
+      $body['format']) : '',
+    'lessons'        => $lessons,
+    'wrapper'        => $wrapper,
+    'current_lesson' => $current_lesson,
+    'pupil'          => $pupil,
+    'name'           => $name,
+  ));
+
+  return $html;
 }
