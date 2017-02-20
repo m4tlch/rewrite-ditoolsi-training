@@ -3,8 +3,7 @@
 function ditoolsi_training_get_tasks($lesson_id) {
   $query = new EntityFieldQuery();
 
-  $query
-    ->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->fieldCondition('field_task_lesson', 'target_id', $lesson_id);
 
   $result = $query->execute();
@@ -29,10 +28,10 @@ function ditoolsi_training_count_lessons($course_id) {
   $course = node_load($course_id);
 
   $query = db_select('node', 'lesson');
-  $query->join('field_data_field_lesson_course', 'lesson_course', 'lesson_course.entity_id = lesson.nid');
+  $query->join('field_data_field_lesson_course', 'lesson_course',
+    'lesson_course.entity_id = lesson.nid');
   $query->addExpression('COUNT(lesson.nid)', 'lessons');
-  $query
-    ->condition('lesson.type', 'lesson')
+  $query->condition('lesson.type', 'lesson')
     ->condition('lesson.uid', $course->uid)
     ->condition('lesson_course.field_lesson_course_target_id', $course_id);
 
@@ -41,7 +40,11 @@ function ditoolsi_training_count_lessons($course_id) {
   return $cache[$course_id];
 }
 
-function ditoolsi_training_get_lessons($course, $current_lesson, $account = NULL) {
+function ditoolsi_training_get_lessons(
+  $course,
+  $current_lesson,
+  $account = NULL
+) {
   global $user;
 
   if (empty($account)) {
@@ -52,11 +55,12 @@ function ditoolsi_training_get_lessons($course, $current_lesson, $account = NULL
 
   if ($current_lesson > 0) {
     $query = db_select('node', 'lesson');
-    $query->join('field_data_field_lesson_course', 'lesson_course', 'lesson_course.entity_id = lesson.nid');
-    $query->join('field_data_field_lesson_number', 'lesson_number', 'lesson_number.entity_id = lesson.nid');
+    $query->join('field_data_field_lesson_course', 'lesson_course',
+      'lesson_course.entity_id = lesson.nid');
+    $query->join('field_data_field_lesson_number', 'lesson_number',
+      'lesson_number.entity_id = lesson.nid');
     $query->addField('lesson', 'nid');
-    $query
-      ->condition('lesson.type', 'lesson')
+    $query->condition('lesson.type', 'lesson')
       ->condition('lesson_course.field_lesson_course_target_id', $course->nid);
 
     if (isset($course->field_course_lessons_visible[LANGUAGE_NONE][0]['value'])) {
@@ -65,7 +69,8 @@ function ditoolsi_training_get_lessons($course, $current_lesson, $account = NULL
 
     switch ($visible) {
       case DT_TRAINING_LESSON_VISIBLE_VISIBLE_ONE_ACCESS_ONE:
-        $query->condition('lesson_number.field_lesson_number_value', $current_lesson, '<=');
+        $query->condition('lesson_number.field_lesson_number_value',
+          $current_lesson, '<=');
         break;
 
       case DT_TRAINING_LESSON_VISIBLE_VISIBLE_MANUAL_ACCESS_MANUAL:
@@ -80,7 +85,8 @@ function ditoolsi_training_get_lessons($course, $current_lesson, $account = NULL
           $or->condition('lesson.nid', -1);
         }
 
-        $or->condition('lesson_number.field_lesson_number_value', $current_lesson, '<=');
+        $or->condition('lesson_number.field_lesson_number_value',
+          $current_lesson, '<=');
         $query->condition($or);
         break;
     }
@@ -97,11 +103,11 @@ function ditoolsi_training_get_lessons($course, $current_lesson, $account = NULL
 
   if (count($lessons_id)) {
     $query = new EntityFieldQuery();
-    $query
-      ->entityCondition('entity_type', 'node')
+    $query->entityCondition('entity_type', 'node')
       ->entityCondition('bundle', 'lesson_progress')
       ->propertyCondition('uid', $account->uid)
-      ->fieldCondition('field_progress_lesson_id', 'target_id', $lessons_id, 'IN');
+      ->fieldCondition('field_progress_lesson_id', 'target_id', $lessons_id,
+        'IN');
     $items = $query->execute();
 
     if (isset($items['node'])) {
@@ -143,17 +149,24 @@ function ditoolsi_training_get_courses() {
 
 function ditoolsi_training_block_autotest($task, $account) {
   $query = db_select('node', 'n');
-  $query->join('field_data_field_progress_lesson_id', 'lesson_id', 'lesson_id.entity_id = n.nid');
-  $query->join('field_data_field_progress_tasks', 'progress_tasks', 'progress_tasks.entity_id = n.nid');
-  $query->join('field_data_field_progress_task_progress', 'task_progress', 'task_progress.entity_id = progress_tasks.field_progress_tasks_value');
-  $query->join('node', 'node_progress_task', 'node_progress_task.nid = task_progress.field_progress_task_progress_target_id');
-  $query->join('field_data_field_progress_task', 'progress_task', 'progress_task.entity_id = node_progress_task.nid');
-  $query->join('node', 'node_task', 'node_task.nid = progress_task.field_progress_task_target_id');
-  $query->join('field_data_field_autotest_time_completion', 'time_completion', 'time_completion.entity_id = node_task.nid');
-  $query->join('field_data_field_progress_start_autotest', 'start_autotest', 'start_autotest.entity_id = node_progress_task.nid');
+  $query->join('field_data_field_progress_lesson_id', 'lesson_id',
+    'lesson_id.entity_id = n.nid');
+  $query->join('field_data_field_progress_tasks', 'progress_tasks',
+    'progress_tasks.entity_id = n.nid');
+  $query->join('field_data_field_progress_task_progress', 'task_progress',
+    'task_progress.entity_id = progress_tasks.field_progress_tasks_value');
+  $query->join('node', 'node_progress_task',
+    'node_progress_task.nid = task_progress.field_progress_task_progress_target_id');
+  $query->join('field_data_field_progress_task', 'progress_task',
+    'progress_task.entity_id = node_progress_task.nid');
+  $query->join('node', 'node_task',
+    'node_task.nid = progress_task.field_progress_task_target_id');
+  $query->join('field_data_field_autotest_time_completion', 'time_completion',
+    'time_completion.entity_id = node_task.nid');
+  $query->join('field_data_field_progress_start_autotest', 'start_autotest',
+    'start_autotest.entity_id = node_progress_task.nid');
 
-  $query
-    ->fields('node_progress_task', array('nid'))
+  $query->fields('node_progress_task', array('nid'))
     ->condition('n.type', 'lesson_progress')
     ->condition('node_progress_task.type', 'auto_test_progress')
     ->condition('node_task.type', 'lesson_auto_test')
@@ -175,13 +188,16 @@ function ditoolsi_training_block_autotest($task, $account) {
 
 function ditoolsi_training_finish_autotest($task, $account) {
   $query = db_select('node', 'n');
-  $query->join('field_data_field_progress_tasks', 'progress_tasks', 'progress_tasks.entity_id = n.nid');
-  $query->join('field_data_field_progress_task_progress', 'task_progress', 'task_progress.entity_id = progress_tasks.field_progress_tasks_value');
-  $query->join('node', 'node_progress_task', 'node_progress_task.nid = task_progress.field_progress_task_progress_target_id');
-  $query->join('field_data_field_progress_task', 'progress_task', 'progress_task.entity_id = node_progress_task.nid');
+  $query->join('field_data_field_progress_tasks', 'progress_tasks',
+    'progress_tasks.entity_id = n.nid');
+  $query->join('field_data_field_progress_task_progress', 'task_progress',
+    'task_progress.entity_id = progress_tasks.field_progress_tasks_value');
+  $query->join('node', 'node_progress_task',
+    'node_progress_task.nid = task_progress.field_progress_task_progress_target_id');
+  $query->join('field_data_field_progress_task', 'progress_task',
+    'progress_task.entity_id = node_progress_task.nid');
 
-  $query
-    ->condition('progress_task.field_progress_task_target_id', $task->nid)
+  $query->condition('progress_task.field_progress_task_target_id', $task->nid)
     ->condition('node_progress_task.uid', $account->uid)
     ->fields('node_progress_task', array('nid'))
     ->fields('progress_tasks', array('field_progress_tasks_value'));
@@ -212,20 +228,26 @@ function ditoolsi_training_is_lesson_finished($lesson, $account) {
   );
 
   $query = db_select('node', 'n');
-  $query->join('field_data_field_progress_tasks', 'progress_tasks', 'progress_tasks.entity_id = n.nid');
-  $query->join('field_data_field_progress_task_progress', 'progress_task_progress', 'progress_task_progress.entity_id = progress_tasks.field_progress_tasks_value');
-  $query->join('field_data_field_progress_status', 'progress_status', 'progress_status.entity_id = progress_tasks.field_progress_tasks_value');
-  $query->join('field_data_field_progress_task', 'progres_task', 'progres_task.entity_id = progress_task_progress.field_progress_task_progress_target_id');
+  $query->join('field_data_field_progress_tasks', 'progress_tasks',
+    'progress_tasks.entity_id = n.nid');
+  $query->join('field_data_field_progress_task_progress',
+    'progress_task_progress',
+    'progress_task_progress.entity_id = progress_tasks.field_progress_tasks_value');
+  $query->join('field_data_field_progress_status', 'progress_status',
+    'progress_status.entity_id = progress_tasks.field_progress_tasks_value');
+  $query->join('field_data_field_progress_task', 'progres_task',
+    'progres_task.entity_id = progress_task_progress.field_progress_task_progress_target_id');
 
   $nids = array_keys($lesson->tasks);
 
   if ($nids) {
-    $query
-      ->condition('n.uid', $account->uid)
+    $query->condition('n.uid', $account->uid)
       ->condition('progres_task.field_progress_task_target_id', $nids, 'IN')
-      ->condition('progress_status.field_progress_status_value', $statuses, 'IN');
+      ->condition('progress_status.field_progress_status_value', $statuses,
+        'IN');
 
-    $query->addField('progress_status', 'field_progress_status_value', 'status');
+    $query->addField('progress_status', 'field_progress_status_value',
+      'status');
     $result = $query->execute()->fetchCol();
   }
   else {
@@ -257,17 +279,22 @@ function ditoolsi_training_is_lesson_recast($lesson, $account) {
   }
 
   $query = db_select('node', 'n');
-  $query->join('field_data_field_progress_tasks', 'progress_tasks', 'progress_tasks.entity_id = n.nid');
-  $query->join('field_data_field_progress_task_progress', 'progress_task_progress', 'progress_task_progress.entity_id = progress_tasks.field_progress_tasks_value');
-  $query->join('field_data_field_progress_status', 'progress_status', 'progress_status.entity_id = progress_tasks.field_progress_tasks_value');
-  $query->join('field_data_field_progress_task', 'progres_task', 'progres_task.entity_id = progress_task_progress.field_progress_task_progress_target_id');
+  $query->join('field_data_field_progress_tasks', 'progress_tasks',
+    'progress_tasks.entity_id = n.nid');
+  $query->join('field_data_field_progress_task_progress',
+    'progress_task_progress',
+    'progress_task_progress.entity_id = progress_tasks.field_progress_tasks_value');
+  $query->join('field_data_field_progress_status', 'progress_status',
+    'progress_status.entity_id = progress_tasks.field_progress_tasks_value');
+  $query->join('field_data_field_progress_task', 'progres_task',
+    'progres_task.entity_id = progress_task_progress.field_progress_task_progress_target_id');
 
   $nids = array_keys($lesson->tasks);
 
-  $query
-    ->condition('n.uid', $account->uid)
+  $query->condition('n.uid', $account->uid)
     ->condition('progres_task.field_progress_task_target_id', $nids, 'IN')
-    ->condition('progress_status.field_progress_status_value', DITOOLSI_TRAINING_PROGRESS_STATUS_RECAST);
+    ->condition('progress_status.field_progress_status_value',
+      DITOOLSI_TRAINING_PROGRESS_STATUS_RECAST);
 
   return $query->countQuery()->execute()->fetchField();
 }
@@ -280,17 +307,22 @@ function ditoolsi_training_is_lesson_all_finished($lesson, $account) {
 
 
   $query = db_select('node', 'n');
-  $query->join('field_data_field_progress_tasks', 'progress_tasks', 'progress_tasks.entity_id = n.nid');
-  $query->join('field_data_field_progress_task_progress', 'progress_task_progress', 'progress_task_progress.entity_id = progress_tasks.field_progress_tasks_value');
-  $query->join('field_data_field_progress_status', 'progress_status', 'progress_status.entity_id = progress_tasks.field_progress_tasks_value');
-  $query->join('field_data_field_progress_task', 'progres_task', 'progres_task.entity_id = progress_task_progress.field_progress_task_progress_target_id');
+  $query->join('field_data_field_progress_tasks', 'progress_tasks',
+    'progress_tasks.entity_id = n.nid');
+  $query->join('field_data_field_progress_task_progress',
+    'progress_task_progress',
+    'progress_task_progress.entity_id = progress_tasks.field_progress_tasks_value');
+  $query->join('field_data_field_progress_status', 'progress_status',
+    'progress_status.entity_id = progress_tasks.field_progress_tasks_value');
+  $query->join('field_data_field_progress_task', 'progres_task',
+    'progres_task.entity_id = progress_task_progress.field_progress_task_progress_target_id');
 
   $nids = array_keys($lesson->tasks);
 
-  $query
-    ->condition('n.uid', $account->uid)
+  $query->condition('n.uid', $account->uid)
     ->condition('progres_task.field_progress_task_target_id', $nids, 'IN')
-    ->condition('progress_status.field_progress_status_value', DITOOLSI_TRAINING_PROGRESS_STATUS_FINISHED);
+    ->condition('progress_status.field_progress_status_value',
+      DITOOLSI_TRAINING_PROGRESS_STATUS_FINISHED);
 
   $count = $query->countQuery()->execute()->fetchField();
 
@@ -305,12 +337,12 @@ function ditoolsi_training_get_lesson_progress($lesson, $account) {
   }
 
   $query = db_select('node', 'n');
-  $query->join('field_data_field_progress_lesson_id', 'lesson_id', 'lesson_id.entity_id = n.nid');
-  $query->join('field_data_field_progress_status', 'status', 'status.entity_id = n.nid');
-  $query
-    ->condition('lesson_id.field_progress_lesson_id_target_id', $lesson->nid)
-    ->condition('n.uid', $account->uid)
-    ->fields('n', array('nid'));
+  $query->join('field_data_field_progress_lesson_id', 'lesson_id',
+    'lesson_id.entity_id = n.nid');
+  $query->join('field_data_field_progress_status', 'status',
+    'status.entity_id = n.nid');
+  $query->condition('lesson_id.field_progress_lesson_id_target_id',
+    $lesson->nid)->condition('n.uid', $account->uid)->fields('n', array('nid'));
 
   $nid = $query->execute()->fetchField();
 
@@ -320,7 +352,9 @@ function ditoolsi_training_get_lesson_progress($lesson, $account) {
 
   $node = node_load($nid);
 
-  if ($field_progress_status = field_get_items('node', $node, 'field_progress_status')) {
+  if ($field_progress_status = field_get_items('node', $node,
+    'field_progress_status')
+  ) {
     $status = $field_progress_status[0]['value'];
   }
   else {
@@ -337,7 +371,9 @@ function ditoolsi_training_get_lesson_progress($lesson, $account) {
 
   foreach ($n_wrapper->field_progress_tasks->value() as $fc_progress_task) {
     // Get status of task.
-    if ($field_progress_status = field_get_items('field_collection_item', $fc_progress_task, 'field_progress_status')) {
+    if ($field_progress_status = field_get_items('field_collection_item',
+      $fc_progress_task, 'field_progress_status')
+    ) {
       $task_status = $field_progress_status[0]['value'];
     }
     else {
@@ -345,7 +381,9 @@ function ditoolsi_training_get_lesson_progress($lesson, $account) {
     }
 
     // Get node of progress of task.
-    if ($field_progress_task_progress = field_get_items('field_collection_item', $fc_progress_task, 'field_progress_task_progress')) {
+    if ($field_progress_task_progress = field_get_items('field_collection_item',
+      $fc_progress_task, 'field_progress_task_progress')
+    ) {
       $task_progress = node_load($field_progress_task_progress[0]['target_id']);
     }
     else {
@@ -356,7 +394,9 @@ function ditoolsi_training_get_lesson_progress($lesson, $account) {
     }
 
     // Get id of task.
-    if ($field_progress_task = field_get_items('node', $task_progress, 'field_progress_task')) {
+    if ($field_progress_task = field_get_items('node', $task_progress,
+      'field_progress_task')
+    ) {
       $task_id                     = $field_progress_task[0]['target_id'];
       $progress['tasks'][$task_id] = array(
         'status' => $task_status,
@@ -404,7 +444,8 @@ function ditoolsi_training_lesson_allowed_for_review($lesson, $account) {
 
   $lesson_status = $progress['node']->field_progress_status[LANGUAGE_NONE][0]['value'];
 
-  return $allowed >= $all && in_array($lesson_status, $allowed_statuses['lesson_progress']);
+  return $allowed >= $all && in_array($lesson_status,
+      $allowed_statuses['lesson_progress']);
 }
 
 function ditoolsi_training_get_lesson_status($lesson, $account) {
@@ -415,12 +456,12 @@ function ditoolsi_training_get_lesson_status($lesson, $account) {
   }
 
   $query = db_select('node', 'n');
-  $query->join('field_data_field_progress_lesson_id', 'lesson_id', 'lesson_id.entity_id = n.nid');
-  $query->join('field_data_field_progress_status', 'status', 'status.entity_id = n.nid');
-  $query
-    ->condition('lesson_id.field_progress_lesson_id_target_id', $lesson->nid)
-    ->condition('n.uid', $account->uid)
-    ->fields('n', array('nid'));
+  $query->join('field_data_field_progress_lesson_id', 'lesson_id',
+    'lesson_id.entity_id = n.nid');
+  $query->join('field_data_field_progress_status', 'status',
+    'status.entity_id = n.nid');
+  $query->condition('lesson_id.field_progress_lesson_id_target_id',
+    $lesson->nid)->condition('n.uid', $account->uid)->fields('n', array('nid'));
 
   $nid = $query->execute()->fetchField();
 
@@ -430,7 +471,9 @@ function ditoolsi_training_get_lesson_status($lesson, $account) {
 
   $node = node_load($nid);
 
-  if ($field_progress_status = field_get_items('node', $node, 'field_progress_status')) {
+  if ($field_progress_status = field_get_items('node', $node,
+    'field_progress_status')
+  ) {
     $status = $field_progress_status[0]['value'];
   }
   else {
@@ -470,12 +513,16 @@ function ditoolsi_training_get_task_progress($task, $account) {
   $nid = $task->nid;
 
   $query = db_select('node', 'n');
-  $query->join('field_data_field_progress_tasks', 'progress_tasks', 'progress_tasks.entity_id = n.nid');
-  $query->join('field_data_field_progress_task_progress', 'progress_task_progress', 'progress_task_progress.entity_id = progress_tasks.field_progress_tasks_value');
-  $query->join('field_data_field_progress_status', 'progress_status', 'progress_status.entity_id = progress_tasks.field_progress_tasks_value');
-  $query->join('field_data_field_progress_task', 'progres_task', 'progres_task.entity_id = progress_task_progress.field_progress_task_progress_target_id');
-  $query
-    ->condition('n.uid', $account->uid)
+  $query->join('field_data_field_progress_tasks', 'progress_tasks',
+    'progress_tasks.entity_id = n.nid');
+  $query->join('field_data_field_progress_task_progress',
+    'progress_task_progress',
+    'progress_task_progress.entity_id = progress_tasks.field_progress_tasks_value');
+  $query->join('field_data_field_progress_status', 'progress_status',
+    'progress_status.entity_id = progress_tasks.field_progress_tasks_value');
+  $query->join('field_data_field_progress_task', 'progres_task',
+    'progres_task.entity_id = progress_task_progress.field_progress_task_progress_target_id');
+  $query->condition('n.uid', $account->uid)
     ->condition('progres_task.field_progress_task_target_id', $nid);
   $query->addField('progress_status', 'field_progress_status_value', 'status');
   $result = $query->execute()->fetchField();
@@ -496,9 +543,7 @@ function ditoolsi_training_show_task_answer($task, $account) {
   }
 
   $task_progress = ditoolsi_training_get_task_progress($task, $account);
-  if ($task_progress == DITOOLSI_TRAINING_PROGRESS_STATUS_FINISHED
-    || $task_progress == DITOOLSI_TRAINING_PROGRESS_STATUS_REVIEW
-  ) {
+  if ($task_progress == DITOOLSI_TRAINING_PROGRESS_STATUS_FINISHED || $task_progress == DITOOLSI_TRAINING_PROGRESS_STATUS_REVIEW) {
     $show_answer = TRUE;
   }
 
@@ -541,12 +586,13 @@ function ditoolsi_training_get_section($library_id) {
   $library = node_load($library_id);
 
   $query = db_select('node', 'section');
-  $query->join('field_data_field_section_library', 'field_section_library', 'field_section_library.entity_id = section.nid');
+  $query->join('field_data_field_section_library', 'field_section_library',
+    'field_section_library.entity_id = section.nid');
   $query->addField('section', 'nid');
-  $query
-    ->condition('section.type', 'section')
+  $query->condition('section.type', 'section')
     ->condition('section.uid', $library->uid)
-    ->condition('field_section_library.field_section_library_target_id', $library_id);
+    ->condition('field_section_library.field_section_library_target_id',
+      $library_id);
 
   $nids = $query->execute()->fetchCol();
 
@@ -599,7 +645,8 @@ function ditoolsi_training_lesson_video_count($lesson) {
 }
 
 function ditoolsi_training_lesson_presentation_count($lesson) {
-  $presentations     = field_get_items('node', $lesson, 'field_lesson_presentation');
+  $presentations     = field_get_items('node', $lesson,
+    'field_lesson_presentation');
   $presentations_ids = array();
 
   foreach ($presentations as $presentation) {
@@ -608,7 +655,9 @@ function ditoolsi_training_lesson_presentation_count($lesson) {
   $field_collection_presentations = field_collection_item_load_multiple($presentation_ids);
   $presentation_files_count       = 0;
   foreach ($field_collection_presentations as $field_collection_presentation) {
-    if ($presentation_files = field_get_items('field_collection_item', $field_collection_presentation, 'field_lesson_presentation_file')) {
+    if ($presentation_files = field_get_items('field_collection_item',
+      $field_collection_presentation, 'field_lesson_presentation_file')
+    ) {
       $presentation_files_count += count($presentation_files);
     }
   }
@@ -669,11 +718,14 @@ function ditoolsi_training_lesson_status_view($lesson, $allow_view = TRUE) {
   $result = $query->execute()->fetchCol();
   $course = node_load($lesson->field_lesson_course[LANGUAGE_NONE][0]['target_id']);
 
-  if (!in_array($lesson->field_lesson_course[LANGUAGE_NONE][0]['target_id'], $result) || !ditoolsi_training_access('pass lesson', $course)) {
+  if (!in_array($lesson->field_lesson_course[LANGUAGE_NONE][0]['target_id'],
+      $result) || !ditoolsi_training_access('pass lesson', $course)
+  ) {
     return '';
   }
   elseif (!$allow_view) {
-    return '<div class="lesson-status red">' . t('Closed', array(), array('context' => 'lesson')) . '</div>';
+    return '<div class="lesson-status red">' . t('Closed', array(),
+        array('context' => 'lesson')) . '</div>';
   }
   static $count_l = 0;
   if (!empty($lesson->progress)) {
@@ -724,7 +776,7 @@ function ditoolsi_training_get_current_lesson($course, $account = NULL) {
     ->execute()
     ->fetchObject();
 
-  if ($pupil && ($history || $course->nid == DITOOLSI_TRAINING_TEACHER_COURSE)) {
+  if ($pupil && ($history || $course->nid == MGC_TEACH_COURSE_ID)) {
     $current_lesson = $pupil->current_lesson;
   }
   elseif (ditoolsi_training_access('pass lesson', $course)) {
@@ -753,10 +805,10 @@ function ditoolsi_training_get_first_lesson($course) {
   }
 
   $query = db_select('node', 'lesson');
-  $query->join('field_data_field_lesson_number', 'lesson_number', 'lesson_number.entity_id = lesson.nid');
+  $query->join('field_data_field_lesson_number', 'lesson_number',
+    'lesson_number.entity_id = lesson.nid');
   $query->addField('lesson', 'nid');
-  $query
-    ->condition('lesson.type', 'lesson')
+  $query->condition('lesson.type', 'lesson')
     ->condition('lesson.nid', $nids, 'IN')
     ->orderBy('lesson_number.field_lesson_number_value');
 
@@ -776,8 +828,7 @@ function ditoolsi_training_is_user_blocked($course, $account = NULL) {
 
   $query = db_select('ditoolsi_training_pupils_list', 'pl');
   $query->addField('pl', 'user_id');
-  $query
-    ->condition('pl.user_id', $account->uid)
+  $query->condition('pl.user_id', $account->uid)
     ->condition('pl.course_id', $course->nid)
     ->condition('pl.status', DITOOLSI_TRAINING_PUPIL_BLOCKED);
 
@@ -790,31 +841,37 @@ function ditoolsi_training_is_user_blocked($course, $account = NULL) {
   return $blocked;
 }
 
-function ditoolsi_training_add_pupil_to_course($mail, $name, $phone, $course_id, $lesson) {
+function ditoolsi_training_add_pupil_to_course(
+  $mail,
+  $name,
+  $phone,
+  $course_id,
+  $lesson
+) {
   if (!empty($mail)) {
     if (valid_email_address($mail)) {
       $account = user_load_by_mail($mail);
       if (!empty($account)) {
-        $query = db_select('ditoolsi_training_pupils_list', 'training_pupils_list');
+        $query = db_select('ditoolsi_training_pupils_list',
+          'training_pupils_list');
         $query->fields('training_pupils_list', array('id'));
         $query->condition('training_pupils_list.user_id', $account->uid);
         $query->condition('training_pupils_list.course_id', $course_id);
         $results = $query->execute()->fetchAll();
         if (!empty($results)) {
-          drupal_set_message(t('Pupil @user is already on your course', array('@user' => $account->mail)), 'error');
+          drupal_set_message(t('Pupil @user is already on your course',
+            array('@user' => $account->mail)), 'error');
         }
         else {
-          db_insert('ditoolsi_training_pupils_list')
-            ->fields(array(
-                'course_id'      => $course_id,
-                'user_id'        => $account->uid,
-                'current_lesson' => $lesson,
-                'created'        => time(),
-                'status'         => DITOOLSI_TRAINING_PUPIL_ACTIVE
-              )
-            )
-            ->execute();
-          drupal_set_message(t('Pupil @user successfully added to your course', array('@user' => $account->mail)));
+          db_insert('ditoolsi_training_pupils_list')->fields(array(
+            'course_id'      => $course_id,
+            'user_id'        => $account->uid,
+            'current_lesson' => $lesson,
+            'created'        => time(),
+            'status'         => DITOOLSI_TRAINING_PUPIL_ACTIVE,
+          ))->execute();
+          drupal_set_message(t('Pupil @user successfully added to your course',
+            array('@user' => $account->mail)));
         }
       }
       else {
@@ -848,21 +905,20 @@ function ditoolsi_training_add_pupil_to_course($mail, $name, $phone, $course_id,
         $account = user_load_by_mail($mail); // Loading account
 
         ditoolsi_training_send_mail_to_pupil($account, $course_id);
-        $add_user = db_insert('ditoolsi_training_pupils_list')
-          ->fields(array(
-              'course_id'      => $course_id,
-              'user_id'        => $account->uid,
-              'current_lesson' => $lesson,
-              'created'        => time(),
-              'status'         => DITOOLSI_TRAINING_PUPIL_ACTIVE
-            )
-          )
-          ->execute();
-        drupal_set_message(t('Pupil @user successfully added to your course', array('@user' => $account->mail)));
+        $add_user = db_insert('ditoolsi_training_pupils_list')->fields(array(
+          'course_id'      => $course_id,
+          'user_id'        => $account->uid,
+          'current_lesson' => $lesson,
+          'created'        => time(),
+          'status'         => DITOOLSI_TRAINING_PUPIL_ACTIVE,
+        ))->execute();
+        drupal_set_message(t('Pupil @user successfully added to your course',
+          array('@user' => $account->mail)));
       }
     }
     else {
-      drupal_set_message(t('Wrong e-mail format @email', array('@email' => $mail)), 'error');
+      drupal_set_message(t('Wrong e-mail format @email',
+        array('@email' => $mail)), 'error');
     }
   }
   else {
@@ -880,7 +936,7 @@ function ditoolsi_training_add_pupil_to_course($mail, $name, $phone, $course_id,
  */
 function ditoolsi_training_get_mail_activation($node = NULL) {
   $data = array(
-//    array('subject' => '', 'body' => ''),
+    //    array('subject' => '', 'body' => ''),
     array('subject' => '', 'body' => ''),
     array('subject' => '', 'body' => ''),
   );
@@ -906,14 +962,20 @@ function ditoolsi_training_get_mail_activation($node = NULL) {
 
 function ditoolsi_training_requests_review_query($course_id = NULL) {
   $query = db_select('node', 'n');
-  $query->join('field_data_field_progress_lesson_id', 'lesson_id', 'lesson_id.entity_id = n.nid');
+  $query->join('field_data_field_progress_lesson_id', 'lesson_id',
+    'lesson_id.entity_id = n.nid');
   $query->join('users', 'u', 'u.uid = n.uid');
-  $query->join('field_data_field_lesson_number', 'lesson_number', 'lesson_number.entity_id = lesson_id.field_progress_lesson_id_target_id');
-  $query->join('field_data_field_lesson_course', 'course', 'course.entity_id = lesson_id.field_progress_lesson_id_target_id');
-  $query->join('node', 'node_course', 'node_course.nid = course.field_lesson_course_target_id');
-  $query->join('field_data_field_progress_status', 'progress_status', 'progress_status.entity_id = n.nid and progress_status.bundle = :bundle', array(':bundle' => 'lesson_progress'));
-  $query
-    ->condition('progress_status.field_progress_status_value', DITOOLSI_TRAINING_PROGRESS_STATUS_REVIEW)
+  $query->join('field_data_field_lesson_number', 'lesson_number',
+    'lesson_number.entity_id = lesson_id.field_progress_lesson_id_target_id');
+  $query->join('field_data_field_lesson_course', 'course',
+    'course.entity_id = lesson_id.field_progress_lesson_id_target_id');
+  $query->join('node', 'node_course',
+    'node_course.nid = course.field_lesson_course_target_id');
+  $query->join('field_data_field_progress_status', 'progress_status',
+    'progress_status.entity_id = n.nid and progress_status.bundle = :bundle',
+    array(':bundle' => 'lesson_progress'));
+  $query->condition('progress_status.field_progress_status_value',
+    DITOOLSI_TRAINING_PROGRESS_STATUS_REVIEW)
     ->fields('n', array('nid'))
     ->orderBy('n.changed', 'desc')
     ->orderBy('lesson_number.field_lesson_number_value', 'ASC');
@@ -945,14 +1007,66 @@ function ditoolsi_training_request_sent($course) {
       ->fetchField();
 
     $query = db_select('node', 'n');
-    $query->join('field_data_field_request_course_id', 'ci', 'ci.entity_id = n.nid');
-    $query->join('field_data_field_request_course_status', 's', 's.entity_id = n.nid');
-    $query
-      ->condition('n.uid', $user->uid)
+    $query->join('field_data_field_request_course_id', 'ci',
+      'ci.entity_id = n.nid');
+    $query->join('field_data_field_request_course_status', 's',
+      's.entity_id = n.nid');
+    $query->condition('n.uid', $user->uid)
       ->condition('ci.field_request_course_id_target_id', $course->nid)
-      ->condition('s.field_request_course_status_value', DT_TRAINING_REQUEST_STATUS_NEW);
+      ->condition('s.field_request_course_status_value',
+        DT_TRAINING_REQUEST_STATUS_NEW);
     $result = $query->countQuery()->execute()->fetchField() && !((bool) $pupil);
   }
 
   return $result;
+}
+
+function mgc_teach_course_lesson_status_view($lesson, $allow_view = TRUE) {
+  global $user;
+
+  $lesson_status = '';
+
+  if (!mgc_user_has_teacher_role()) {
+    return '';
+  }
+  elseif (!$allow_view) {
+    return '<div class="lesson-status red">' . t('Closed', array(),
+        array('context' => 'lesson')) . '</div>';
+  }
+  static $count_l = 0;
+  if (!empty($lesson->progress)) {
+    $status = $lesson->progress->field_progress_status->raw();
+
+    switch ($status) {
+
+      case DITOOLSI_TRAINING_PROGRESS_STATUS_FINISHED:
+        $count_l++;
+        $lesson_status = '<div class="lesson-status green">' . t('Complete') . '</div>';
+        break;
+
+      case DITOOLSI_TRAINING_PROGRESS_STATUS_RECAST:
+        $lesson_status = '<div class="lesson-status red">' . t('On completion') . '</div>';
+        break;
+
+      case DITOOLSI_TRAINING_PROGRESS_STATUS_REVIEW:
+        $lesson_status = '<div class="lesson-status yellow">' . t('On review') . '</div>';
+        break;
+
+      case DITOOLSI_TRAINING_PROGRESS_STATUS_NEW:
+      default:
+        $lesson_status = '<div class="lesson-status yellow">' . t('In work') . '</div>';
+        break;
+    }
+  }
+  elseif (isset($user->roles[DITOOLSI_PUPIL_RID]) || $lesson->field_lesson_course[LANGUAGE_NONE][0]['target_id'] == MGC_TEACH_COURSE_ID) {
+    $lesson_status = '<div class="lesson-status yellow">' . t('In work') . '</div>';
+  }
+
+  return $lesson_status;
+}
+
+function mgc_get_courses($user) {
+  $query = ditoolsi_training_get_cources_query($user->uid, TRUE);
+  $nids  = $query->execute()->fetchCol();
+  return $nids;
 }

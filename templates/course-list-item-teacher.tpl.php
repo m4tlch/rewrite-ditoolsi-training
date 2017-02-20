@@ -65,27 +65,6 @@ $course_path  = $node->nid;
                 ?>
               </div>
           <?php endif; ?>
-
-          <?php
-          if (ditoolsi_training_access('request learning', $node)) {
-            if (isset($node->field_course_payment_link[LANGUAGE_NONE][0]['value'])) {
-              $url = $node->field_course_payment_link[LANGUAGE_NONE][0]['value'];
-            }
-            else {
-              $url = 'course/' . $node->nid . '/request';
-            }
-
-            print l(t('Send request and buy course'), $url, array(
-              'attributes' => array(
-                'class'          => array('btn dit-submit'),
-                'data-course-id' => $node->nid,
-              ),
-            ));
-          }
-          elseif (ditoolsi_training_request_sent($node)) {
-            print '<div class="request-sent">' . t('Request sent') . '</div>';
-          }
-          ?>
         </div>
     </div>
 </div>

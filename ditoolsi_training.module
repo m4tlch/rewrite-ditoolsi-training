@@ -54,7 +54,7 @@ define('DT_TRAINING_LESSON_VISIBLE_VISIBLE_ALL_ACCESS_ONE', 2);
 define('DT_TRAINING_LESSON_VISIBLE_VISIBLE_ALL_ACCESS_ALL', 3);
 define('DT_TRAINING_LESSON_VISIBLE_VISIBLE_MANUAL_ACCESS_MANUAL', 4);
 
-define('DITOOLSI_TRAINING_TEACHER_COURSE', 138);
+define('DITOOLSI_TRAINING_TEACHER_COURSE', 25390);
 
 define('DITOOLSI_TRAINING_COURSE_CARD_1', 1);
 define('DITOOLSI_TRAINING_COURSE_CARD_2', 2);
@@ -896,11 +896,20 @@ function ditoolsi_training_menu() {
     'file'            => 'includes/mgc.rewrite.helpers.inc',
   );
 
-  $items['teach-course/%node'] = array(
+  $items['teach-course/%node']       = array(
     'page callback'    => 'mgc_teach_course_page',
     'page arguments'   => array(1),
     'access callback'  => 'ditoolsi_training_access',
     'access arguments' => array('view teach course'),
+    'type'             => MENU_CALLBACK,
+    'file'             => 'includes/page.inc',
+  );
+  $items['teach-course/%node/%node'] = array(
+    'title'            => 'View the lesson',
+    'page callback'    => 'mgc_teach_course_lesson_page',
+    'page arguments'   => array(1, 2),
+    'access callback'  => 'ditoolsi_training_access',
+    'access arguments' => array('view teach course lesson', 1, 2),
     'type'             => MENU_CALLBACK,
     'file'             => 'includes/page.inc',
   );
@@ -1651,6 +1660,38 @@ function ditoolsi_training_theme() {
         'result'      => array(),
       ),
     ),
+    'mgc_teach_course_lesson_list_item'      => array(
+      'path'      => $path,
+      'template'  => 'teach-course-lesson-list-item',
+      'variables' => array(
+        'number'         => 0,
+        'title'          => '',
+        'nid'            => '',
+        'status'         => '',
+        'tasks'          => 0,
+        'videos'         => 0,
+        'presentations'  => 0,
+        'lesson'         => new stdClass(),
+        'history'        => FALSE,
+        'account'        => new stdClass(),
+        'access_request' => FALSE,
+        'hide_status'    => FALSE,
+        'pupil'          => new stdClass(),
+      ),
+    ),
+    'mgc_teach_course_lesson_page'           => array(
+      'path'      => $path,
+      'template'  => 'teach-course-lesson-page',
+      'variables' => array(
+        'node'           => new stdClass(),
+        'wrapper'        => new stdClass(),
+        'course'         => new stdClass(),
+        'account'        => new stdClass(),
+        'lessons'        => array(),
+        'history'        => FALSE,
+        'current_lesson' => -1,
+      ),
+    ),
   );
 }
 
@@ -1767,7 +1808,7 @@ function ditoolsi_training_access($op) {
       $rid        = 5;
       $is_curator = mgc_user_has_role($rid);
 
-      return user_access('training pass lesson') || ($course && $course->nid == DITOOLSI_TRAINING_TEACHER_COURSE) || $is_curator;
+      return user_access('training pass lesson') || ($course && $course->nid == MGC_TEACH_COURSE_ID) || $is_curator;
       break;
 
     case 'view lesson':
@@ -1784,6 +1825,56 @@ function ditoolsi_training_access($op) {
       if (ditoolsi_training_access('pass lesson',
           $course) || $course->nid == DITOOLSI_TRAINING_TEACHER_COURSE
       ) {
+
+        if (isset($user->roles[DITOOLSI_CURATOR_RID]) || isset($user->roles[DITOOLSI_TEACHER_RID]) || isset($user->roles[DITOOLSI_ADMIN_RID])) {
+          return TRUE;
+        }
+        else {
+          $l_wrapper     = entity_metadata_wrapper('node', $lesson);
+          $c_wrapper     = entity_metadata_wrapper('node', $course);
+          $visible       = $c_wrapper->field_course_lessons_visible->value();
+          $lesson_number = $l_wrapper->field_lesson_number->value();
+          $pupil         = db_select('ditoolsi_training_pupils_list', 'pl')
+            ->fields('pl', array('current_lesson'))
+            ->condition('pl.user_id', $user->uid)
+            ->condition('pl.course_id', $course->nid)
+            ->execute()
+            ->fetchObject();
+          $stop          = 'Stop';
+          switch ($visible) {
+            case DT_TRAINING_LESSON_VISIBLE_VISIBLE_ONE_ACCESS_ONE:
+            case DT_TRAINING_LESSON_VISIBLE_VISIBLE_ALL_ACCESS_ONE:
+            default:
+              return $pupil && ($pupil->current_lesson === $lesson_number || $c_wrapper->field_if_lesson_open->value());
+              break;
+
+            case DT_TRAINING_LESSON_VISIBLE_VISIBLE_ALL_ACCESS_ALL:
+              return (bool) $pupil;
+              break;
+
+            case DT_TRAINING_LESSON_VISIBLE_VISIBLE_MANUAL_ACCESS_MANUAL:
+              $ids = $c_wrapper->field_course_lessons_list->raw();
+
+              return in_array($lesson->nid,
+                  $ids) || ($pupil && $pupil->current_lesson >= $lesson_number);
+              break;
+          }
+        }
+      }
+      break;
+
+    case 'view teach course lesson':
+      $args         = func_get_args();
+      $course       = $args[1];
+      $lesson       = $args[2];
+      $user_blocked = ditoolsi_training_is_user_blocked($course);
+
+      if ($user_blocked) {
+        return FALSE;
+      }
+      $stop = ditoolsi_training_access('pass lesson', $course);
+      $stop = 'Stop';
+      if (mgc_user_has_teacher_role() && $course->nid == MGC_TEACH_COURSE_ID) {
 
         if (isset($user->roles[DITOOLSI_CURATOR_RID]) || isset($user->roles[DITOOLSI_TEACHER_RID]) || isset($user->roles[DITOOLSI_ADMIN_RID])) {
           return TRUE;
@@ -3144,13 +3235,13 @@ function ditoolsi_training_queue_function($data) {
  */
 function ditoolsi_training_user_insert(&$edit, $account, $category) {
   if (isset($edit['roles'][DITOOLSI_TEACHER_RID]) || isset($account->roles[DITOOLSI_TEACHER_RID])) {
-    db_insert('ditoolsi_training_pupils_list')->fields(array(
-      'course_id'      => DITOOLSI_TRAINING_TEACHER_COURSE,
-      'user_id'        => $account->uid,
-      'current_lesson' => 1,
-      'created'        => REQUEST_TIME,
-      'status'         => DITOOLSI_TRAINING_PUPIL_ACTIVE,
-    ))->execute();
+    //    db_insert('ditoolsi_training_pupils_list')->fields(array(
+    //      'course_id'      => DITOOLSI_TRAINING_TEACHER_COURSE,
+    //      'user_id'        => $account->uid,
+    //      'current_lesson' => 1,
+    //      'created'        => REQUEST_TIME,
+    //      'status'         => DITOOLSI_TRAINING_PUPIL_ACTIVE,
+    //    ))->execute();
   }
 }
 
