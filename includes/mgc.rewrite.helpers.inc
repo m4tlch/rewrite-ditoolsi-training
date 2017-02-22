@@ -28,8 +28,8 @@ function mgc_print_pupil_stats_table_form($form, &$form_state) {
   $total_activity = 0;
   foreach ($course_stats as $key => $stat) {
     $current_activity = $stat['autochecks']['count'] + $stat['checks']['count'] + $stat['recasts']['count'];
-    $total_activity += $current_activity;
-    $diff_activity = $current_activity - $activity;
+    $total_activity   += $current_activity;
+    $diff_activity    = $current_activity - $activity;
 
     if ($current_activity > $activity) {
       $tendency = 'green';
@@ -124,7 +124,8 @@ function mgc_print_pupil_stats_table_form($form, &$form_state) {
 
   $form['table']['#attached']['js'] = array(
 
-    drupal_get_path('theme', 'ditoolsi') . '/js/tablesort/jquery.tablesorter.min.js',
+    drupal_get_path('theme',
+      'ditoolsi') . '/js/tablesort/jquery.tablesorter.min.js',
     drupal_get_path('theme', 'ditoolsi') . '/js/common/table-common.js',
   );
 
@@ -141,7 +142,8 @@ function mgc_print_pupil_stats_table_form_submit($form, &$form_state) {
   $start_date                            = $form_state['input']['start_date']['date'];
   $end_date                              = $form_state['input']['end_date']['date'];
   $course                                = $form_state['storage']['course'];
-  $form_state['storage']['course_stats'] = mgc_get_course_range_stats($course, $start_date, $end_date);
+  $form_state['storage']['course_stats'] = mgc_get_course_range_stats($course,
+    $start_date, $end_date);
 }
 
 function mgc_get_course_range_stats($course, $start_date, $end_date) {
@@ -155,8 +157,10 @@ function mgc_get_course_range_stats($course, $start_date, $end_date) {
   $stop      = 'Stop';
   for ($day = 1; $day <= $days; $day++) {
     $course_stats[$day]['date']       = date('d . m', $day_start);
-    $course_stats[$day]['autochecks'] = mgc_get_autochecks_for_day($course, $day, $day_start, $day_end);
-    $course_stats[$day]['recasts']    = mgc_get_recasts_for_day($course, $day, $day_start, $day_end);
+    $course_stats[$day]['autochecks'] = mgc_get_autochecks_for_day($course,
+      $day, $day_start, $day_end);
+    $course_stats[$day]['recasts']    = mgc_get_recasts_for_day($course, $day,
+      $day_start, $day_end);
     /*Начало дня в timestamp*/
     $day_start = $start_date + 24 * 60 * 60 * $day;
     $day_end   = $day_start + 24 * 60 * 60 - 1;
@@ -178,9 +182,12 @@ function mgc_get_course_stats($course) {
   $stop        = 'Stop';
   for ($day = 1; $day <= 7; $day++) {
     $course_stats[$day]['date']       = date('d . m', $day_start);
-    $course_stats[$day]['autochecks'] = mgc_get_autochecks_for_day($course, $day, $day_start, $day_end);
-    $course_stats[$day]['checks']     = mgc_get_checks_for_day($course, $day, $day_start, $day_end);
-    $course_stats[$day]['recasts']    = mgc_get_recasts_for_day($course, $day, $day_start, $day_end);
+    $course_stats[$day]['autochecks'] = mgc_get_autochecks_for_day($course,
+      $day, $day_start, $day_end);
+    $course_stats[$day]['checks']     = mgc_get_checks_for_day($course, $day,
+      $day_start, $day_end);
+    $course_stats[$day]['recasts']    = mgc_get_recasts_for_day($course, $day,
+      $day_start, $day_end);
     /*Начало дня в timestamp*/
     $day_start = $month_start + 24 * 60 * 60 * $minus_week + 24 * 60 * 60 * $day;
     $day_end   = $day_start + 24 * 60 * 60 - 1;
@@ -192,8 +199,7 @@ function mgc_get_course_stats($course) {
 function mgc_get_autochecks_for_day($course, $day, $day_start, $day_end) {
   $stop  = 'Stop';
   $query = new EntityFieldQuery();
-  $query
-    ->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'lesson_progress')
     ->propertyCondition('changed', array($day_start, $day_end), 'BETWEEN')
     ->fieldCondition('field_progress_status', 'value', 2);
@@ -234,8 +240,7 @@ function mgc_get_autochecks_for_day($course, $day, $day_start, $day_end) {
 function mgc_get_checks_for_day($course, $day, $day_start, $day_end) {
   $stop  = 'Stop';
   $query = new EntityFieldQuery();
-  $query
-    ->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'lesson_progress')
     ->propertyCondition('changed', array($day_start, $day_end), 'BETWEEN')
     ->fieldCondition('field_progress_status', 'value', 2);
@@ -274,8 +279,7 @@ function mgc_get_checks_for_day($course, $day, $day_start, $day_end) {
 function mgc_get_recasts_for_day($course, $day, $day_start, $day_end) {
   $stop  = 'Stop';
   $query = new EntityFieldQuery();
-  $query
-    ->entityCondition('entity_type', 'node')
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'lesson_progress')
     ->propertyCondition('changed', array($day_start, $day_end), 'BETWEEN')
     ->fieldCondition('field_progress_status', 'value', 3);
@@ -381,7 +385,7 @@ function mgc_days_diff($startTimeStamp, $endTimeStamp) {
   $timeDiff   = abs($endTimeStamp - $startTimeStamp);
   $numberDays = $timeDiff / 86400;  // 86400 seconds in one day
 
-// and you might want to convert to integer
+  // and you might want to convert to integer
   $numberDays = intval($numberDays);
 
   return $numberDays;
@@ -399,7 +403,8 @@ function mgc_get_requests_for_review_count() {
 
 function mgc_get_requests_for_review_w_empty_statuses_count() {
   global $user;
-  $query                 = ditoolsi_training_get_cources_query($user->uid, TRUE);
+  $query                 = ditoolsi_training_get_cources_query($user->uid,
+    TRUE);
   $nids                  = $query->execute()->fetchCol();
   $query                 = mgc_requests_review_w_empty_statuses_query($nids);
   $results               = $query->execute()->fetchCol();
@@ -416,14 +421,20 @@ function mgc_get_requests_for_review_w_empty_statuses_count() {
 
 function mgc_requests_review_w_empty_statuses_query($course_id = NULL) {
   $query = db_select('node', 'n');
-  $query->join('field_data_field_progress_lesson_id', 'lesson_id', 'lesson_id.entity_id = n.nid');
+  $query->join('field_data_field_progress_lesson_id', 'lesson_id',
+    'lesson_id.entity_id = n.nid');
   $query->join('users', 'u', 'u.uid = n.uid');
-  $query->join('field_data_field_lesson_number', 'lesson_number', 'lesson_number.entity_id = lesson_id.field_progress_lesson_id_target_id');
-  $query->join('field_data_field_lesson_course', 'course', 'course.entity_id = lesson_id.field_progress_lesson_id_target_id');
-  $query->join('node', 'node_course', 'node_course.nid = course.field_lesson_course_target_id');
-  $query->join('field_data_field_progress_status', 'progress_status', 'progress_status.entity_id = n.nid and progress_status.bundle = :bundle', array(':bundle' => 'lesson_progress'));
-  $query
-    ->condition('progress_status.field_progress_status_value', DITOOLSI_TRAINING_PROGRESS_STATUS_REVIEW)
+  $query->join('field_data_field_lesson_number', 'lesson_number',
+    'lesson_number.entity_id = lesson_id.field_progress_lesson_id_target_id');
+  $query->join('field_data_field_lesson_course', 'course',
+    'course.entity_id = lesson_id.field_progress_lesson_id_target_id');
+  $query->join('node', 'node_course',
+    'node_course.nid = course.field_lesson_course_target_id');
+  $query->join('field_data_field_progress_status', 'progress_status',
+    'progress_status.entity_id = n.nid and progress_status.bundle = :bundle',
+    array(':bundle' => 'lesson_progress'));
+  $query->condition('progress_status.field_progress_status_value',
+      DITOOLSI_TRAINING_PROGRESS_STATUS_REVIEW)
     ->fields('n', array('nid'))
     ->orderBy('n.changed', 'desc')
     ->orderBy('lesson_number.field_lesson_number_value', 'ASC');
@@ -449,11 +460,12 @@ function mgc_start_learn2($course) {
     ->fields('lc', array('entity_id'));
 
   $query->join('node', 'n', 'n.nid = pl.course_id');
-  $query->leftJoin('field_data_field_lesson_course', 'lc', 'lc.field_lesson_course_target_id = n.nid');
-  $query->leftJoin('field_data_field_lesson_number', 'ln', 'ln.entity_id = lc.entity_id AND ln.field_lesson_number_value = pl.current_lesson');
+  $query->leftJoin('field_data_field_lesson_course', 'lc',
+    'lc.field_lesson_course_target_id = n.nid');
+  $query->leftJoin('field_data_field_lesson_number', 'ln',
+    'ln.entity_id = lc.entity_id AND ln.field_lesson_number_value = pl.current_lesson');
 
-  $pupil = $query
-    ->condition('pl.user_id', $user->uid)
+  $pupil = $query->condition('pl.user_id', $user->uid)
     ->condition('pl.course_id', $course->nid)
     ->range(0, 1)
     ->execute()
@@ -476,58 +488,8 @@ function mgc_start_learn2($course) {
   }
 
   if (!$pupil->entity_id) {
-    $lesson = dt_training_load_lesson_by_number($course->nid, $pupil->current_lesson);
-  }
-  else {
-    $lesson = node_load($pupil->entity_id);
-  }
-
-  if ($lesson) {
-    dt_training_update_start_time_progress($lesson, $user);
-    db_update('ditoolsi_training_pupils_list')
-      ->fields(array('started' => REQUEST_TIME))
-      ->condition('user_id', $user->uid)
-      ->condition('course_id', $course->nid)
-      ->execute();
-    //drupal_set_message('Вы можете приступить к обучению');
-  }
-}
-
-function mgc_start_learn2_from_teacher($course, $user) {
-
-  $query = db_select('ditoolsi_training_pupils_list', 'pl')
-    ->fields('pl', array('current_lesson', 'status', 'started'))
-    ->fields('lc', array('entity_id'));
-
-  $query->join('node', 'n', 'n.nid = pl.course_id');
-  $query->leftJoin('field_data_field_lesson_course', 'lc', 'lc.field_lesson_course_target_id = n.nid');
-  $query->leftJoin('field_data_field_lesson_number', 'ln', 'ln.entity_id = lc.entity_id AND ln.field_lesson_number_value = pl.current_lesson');
-
-  $pupil = $query
-    ->condition('pl.user_id', $user->uid)
-    ->condition('pl.course_id', $course->nid)
-    ->range(0, 1)
-    ->execute()
-    ->fetchObject();
-
-  if (!$pupil || $pupil->started) {
-    return MENU_ACCESS_DENIED;
-  }
-
-  if (!$pupil->current_lesson) {
-    db_update('ditoolsi_training_pupils_list')
-      ->fields(array(
-        'current_lesson' => 1,
-      ))
-      ->condition('user_id', $user->uid)
-      ->condition('course_id', $course->nid)
-      ->execute();
-
-    $pupil->current_lesson = 1;
-  }
-
-  if (!$pupil->entity_id) {
-    $lesson = dt_training_load_lesson_by_number($course->nid, $pupil->current_lesson);
+    $lesson = dt_training_load_lesson_by_number($course->nid,
+      $pupil->current_lesson);
   }
   else {
     $lesson = node_load($pupil->entity_id);
@@ -579,14 +541,16 @@ function mgc_get_curator_course($user) {
 
   return $is_curator;
 }
-function mgc_update_question_field(){
+
+function mgc_update_question_field() {
   mgc_change_text_field_max_length('field_autotest_questions', 20000);
 
 }
+
 function mgc_change_text_field_max_length($field_name, $new_length) {
-  $field_table = 'field_data_' . $field_name;
+  $field_table          = 'field_data_' . $field_name;
   $field_revision_table = 'field_revision_' . $field_name;
-  $field_column = $field_name . '_value';
+  $field_column         = $field_name . '_value';
 
   // Alter value field length in fields table
   db_query("UPDATE `{$field_table}` SET `{$field_column}`=SUBSTR(`{$field_column}`, 0, {$new_length})");
@@ -596,11 +560,11 @@ function mgc_change_text_field_max_length($field_name, $new_length) {
   db_query("ALTER TABLE `{$field_revision_table}` CHANGE `{$field_column}` `{$field_column}` VARCHAR( {$new_length} )");
 
   // Update field config with new max length
-  $result = db_query("SELECT CAST(`data` AS CHAR(10000) CHARACTER SET utf8) FROM `field_config` WHERE field_name = '{$field_name}'");
-  $config = $result->fetchField();
-  $config_array = unserialize($config);
+  $result                                 = db_query("SELECT CAST(`data` AS CHAR(10000) CHARACTER SET utf8) FROM `field_config` WHERE field_name = '{$field_name}'");
+  $config                                 = $result->fetchField();
+  $config_array                           = unserialize($config);
   $config_array['settings']['max_length'] = $new_length;
-  $config = serialize($config_array);
+  $config                                 = serialize($config_array);
   db_update('field_config')
     ->fields(array('data' => $config))
     ->condition('field_name', $field_name)

@@ -62,6 +62,8 @@ define('DITOOLSI_TRAINING_COURSE_CARD_2', 2);
 define('DT_TRAINING_RATING_1', 1);
 define('DT_TRAINING_RATING_2', 2);
 
+define('MGC_TEACH_COURSE_ID', 25390);
+
 require_once('includes/training.inc');
 require_once('includes/mgc.rewrite.helpers.inc');
 
@@ -3242,6 +3244,9 @@ function ditoolsi_training_user_insert(&$edit, $account, $category) {
     //      'created'        => REQUEST_TIME,
     //      'status'         => DITOOLSI_TRAINING_PUPIL_ACTIVE,
     //    ))->execute();
+    mgc_set_course_to_user(MGC_TEACH_COURSE_ID, $account->uid);
+    $course = node_load(MGC_TEACH_COURSE_ID);
+    mgc_start_learn2_from_teacher($course, $account);
   }
 }
 
@@ -3710,4 +3715,68 @@ function get_groups_by_teacher($user) {
   $terms = taxonomy_term_load_multiple($tids);
 
   return $terms;
+}
+
+function mgc_start_learn2_from_teacher($course, $user) {
+
+  $query = db_select('ditoolsi_training_pupils_list', 'pl')
+    ->fields('pl', array('current_lesson', 'status', 'started'))
+    ->fields('lc', array('entity_id'));
+
+  $query->join('node', 'n', 'n.nid = pl.course_id');
+  $query->leftJoin('field_data_field_lesson_course', 'lc',
+    'lc.field_lesson_course_target_id = n.nid');
+  $query->leftJoin('field_data_field_lesson_number', 'ln',
+    'ln.entity_id = lc.entity_id AND ln.field_lesson_number_value = pl.current_lesson');
+
+  $pupil = $query->condition('pl.user_id', $user->uid)
+    ->condition('pl.course_id', $course->nid)
+    ->range(0, 1)
+    ->execute()
+    ->fetchObject();
+  if (!mgc_user_has_teacher_role($user)) {
+
+  }
+  if (!$pupil || $pupil->started) {
+    return MENU_ACCESS_DENIED;
+  }
+  if (!$pupil->current_lesson) {
+    db_update('ditoolsi_training_pupils_list')
+      ->fields(array(
+        'current_lesson' => 1,
+      ))
+      ->condition('user_id', $user->uid)
+      ->condition('course_id', $course->nid)
+      ->execute();
+
+    $pupil->current_lesson = 1;
+  }
+
+  if (!$pupil->entity_id) {
+    $lesson = dt_training_load_lesson_by_number($course->nid,
+      $pupil->current_lesson);
+  }
+  else {
+    $lesson = node_load($pupil->entity_id);
+  }
+
+  if ($lesson) {
+    dt_training_update_start_time_progress($lesson, $user);
+    db_update('ditoolsi_training_pupils_list')
+      ->fields(array('started' => REQUEST_TIME))
+      ->condition('user_id', $user->uid)
+      ->condition('course_id', $course->nid)
+      ->execute();
+    //drupal_set_message('Вы можете приступить к обучению');
+  }
+  $stop = 'Stop';
+}
+function mgc_set_course_to_user($course_id, $uid) {
+  db_insert('ditoolsi_training_pupils_list')->fields(array(
+    'course_id'      => $course_id,
+    'user_id'        => $uid,
+    'current_lesson' => 1,
+    'created'        => REQUEST_TIME,
+    'status'         => DITOOLSI_TRAINING_PUPIL_ACTIVE,
+  ))->execute();
 }

@@ -1066,7 +1066,10 @@ function mgc_teach_course_lesson_status_view($lesson, $allow_view = TRUE) {
 }
 
 function mgc_get_courses($user) {
-  $query = ditoolsi_training_get_cources_query($user->uid, TRUE);
-  $nids  = $query->execute()->fetchCol();
+  $nids = FALSE;
+  if (user_is_logged_in()) {
+    $query = ditoolsi_training_get_cources_query($user->uid, TRUE);
+    $nids  = $query->execute()->fetchCol();
+  }
   return $nids;
 }

@@ -3106,6 +3106,7 @@ function dt_training_support_page($node) {
   }, $accounts);
 
   $html = '<div class="tech-support">
+  <h3>По вопросам курсов, заданий, ответов обращаться к преподавателю или куратору:</h3>
   <div class="course-teacher">
     <label>' . t('Teacher') . ':</label>
     <div class="name">' . l($teacher_name, "user/{$node->uid}") . '</div>
@@ -3132,6 +3133,7 @@ function dt_training_support_page($node) {
 
   return $html . '
   <div class="tech-support">
+   <h3>Если не работает сайт, не верно отображается страница, не работает какая-либо функция, обращайтесь:</h3>
 Тех. Поддержка (только по техническим вопросам, с 11-00 до 19-00 МСК). <br>
 Ольга
       <div class="bottom skype">Skype: olga_zotova8</div>

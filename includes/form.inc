@@ -3897,6 +3897,7 @@ function ditoolsi_training_accept_lesson_popup_form_submit(
 
   /*Сохраняем дату проверку учителя*/
   global $user;
+  //TODO uncomment for stats
   mgc_set_progress_update($progress->uid, $user->uid, $progress->nid);
 
   $form_state['success'] = TRUE;
